@@ -58,7 +58,7 @@ function App() {
           setUsername(event.target.value)
         }}/>
         <label>Password:</label>
-        <input type = "text" onChange={(event) => {
+        <input type = "password" onChange={(event) => {
           setPwd(event.target.value)
         }}/>
         <label>Birth Date: </label>
