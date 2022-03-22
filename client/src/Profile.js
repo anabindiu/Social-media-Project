@@ -1,46 +1,43 @@
 import { useState } from 'react';
 import './Profile.css';
 
-//API which will be replaced with our own
-import Axios from 'axios';
-
-
-/*
-Email varchar(255) UNIQUE NOT NULL,
-    Username varchar(255) UNIQUE NOT NULL,
-    `Password` varchar(255) NOT NULL,
-    B_Date DATETIME, 
-    `Name` varchar(255),
-    Profile_Pic nvarchar(255),
-    User_Email varchar(255),
-*/
-
-
 function App() {
+  return(
+    <div className = "Profile">
+       <CreateProfileForm/>
+    </div>
+  )
+}
 
-  const addProfile = () => {
-    console.log(Name);
-    Axios.post('http://localhost:3001/create', {
-      Name: Name, 
-      Email: Email, 
-      Username: Username, 
-      Password: Password, 
-      Birth_Date: Birth_Date, 
-      Profile_Pic: Profile_Pic, 
-      UserEmail: UserEmail
-    }).then(() => {
-      console.log("Success");
-    });
-  };
+export default App;
 
+function CreateProfileForm(){
+    
   const[Name, setName] = useState("");
   const[Email, setEmail] = useState("");
   const[Username, setUsername] = useState("");
   const[Password, setPwd] = useState("");
-  const[Birth_Date, setBDAte] = useState(Date);
+  const[Birth_Date, setBDAte] = useState("");
   const[Profile_Pic, setPic] = useState("");
-  const[UserEmail, setUserEmail] = useState("");
+  const[UserEmail, setUserEmail] = useState(""); 
 
+  const addProfile = () => {
+    try{
+      console.log(Birth_Date);
+      console.log(JSON.stringify({"Email": Email, "Username":Username, "Password":Password, "B_Date": Birth_Date , "Name":Name, "Profile_Pic":Profile_Pic, "User_Email": "NULL"}));
+      fetch('http://localhost:3001/profile', {
+        method: 'POST',
+        headers: new Headers({'content-type': 'application/json'}),
+        // Need to make sure Useremail is not null.
+        body: JSON.stringify({"Email": Email, "Username":Username, "Password":Password, "B_Date": Birth_Date , "Name":Name, "Profile_Pic":Profile_Pic, "User_Email": "NULL"}),
+      })
+      console.log(Email);
+    }
+    catch(error){
+      console.log(error);
+    }
+  
+  };
 
   return (
     <div className="Profile">
@@ -62,7 +59,7 @@ function App() {
           setPwd(event.target.value)
         }}/>
         <label>Birth Date: </label>
-        <input type = "date" onChange={(event) => {
+        <input type = "Date" onChange={(event) => {
           setBDAte(event.target.value)
         }}/>
         <label>Profile_Pic(Ignore) :</label>
@@ -80,5 +77,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
