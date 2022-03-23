@@ -2,7 +2,7 @@ import dayjs from "dayjs";
 import React, { useContext, useState, useEffect } from "react";
 import GlobalContext from "../context/GlobalContext";
 
-export default function Day({ day, rowIdx }) {
+export default function Day({ day, start_date, end_date, rowIdx }) {
   const [dayEvents, setDayEvents] = useState([]);
   const {
     setDaySelected,
@@ -18,6 +18,12 @@ export default function Day({ day, rowIdx }) {
     );
     setDayEvents(events);
   }, [filteredEvents, day]);
+
+  function getStartDateClass(){
+    var today = new Date()
+
+    return start_date.format("T:TT") === today.getHours()+':' + today.getMinutes();
+  }
 
   function getCurrentDayClass() {
     return day.format("DD-MM-YY") === dayjs().format("DD-MM-YY")

@@ -14,14 +14,18 @@ export default function EventModal() {
   const {
     setShowEventModal,
     daySelected,
-    fromTime,
-    toTime,
     dispatchCalEvent,
     selectedEvent,
   } = useContext(GlobalContext);
 
   const [title, setTitle] = useState(
     selectedEvent ? selectedEvent.title : ""
+  );
+  const [start_time, setStart] = useState(
+    selectedEvent ? selectedEvent.start_time : ""
+  );
+  const [to_time, setEnd] = useState(
+    selectedEvent ? selectedEvent.to_time : ""
   );
   const [description, setDescription] = useState(
     selectedEvent ? selectedEvent.description : ""
@@ -42,6 +46,9 @@ export default function EventModal() {
       description,
       label: selectedLabel,
       day: daySelected.valueOf(),
+      location,
+      start_time,
+      to_time,
       id: selectedEvent ? selectedEvent.id : Date.now(),
     };
     if (selectedEvent) {
@@ -98,6 +105,27 @@ export default function EventModal() {
             </span>
             <p>{daySelected.format("dddd, MMMM DD")}</p>
             <span className="material-icons-outlined text-gray-400">
+              watch
+            </span>
+            <input
+              type="text"
+              name="from_time"
+              placeholder="Add a start time"
+              value={start_time}
+              className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
+              onChange={(e) => setStart(e.target.value)}
+            />
+            <div></div>
+            <input
+              type="text"
+              name="to_time"
+              placeholder="Add an end time"
+              value={to_time}
+              className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
+              onChange={(e) => setEnd(e.target.value)}
+            />
+
+            <span className="material-icons-outlined text-gray-400">
               segment
             </span>
             <input
@@ -105,7 +133,6 @@ export default function EventModal() {
               name="description"
               placeholder="Add a description"
               value={description}
-              required
               className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -116,6 +143,7 @@ export default function EventModal() {
               type="text"
               name="location"
               placeholder="Add a location"
+              value={location}
               className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setLocation(e.target.value)}
             />
