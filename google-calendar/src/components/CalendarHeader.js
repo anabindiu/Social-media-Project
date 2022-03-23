@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from "./Day.js";
 import React, { useContext } from "react";
 import logo from "../assets/logo.png";
 import GlobalContext from "../context/GlobalContext";
