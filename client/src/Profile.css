@@ -1,0 +1,36 @@
+.Profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.Information{
+  display: flex;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+}
+
+.Information input{
+  width: 300px;
+  height: 30px;
+  font-size: 20px;
+  margin: 5px;
+}
+
+.Information button{
+  justify-content: center;
+  margin-top: 50px;
+  width: 300px;
+  height: 50px;
+}
+
+.Information button:hover{
+  cursor: pointer;
+}
+
+
+
