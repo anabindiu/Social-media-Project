@@ -64,4 +64,3 @@ insert into usage_statistics values ("parth@gmail.com", "_Parth_", "Usage");
 insert into `view` values ("admin@project.com", "parth@gmail.com", "_Parth_");
 
 -- Skipped: features_sp,  send_report
-
