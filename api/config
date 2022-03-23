@@ -1,7 +1,8 @@
 const config = {
   db: {
     /* don't expose password or any sensitive info, done only for demo */
-    host: "localhost",
+    /* University Address : 10.13.130.15 */
+    host: "10.13.130.15",
     user: "root",
     password: "password",
     database: "project",
@@ -9,3 +10,15 @@ const config = {
   listPerPage: 10,
 };
 module.exports = config;
+
+/*const config = {
+  db: {
+    /* don't expose password or any sensitive info, done only for demo */
+    host: "localhost",
+    user: "root",
+    password: "password",
+    database: "project",
+  },
+  listPerPage: 10,
+};
+module.exports = config;*/
