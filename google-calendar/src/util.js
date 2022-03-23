@@ -1,4 +1,4 @@
-import dayjs from "./components/Day.js";
+import dayjs from "dayjs";
 
 export function getMonth(month = dayjs().month()) {
   month = Math.floor(month);

@@ -1,4 +1,4 @@
-import dayjs from "../components/Day.js";
+import dayjs from "dayjs";
 import React, {
   useState,
   useEffect,

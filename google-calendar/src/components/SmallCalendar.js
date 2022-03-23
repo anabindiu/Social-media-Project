@@ -1,4 +1,4 @@
-import dayjs from "./Day.js";
+import dayjs from "dayjs";
 import React, { useContext, useEffect, useState } from "react";
 import GlobalContext from "../context/GlobalContext";
 import { getMonth } from "../util";
