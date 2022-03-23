@@ -14,6 +14,8 @@ export default function EventModal() {
   const {
     setShowEventModal,
     daySelected,
+    fromTime,
+    toTime,
     dispatchCalEvent,
     selectedEvent,
   } = useContext(GlobalContext);
@@ -23,6 +25,9 @@ export default function EventModal() {
   );
   const [description, setDescription] = useState(
     selectedEvent ? selectedEvent.description : ""
+  );
+  const [location, setLocation] = useState(
+    selectedEvent ? selectedEvent.location : ""
   );
   const [selectedLabel, setSelectedLabel] = useState(
     selectedEvent
@@ -103,6 +108,16 @@ export default function EventModal() {
               required
               className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setDescription(e.target.value)}
+            />
+            <span className="material-icons-outlined text-gray-400">
+              place
+            </span>
+            <input
+              type="text"
+              name="location"
+              placeholder="Add a location"
+              className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
+              onChange={(e) => setLocation(e.target.value)}
             />
             <span className="material-icons-outlined text-gray-400">
               bookmark_border
