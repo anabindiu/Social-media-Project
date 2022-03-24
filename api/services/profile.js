@@ -2,10 +2,23 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
 
-async function getMultiple(page = 1){
+function parseKey(key_type, key_value){
+    switch(key_type){
+        case "ID":
+            return key_value;
+        case "Email":
+            return `\"${key_value}\"`;
+        case "Username":
+            return `\"${key_value}\"`;
+        default:
+            return key_value;
+    }
+}
+
+async function getAll(page = 1){
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT Email 
+        `SELECT ID, Email, Username, Password, B_Date, Name, Profile_Pic
         FROM profile LIMIT ${offset},${config.listPerPage}`
     );
     const data = helper.emptyOrRows(rows);
@@ -17,12 +30,26 @@ async function getMultiple(page = 1){
     }
 }
 
-async function create(profile){
+async function getOne(key_type, key_value){
+    key_value = parseKey(key_type, key_value);
+    const rows = await db.query(
+        `SELECT ID, Email, Username, Password, B_Date, Name, Profile_Pic
+        FROM profile
+        WHERE ${key_type}=${key_value}`
+    );
+    const data = helper.emptyOrRows(rows);
+    
+    return {
+        data
+    }
+}
+
+async function create(body){
     const result = await db.query(
         `INSERT INTO profile 
-        (Email, Username, Password, B_Date, Name, Profile_Pic, User_Email) 
+        (Email, Username, Password, B_Date, Name, Profile_Pic) 
         VALUES 
-        ("${profile.Email}", "${profile.Username}", "${profile.Password}", ${profile.B_Date}, "${profile.Name}", "${profile.Profile_Pic}", ${profile.User_Email})`
+        ("${body.Email}", "${body.Username}", "${body.Password}", "${body.B_Date}", "${body.Name}", "${body.Profile_Pic}")`
     );
     
     let message = 'Error in creating profile ';
@@ -34,11 +61,12 @@ async function create(profile){
     return {message};
 }
 
-async function update(Email, profile){
+async function update(key_type, key_value, body){
+    key_value = parseKey(key_type, key_value);
     const result = await db.query(
         `UPDATE profile 
-        SET Email=${profile.Email}, Username=${profile.Username}, ${profile.Password}, B_Date=${profile.B_Date}, Name=${profile.Name}, Profile_Pic=${profile.Profile_Pic}, User_Email=${profile.User_Email}
-        WHERE Email=${Email}` 
+        SET Email="${body.Email}", Username="${body.Username}", Password="${body.Password}", B_Date="${body.B_Date}", Name="${body.Name}", Profile_Pic="${body.Profile_Pic}"
+        WHERE ${key_type}=${key_value}` 
     );
     
     let message = 'Error in updating profile';
@@ -50,9 +78,10 @@ async function update(Email, profile){
     return {message};
 }
 
-async function remove(Email){
+async function remove(key_type, key_value){
+    key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `DELETE FROM profile WHERE Email=${Email}`
+        `DELETE FROM profile WHERE ${key_type}=${key_value}`
     );
     
     let message = 'Error in deleting profile';
@@ -65,7 +94,8 @@ async function remove(Email){
 }
 
 module.exports = {
-    getMultiple,
+    getAll,
+    getOne,
     create,
     update,
     remove

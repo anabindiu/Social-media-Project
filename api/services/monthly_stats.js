@@ -2,11 +2,22 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
 
-async function getMultiple(page = 1){
+function parseKey(key_type, key_value){
+    switch(key_type){
+        case "Feature_Stats_ID":
+            return key_value;
+        case "Month_Year":
+            return `\"${key_value}\"`;
+        default:
+            return key_value;
+    }
+}
+
+async function getAll(page = 1){
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT Email 
-        FROM profile LIMIT ${offset},${config.listPerPage}`
+        `SELECT Feature_Stats_ID, Month_Year, Total_Events, Total_Tasks, Total_Notes, Total_Reminders, Year
+        FROM monthly_stats LIMIT ${offset},${config.listPerPage}`
     );
     const data = helper.emptyOrRows(rows);
     const meta = {page};
@@ -17,55 +28,87 @@ async function getMultiple(page = 1){
     }
 }
 
-async function create(profile){
+async function getOne(key_type1, key_type2, key_value1, key_value2){
+    key_value1 = parseKey(key_type1, key_value1);
+    key_value2 = parseKey(key_type2, key_value2);
+    if(key_value2 == null){
+        const rows = await db.query(
+            `SELECT Feature_Stats_ID, Month_Year, Total_Events, Total_Tasks, Total_Notes, Total_Reminders, Year
+            FROM monthly_stats
+            WHERE ${key_type1}=${key_value1}`
+        );
+    }
+    else{
+        const rows = await db.query(
+            `SELECT Feature_Stats_ID, Month_Year, Total_Events, Total_Tasks, Total_Notes, Total_Reminders, Year
+            FROM monthly_stats
+            WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
+        );
+    }
+    
+    const data = helper.emptyOrRows(rows);
+    
+    return {
+        data
+    }
+}
+
+async function create(body){
     const result = await db.query(
-        `INSERT INTO profile 
-        (Email, Username, Password, B_Date, Name, Profile_Pic, User_Email) 
+        `INSERT INTO monthly_stats 
+        (Feature_Stats_ID, Month_Year, Total_Events, Total_Tasks, Total_Notes, Total_Reminders, Year) 
         VALUES 
-        ("${profile.Email}", "${profile.Username}", "${profile.Password}", ${profile.B_Date}, "${profile.Name}", "${profile.Profile_Pic}", ${profile.User_Email})`
+        (${body.Feature_Stats_ID}, "${body.Month_Year}", ${body.Total_Events}, ${body.Total_Tasks}, ${body.Total_Notes}, ${body.Total_Reminders}, "${body.Year}")`
     );
     
-    let message = 'Error in creating profile ';
+    let message = 'Error in creating monthly_stats ';
     
     if (result.affectedRows) {
-        message = 'Profile created successfully';
+        message = 'monthly_stats created successfully';
     }
     
     return {message};
 }
 
-async function update(Email, profile){
+async function update(key_type1, key_type2, key_value1, key_value2, body){
+    key_value1 = parseKey(key_type1, key_value1);
+    key_value2 = parseKey(key_type2, key_value2);
+    
     const result = await db.query(
-        `UPDATE profile 
-        SET Email=${profile.Email}, Username=${profile.Username}, ${profile.Password}, B_Date=${profile.B_Date}, Name=${profile.Name}, Profile_Pic=${profile.Profile_Pic}, User_Email=${profile.User_Email}
-        WHERE Email=${Email}` 
+        `UPDATE monthly_stats 
+        SET Feature_Stats_ID=${body.Feature_Stats_ID}, Month_Year="${body.Month_Year}", Total_Events=${body.Total_Events}, Total_Tasks=${body.Total_Tasks}, Total_Notes=${body.Total_Notes}, Total_Reminders=${body.Total_Reminders}, Year="${body.Year}"
+        WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
     );
     
-    let message = 'Error in updating profile';
+    let message = 'Error in updating monthly_stats';
     
     if (result.affectedRows) {
-        message = 'profile updated successfully';
+        message = 'monthly_stats updated successfully';
     }
     
     return {message};
 }
 
-async function remove(Email){
+async function remove(key_type1, key_type2, key_value1, key_value2){
+    key_value1 = parseKey(key_type1, key_value1);
+    key_value2 = parseKey(key_type2, key_value2);
+
     const result = await db.query(
-        `DELETE FROM profile WHERE Email=${Email}`
+        `DELETE FROM monthly_stats WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
     );
     
-    let message = 'Error in deleting profile';
+    let message = 'Error in deleting monthly_stats';
     
     if (result.affectedRows) {
-        message = 'profile deleted successfully';
+        message = 'monthly_stats deleted successfully';
     }
     
     return {message};
 }
 
 module.exports = {
-    getMultiple,
+    getAll,
+    getOne,
     create,
     update,
     remove

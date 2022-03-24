@@ -2,11 +2,24 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
 
-async function getMultiple(page = 1){
+function parseKey(key_type, key_value){
+    switch(key_type){
+        case "Profile_ID":
+            return key_value;
+        case "Profile_Email":
+            return `\"${key_value}\"`;
+        case "Profile_Username":
+            return `\"${key_value}\"`;
+        default:
+            return key_value;
+    }
+}
+
+async function getAll(page = 1){
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT Email 
-        FROM profile LIMIT ${offset},${config.listPerPage}`
+        `SELECT Profile_ID, Profile_Email, Profile_Username, Schedule_ID, Notes_ID, Tasks_ID, Setting_ID
+        FROM features LIMIT ${offset},${config.listPerPage}`
     );
     const data = helper.emptyOrRows(rows);
     const meta = {page};
@@ -17,55 +30,72 @@ async function getMultiple(page = 1){
     }
 }
 
-async function create(profile){
+async function getOne(key_type, key_value){
+    key_value = parseKey(key_type, key_value);
+    const rows = await db.query(
+        `SELECT Profile_ID, Profile_Email, Profile_Username, Schedule_ID, Notes_ID, Tasks_ID, Setting_ID
+        FROM features
+        WHERE ${key_type}=${key_value}`
+    );
+    const data = helper.emptyOrRows(rows);
+    
+    return {
+        data
+    }
+}
+
+async function create(body){
     const result = await db.query(
-        `INSERT INTO profile 
-        (Email, Username, Password, B_Date, Name, Profile_Pic, User_Email) 
+        `INSERT INTO features 
+        (Profile_ID, Profile_Email, Profile_Username, Schedule_ID, Notes_ID, Tasks_ID, Setting_ID) 
         VALUES 
-        ("${profile.Email}", "${profile.Username}", "${profile.Password}", ${profile.B_Date}, "${profile.Name}", "${profile.Profile_Pic}", ${profile.User_Email})`
+        (${body.Profile_ID}, "${body.Profile_Email}", "${body.Profile_Username}", ${body.Schedule_ID}, ${body.Notes_ID}, ${body.Tasks_ID}, ${body.Setting_ID})`
     );
     
-    let message = 'Error in creating profile ';
+    let message = 'Error in creating features ';
     
     if (result.affectedRows) {
-        message = 'Profile created successfully';
+        message = 'features created successfully';
     }
     
     return {message};
 }
 
-async function update(Email, profile){
+async function update(key_type, key_value, body){
+    key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `UPDATE profile 
-        SET Email=${profile.Email}, Username=${profile.Username}, ${profile.Password}, B_Date=${profile.B_Date}, Name=${profile.Name}, Profile_Pic=${profile.Profile_Pic}, User_Email=${profile.User_Email}
-        WHERE Email=${Email}` 
+        `UPDATE features 
+        SET Profile_ID=${body.Profile_ID}, Profile_Email="${body.Profile_Email}", Profile_Username="${body.Profile_Username}", Schedule_ID=${body.Schedule_ID}, Notes_ID=${body.Notes_ID}, Tasks_ID=${body.Tasks_ID}, Setting_ID=${body.Setting_ID},
+        WHERE ${key_type}=${key_value}` 
     );
     
-    let message = 'Error in updating profile';
+    let message = 'Error in updating features';
     
     if (result.affectedRows) {
-        message = 'profile updated successfully';
+        message = 'features updated successfully';
     }
     
     return {message};
 }
 
-async function remove(Email){
+async function remove(key_type, key_value){
+    key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `DELETE FROM profile WHERE Email=${Email}`
+        `DELETE FROM features WHERE ${key_type}=${key_value}`
     );
     
-    let message = 'Error in deleting profile';
+    let message = 'Error in deleting features';
     
     if (result.affectedRows) {
-        message = 'profile deleted successfully';
+        message = 'features deleted successfully';
     }
     
     return {message};
 }
 
 module.exports = {
-    getMultiple,
+    getAll,
+    getOne,
     create,
     update,
     remove

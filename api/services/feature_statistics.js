@@ -2,11 +2,22 @@ const db = require('./db');
 const helper = require('../helper');
 const config = require('../config');
 
-async function getMultiple(page = 1){
+function parseKey(key_type, key_value){
+    switch(key_type){
+        case "ID":
+            return key_value;
+        case "Profile_ID":
+            return key_value;
+        default:
+            return key_value;
+    }
+}
+
+async function getAll(page = 1){
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT Email 
-        FROM profile LIMIT ${offset},${config.listPerPage}`
+        `SELECT ID, Profile_ID, Statistics_type, Title
+        FROM feature_statistics LIMIT ${offset},${config.listPerPage}`
     );
     const data = helper.emptyOrRows(rows);
     const meta = {page};
@@ -17,55 +28,72 @@ async function getMultiple(page = 1){
     }
 }
 
-async function create(profile){
+async function getOne(key_type, key_value){
+    key_value = parseKey(key_type, key_value);
+    const rows = await db.query(
+        `ID, Profile_ID, Statistics_type, Title
+        FROM feature_statistics
+        WHERE ${key_type}=${key_value}`
+    );
+    const data = helper.emptyOrRows(rows);
+    
+    return {
+        data
+    }
+}
+
+async function create(body){
     const result = await db.query(
-        `INSERT INTO profile 
-        (Email, Username, Password, B_Date, Name, Profile_Pic, User_Email) 
+        `INSERT INTO feature_statistics 
+        (Profile_ID, Statistics_type, Title) 
         VALUES 
-        ("${profile.Email}", "${profile.Username}", "${profile.Password}", ${profile.B_Date}, "${profile.Name}", "${profile.Profile_Pic}", ${profile.User_Email})`
+        (${body.Profile_ID}, "${body.Statistics_type}", "${body.Title}")`
     );
     
-    let message = 'Error in creating profile ';
+    let message = 'Error in creating feature_statistics ';
     
     if (result.affectedRows) {
-        message = 'Profile created successfully';
+        message = 'feature_statistics created successfully';
     }
     
     return {message};
 }
 
-async function update(Email, profile){
+async function update(key_type, key_value, body){
+    key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `UPDATE profile 
-        SET Email=${profile.Email}, Username=${profile.Username}, ${profile.Password}, B_Date=${profile.B_Date}, Name=${profile.Name}, Profile_Pic=${profile.Profile_Pic}, User_Email=${profile.User_Email}
-        WHERE Email=${Email}` 
+        `UPDATE feature_statistics 
+        SET Profile_ID=${body.Profile_ID}, Statistics_type="${body.Statistics_type}", Title="${body.Title}"
+        WHERE ${key_type}=${key_value}` 
     );
     
-    let message = 'Error in updating profile';
+    let message = 'Error in updating feature_statistics';
     
     if (result.affectedRows) {
-        message = 'profile updated successfully';
+        message = 'feature_statistics updated successfully';
     }
     
     return {message};
 }
 
-async function remove(Email){
+async function remove(key_type, key_value){
+    key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `DELETE FROM profile WHERE Email=${Email}`
+        `DELETE FROM feature_statistics WHERE ${key_type}=${key_value}`
     );
     
-    let message = 'Error in deleting profile';
+    let message = 'Error in deleting feature_statistics';
     
     if (result.affectedRows) {
-        message = 'profile deleted successfully';
+        message = 'feature_statistics deleted successfully';
     }
     
     return {message};
 }
 
 module.exports = {
-    getMultiple,
+    getAll,
+    getOne,
     create,
     update,
     remove
