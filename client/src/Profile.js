@@ -21,6 +21,8 @@ function CreateProfileForm(){
   const[Profile_Pic, setPic] = useState("");
   const[UserEmail, setUserEmail] = useState(""); 
 
+  const[ProfileList, setProfileList] = useState([[]]);
+
   const addProfile = () => {
     try{
       console.log(Birth_Date);
@@ -38,6 +40,20 @@ function CreateProfileForm(){
     }
   
   };
+
+
+  const showProfiles = async () => {
+    try{
+      const response = await fetch('http://localhost:3001/profile');
+      const data = await response.json();
+      console.log(data);
+      setProfileList(data); 
+    
+    }catch(err){
+      console.log(err);
+    }
+  };
+
 
   return (
     <div className="Profile">
@@ -60,7 +76,7 @@ function CreateProfileForm(){
         }}/>
         <label>Birth Date: </label>
         <input type = "Date" onChange={(event) => {
-          setBDAte(event.target.value)
+          setBDAte(event.target.value);          
         }}/>
         <label>Profile_Pic(Ignore) :</label>
         <input type = "text" onChange={(event) => {
@@ -72,8 +88,17 @@ function CreateProfileForm(){
         }}/>
         <button onClick={addProfile}> Add Profile</button>
       </div>
-
-            
+      <div className='ShowInfo'>
+        <button onClick={showProfiles}> Show Profiles </button>
+        {ProfileList.data.map((val, key) => {
+          return(
+            <div className='info'>
+              <h1> Email: {val.Email}</h1>
+            </div>
+          )
+        })}
+      
+      </div>           
     </div>
   );
 }
