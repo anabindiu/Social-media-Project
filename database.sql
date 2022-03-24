@@ -37,6 +37,7 @@ CREATE TABLE `administrator` (
 
 LOCK TABLES `administrator` WRITE;
 /*!40000 ALTER TABLE `administrator` DISABLE KEYS */;
+INSERT INTO `administrator` VALUES ('admin@project.com');
 /*!40000 ALTER TABLE `administrator` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,7 +49,7 @@ DROP TABLE IF EXISTS `event`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `event` (
-  `Event_ID` varchar(30) NOT NULL,
+  `Event_ID` int NOT NULL AUTO_INCREMENT,
   `Location` varchar(30) DEFAULT NULL,
   `Description` varchar(30) DEFAULT NULL,
   `Title` varchar(30) NOT NULL,
@@ -58,7 +59,7 @@ CREATE TABLE `event` (
   PRIMARY KEY (`Event_ID`),
   KEY `Calendar_Name` (`Calendar_Name`),
   CONSTRAINT `event_ibfk_1` FOREIGN KEY (`Calendar_Name`) REFERENCES `schedule` (`Calendar_Name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,6 +68,7 @@ CREATE TABLE `event` (
 
 LOCK TABLES `event` WRITE;
 /*!40000 ALTER TABLE `event` DISABLE KEYS */;
+INSERT INTO `event` VALUES (1,'Calgary','attend concert','Concert','2022-03-08 00:00:00','2022-03-09 00:00:00','My calendar'),(2,'Calgary','attend concert','Concert','2022-03-08 00:00:00','2022-03-09 00:00:00','work');
 /*!40000 ALTER TABLE `event` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,7 +82,7 @@ DROP TABLE IF EXISTS `features`;
 CREATE TABLE `features` (
   `profile_Email` varchar(255) NOT NULL,
   `Username` varchar(255) NOT NULL,
-  `Setting_id` varchar(30) NOT NULL,
+  `Setting_id` int NOT NULL AUTO_INCREMENT,
   `User_eMail` varchar(255) NOT NULL,
   PRIMARY KEY (`profile_Email`,`Username`),
   UNIQUE KEY `profile_Email` (`profile_Email`),
@@ -233,13 +235,14 @@ DROP TABLE IF EXISTS `notes`;
 CREATE TABLE `notes` (
   `profile_Email` varchar(255) NOT NULL,
   `Username` varchar(255) NOT NULL,
-  `Note_ID` varchar(20) NOT NULL,
+  `Note_ID` int NOT NULL AUTO_INCREMENT,
   `Date_Created` datetime DEFAULT NULL,
   `Title` varchar(50) DEFAULT NULL,
   `Content` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`profile_Email`,`Username`,`Note_ID`),
   UNIQUE KEY `profile_Email` (`profile_Email`),
   UNIQUE KEY `Username` (`Username`),
+  KEY `Note_ID` (`Note_ID`),
   CONSTRAINT `notes_ibfk_1` FOREIGN KEY (`profile_Email`) REFERENCES `profile` (`Email`),
   CONSTRAINT `notes_ibfk_2` FOREIGN KEY (`Username`) REFERENCES `profile` (`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -262,12 +265,12 @@ DROP TABLE IF EXISTS `profile`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `profile` (
+  `Name` varchar(255) DEFAULT NULL,
   `Email` varchar(255) NOT NULL,
   `Username` varchar(255) NOT NULL,
   `Password` varchar(255) NOT NULL,
-  `B_Date` datetime DEFAULT NULL,
-  `Name` varchar(255) DEFAULT NULL,
-  `Profile_Pic` text NOT NULL,
+  `B_Date` date DEFAULT NULL,
+  `Profile_Pic` text,
   `User_Email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`Email`,`Username`),
   UNIQUE KEY `Email` (`Email`),
@@ -283,6 +286,7 @@ CREATE TABLE `profile` (
 
 LOCK TABLES `profile` WRITE;
 /*!40000 ALTER TABLE `profile` DISABLE KEYS */;
+INSERT INTO `profile` VALUES ('ana','ana@gmail.com','_ana_','password','1885-02-01','ana.jpg','ana@gmail.com'),('derek','derek@gmail.com','_derek_','password','0000-12-25','derek.jpg','derek@gmail.com'),('Parth','parth@gmail.com','_Parth_','password','2000-08-31','parth.jpg','parth@gmail.com');
 /*!40000 ALTER TABLE `profile` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,7 +298,7 @@ DROP TABLE IF EXISTS `reminder`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reminder` (
-  `Reminder_ID` varchar(30) NOT NULL,
+  `Reminder_ID` int NOT NULL AUTO_INCREMENT,
   `Location` varchar(30) DEFAULT NULL,
   `Description` varchar(30) DEFAULT NULL,
   `Title` varchar(30) NOT NULL,
@@ -329,7 +333,7 @@ CREATE TABLE `schedule` (
   PRIMARY KEY (`profile_Email`,`Username`,`Calendar_Name`),
   UNIQUE KEY `profile_Email` (`profile_Email`),
   UNIQUE KEY `Username` (`Username`),
-  KEY `schedule` (`Calendar_Name`),
+  KEY `Calendar_Name` (`Calendar_Name`),
   CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`profile_Email`) REFERENCES `profile` (`Email`),
   CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`Username`) REFERENCES `profile` (`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -341,6 +345,7 @@ CREATE TABLE `schedule` (
 
 LOCK TABLES `schedule` WRITE;
 /*!40000 ALTER TABLE `schedule` DISABLE KEYS */;
+INSERT INTO `schedule` VALUES ('derek@gmail.com','_derek_','work','Dark'),('parth@gmail.com','_Parth_','My Calendar','Dark');
 /*!40000 ALTER TABLE `schedule` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -383,10 +388,10 @@ DROP TABLE IF EXISTS `settings`;
 CREATE TABLE `settings` (
   `Email` varchar(255) NOT NULL,
   `Username` varchar(255) NOT NULL,
-  `Setting_id` varchar(30) NOT NULL,
+  `Setting_id` int NOT NULL AUTO_INCREMENT,
   `Date_Format` enum('dd/mm/yyyy','mm/dd/yyyy') DEFAULT NULL,
   `Time_Format` enum('24:00','12:00') DEFAULT NULL,
-  `TimeZone` varchar(4) DEFAULT NULL,
+  `TimeZone` varchar(3) DEFAULT NULL,
   `Language` enum('English','French') DEFAULT NULL,
   `Theme` enum('Dark','Light') DEFAULT NULL,
   `Country` varchar(20) DEFAULT NULL,
@@ -397,7 +402,7 @@ CREATE TABLE `settings` (
   UNIQUE KEY `Setting_id` (`Setting_id`),
   CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`Email`) REFERENCES `profile` (`Email`),
   CONSTRAINT `settings_ibfk_2` FOREIGN KEY (`Username`) REFERENCES `profile` (`Username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,6 +411,7 @@ CREATE TABLE `settings` (
 
 LOCK TABLES `settings` WRITE;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
+INSERT INTO `settings` VALUES ('derek@gmail.com','_derek_',3,'dd/mm/yyyy','12:00','MDT','English','Dark','Canada','There are no new notifications'),('parth@gmail.com','_Parth_',1,'dd/mm/yyyy','12:00','MDT','English','Dark','Canada','There are no new notifications');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -420,7 +426,7 @@ CREATE TABLE `task` (
   `profile_Email` varchar(255) NOT NULL,
   `Username` varchar(255) NOT NULL,
   `Header` varchar(20) NOT NULL,
-  `Task_ID` varchar(20) NOT NULL,
+  `Task_ID` int NOT NULL AUTO_INCREMENT,
   `Deadline` datetime DEFAULT NULL,
   `Completion_Status` tinyint(1) DEFAULT NULL,
   `Description` varchar(255) DEFAULT NULL,
@@ -429,6 +435,7 @@ CREATE TABLE `task` (
   PRIMARY KEY (`profile_Email`,`Username`,`Header`,`Task_ID`),
   UNIQUE KEY `profile_Email` (`profile_Email`),
   UNIQUE KEY `Username` (`Username`),
+  KEY `Task_ID` (`Task_ID`),
   KEY `Header` (`Header`),
   CONSTRAINT `task_ibfk_1` FOREIGN KEY (`profile_Email`) REFERENCES `profile` (`Email`),
   CONSTRAINT `task_ibfk_2` FOREIGN KEY (`Username`) REFERENCES `profile` (`Username`),
@@ -523,6 +530,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES ('ana@gmail.com'),('derek@gmail.com'),('parth@gmail.com');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -602,4 +610,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-03-21 11:07:50
+-- Dump completed on 2022-03-22 19:29:39
