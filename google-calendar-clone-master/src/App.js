@@ -32,6 +32,7 @@ function App() {
         <Navbar />
         <Routes>
         <Route path="/" exact component={Home}></Route>
+          <Route path="/home" component={Home}></Route>
           <Route path="/contactus" component={Contactus}></Route>
           <Route path="/products" component={Products}></Route>
           <Route path="/services" component={Services}></Route>
