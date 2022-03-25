@@ -20,14 +20,13 @@ function TodoForm(props) {
   const handleSubmit = e => {
     e.preventDefault();
     const input_variables = {
-      input, name_of_Task
-    }
+      input, 
+    };
     props.onSubmit({
       id: Math.floor(Math.random() * 10000),
       text: input
     });
     setInput('');
-    setName('');
   };
 
   return (

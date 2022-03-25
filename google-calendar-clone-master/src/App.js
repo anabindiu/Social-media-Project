@@ -16,35 +16,21 @@ import Features from "./pages/Features";
 import Calendar from "./pages/Calendar"
 
 function App() {
-  const [currenMonth, setCurrentMonth] = useState(getMonth());
-  const { monthIndex, showEventModal } = useContext(GlobalContext);
-
-  useEffect(() => {
-    setCurrentMonth(getMonth(monthIndex));
-  }, [monthIndex]);
   return (
     <>
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" exact component={Profile}></Route>
-          <Route path="/profile" component={Profile}></Route>
-          <Route path="/settings" component={Settings}></Route>
-          <Route path="/features" component={Features}></Route>
-          <Route path="/calendar" component={Calendar}></Route>
-          <Route path="/notes" component={Note_app}></Route>
-          <Route path="/taskList" component={Task_List}></Route>
+          <Route path="/" element = {<Calendar />}></Route>
+          <Route path="/profile" element = {<Profile />}></Route>
+          <Route path="/settings" element = {<Settings />}></Route>
+          <Route path="/features" element = {<Features />}></Route>
+          <Route path="/calendar" element = {<Calendar />}></Route>
+          <Route path="/notes" element = {<Note_app />}></Route>
+          <Route path="/taskList" element = {<Task_List />}></Route>
         </Routes>
       </BrowserRouter>
-      {showEventModal && <EventModal />}
-
-      <div className="h-screen flex flex-col">
-        <CalendarHeader />
-        <div className="flex flex-1">
-          <Sidebar />
-          <Month month={currenMonth} />
-        </div>
-      </div>
+      
     </>
   );
 }
