@@ -32,7 +32,6 @@ function App() {
           <Route path="/profile" component={Profile}></Route>
           <Route path="/settings" component={Settings}></Route>
           <Route path="/features" component={Features}></Route>
-          <Route path="/signup" component={Signup}></Route>
           <Route path="/calendar" component={Calendar}></Route>
           <Route path="/notes" component={Note_app}></Route>
           <Route path="/taskList" component={Task_List}></Route>
