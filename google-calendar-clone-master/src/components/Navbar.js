@@ -17,7 +17,7 @@ function Navbar() {
         </Link>
         <ul className="nav-items">
           {navItems.map((item) => {
-            if (item.title === "Services") {
+            if (item.title === "Features") {
               return (
                 <li
                   key={item.id}

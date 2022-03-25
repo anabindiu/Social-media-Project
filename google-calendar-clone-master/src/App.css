@@ -7,14 +7,12 @@
   font-family: "PT Sans", sans-serif;
 }
 
-.home,
-.consulting,
-.contactus,
-.design,
-.development,
-.marketing,
-.products,
-.services,
+.profile,
+.calendar,
+.features,
+.settings,
+.taskList,
+.notes,
 .signup {
   display: flex;
   justify-content: center;
@@ -26,6 +24,6 @@
   background-size: cover;
   text-shadow: 4px 4px 4px #fff;
 }
-.home {
+.profile {
   background-image: url(./images/home.jpg);
 }
