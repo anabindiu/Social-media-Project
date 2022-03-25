@@ -4,10 +4,14 @@ const config = require('../config');
 
 function parseKey(key_type, key_value){
     switch(key_type){
-        case "ID":
+        case "Profile_ID_Author":
             return key_value;
-        case "Notes_ID":
+        case "Profile_ID_Recipient":
             return key_value;
+        case "Feature_ID":
+            return key_value;
+        case "Feature_type":
+            return `\"${key_value}\"`;
         default:
             return key_value;
     }
@@ -16,8 +20,8 @@ function parseKey(key_type, key_value){
 async function getAll(page = 1){
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT ID, Notes_ID, Date_Created, Title, Content
-        FROM note LIMIT ${offset},${config.listPerPage}`
+        `SELECT Profile_ID_Author, Profile_ID_Recipient, Permissions, Feature_ID, Feature_type
+        FROM shared_features LIMIT ${offset},${config.listPerPage}`
     );
     const data = helper.emptyOrRows(rows);
     const meta = {page};
@@ -33,15 +37,15 @@ async function getOne(key_type1, key_type2, key_value1, key_value2){
     key_value2 = parseKey(key_type2, key_value2);
     if(key_value2 == null){
         const rows = await db.query(
-            `SELECT ID, Notes_ID, Date_Created, Title, Content
-            FROM note
+            `SELECT Profile_ID_Author, Profile_ID_Recipient, Permissions, Feature_ID, Feature_type
+            FROM shared_features
             WHERE ${key_type1}=${key_value1}`
         );
     }
     else{
         const rows = await db.query(
-            `SELECT ID, Notes_ID, Date_Created, Title, Content
-            FROM note
+            `SELECT Profile_ID_Author, Profile_ID_Recipient, Permissions, Feature_ID, Feature_type
+            FROM shared_features
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
     }
@@ -55,16 +59,16 @@ async function getOne(key_type1, key_type2, key_value1, key_value2){
 
 async function create(body){
     const result = await db.query(
-        `INSERT INTO note 
-        (Notes_ID, Date_Created, Title, Content) 
+        `INSERT INTO shared_features 
+        (Profile_ID_Author, Profile_ID_Recipient, Permissions, Feature_ID, Feature_type) 
         VALUES 
-        (${body.Notes_ID}, "${body.Date_Created}", "${body.Title}", "${body.Content}")`
+        (${body.Profile_ID_Author}, ${body.Profile_ID_Recipient}, "${body.Permissions}", ${body.Feature_ID}, "${body.Feature_type}")`
     );
     
-    let message = 'Error in creating note ';
+    let message = 'Error in creating shared_features ';
     
     if (result.affectedRows) {
-        message = 'note created successfully';
+        message = 'shared_features created successfully';
     }
     
     return {message};
@@ -76,24 +80,24 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
 
     if(key_value2 == null){
         const result = await db.query(
-            `UPDATE note 
-            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Title="${body.Title}", Content="${body.Content}"
+            `UPDATE shared_features 
+            SET Profile_ID_Author=${body.Profile_ID_Author}, Profile_ID_Recipient=${body.Profile_ID_Recipient}, Permissions="${body.Permissions}", Feature_ID=${body.Feature_ID}, Feature_type="${body.Feature_type}"
             WHERE ${key_type1}=${key_value1}`
         );
     }
     else{
         const result = await db.query(
-            `UPDATE note 
-            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Title="${body.Title}", Content="${body.Content}"
+            `UPDATE shared_features 
+            SET Profile_ID_Author=${body.Profile_ID_Author}, Profile_ID_Recipient=${body.Profile_ID_Recipient}, Permissions="${body.Permissions}", Feature_ID=${body.Feature_ID}, Feature_type="${body.Feature_type}"
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
         );
     }
     
 
-    let message = 'Error in updating note';
+    let message = 'Error in updating shared_features';
     
     if (result.affectedRows) {
-        message = 'note updated successfully';
+        message = 'shared_features updated successfully';
     }
     
     return {message};
@@ -105,19 +109,19 @@ async function remove(key_type1, key_type2, key_value1, key_value2){
     
     if(key_value2 == null){
         const result = await db.query(
-            `DELETE FROM note WHERE ${key_type1}=${key_value1}`
+            `DELETE FROM shared_features WHERE ${key_type1}=${key_value1}`
         );
     }
     else{
         const result = await db.query(
-            `DELETE FROM note WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
+            `DELETE FROM shared_features WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
     }
     
-    let message = 'Error in deleting note';
+    let message = 'Error in deleting shared_features';
     
     if (result.affectedRows) {
-        message = 'note deleted successfully';
+        message = 'shared_features deleted successfully';
     }
     
     return {message};

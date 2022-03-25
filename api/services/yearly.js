@@ -4,10 +4,10 @@ const config = require('../config');
 
 function parseKey(key_type, key_value){
     switch(key_type){
-        case "ID":
+        case "Feature_Stats_ID":
             return key_value;
-        case "Notes_ID":
-            return key_value;
+        case "Year":
+            return `\"${key_value}\"`;
         default:
             return key_value;
     }
@@ -16,8 +16,8 @@ function parseKey(key_type, key_value){
 async function getAll(page = 1){
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT ID, Notes_ID, Date_Created, Title, Content
-        FROM note LIMIT ${offset},${config.listPerPage}`
+        `SELECT Feature_Stats_ID, Year
+        FROM yearly LIMIT ${offset},${config.listPerPage}`
     );
     const data = helper.emptyOrRows(rows);
     const meta = {page};
@@ -33,15 +33,15 @@ async function getOne(key_type1, key_type2, key_value1, key_value2){
     key_value2 = parseKey(key_type2, key_value2);
     if(key_value2 == null){
         const rows = await db.query(
-            `SELECT ID, Notes_ID, Date_Created, Title, Content
-            FROM note
+            `SELECT Feature_Stats_ID, Year
+            FROM yearly
             WHERE ${key_type1}=${key_value1}`
         );
     }
     else{
         const rows = await db.query(
-            `SELECT ID, Notes_ID, Date_Created, Title, Content
-            FROM note
+            `SELECT Feature_Stats_ID, Year
+            FROM yearly
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
     }
@@ -55,16 +55,16 @@ async function getOne(key_type1, key_type2, key_value1, key_value2){
 
 async function create(body){
     const result = await db.query(
-        `INSERT INTO note 
-        (Notes_ID, Date_Created, Title, Content) 
+        `INSERT INTO yearly 
+        (Feature_Stats_ID, Year) 
         VALUES 
-        (${body.Notes_ID}, "${body.Date_Created}", "${body.Title}", "${body.Content}")`
+        (${body.Feature_Stats_ID}, "${body.Year}")`
     );
     
-    let message = 'Error in creating note ';
+    let message = 'Error in creating yearly ';
     
     if (result.affectedRows) {
-        message = 'note created successfully';
+        message = 'yearly created successfully';
     }
     
     return {message};
@@ -73,27 +73,17 @@ async function create(body){
 async function update(key_type1, key_type2, key_value1, key_value2, body){
     key_value1 = parseKey(key_type1, key_value1);
     key_value2 = parseKey(key_type2, key_value2);
-
-    if(key_value2 == null){
-        const result = await db.query(
-            `UPDATE note 
-            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Title="${body.Title}", Content="${body.Content}"
-            WHERE ${key_type1}=${key_value1}`
-        );
-    }
-    else{
-        const result = await db.query(
-            `UPDATE note 
-            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Title="${body.Title}", Content="${body.Content}"
-            WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
-        );
-    }
     
-
-    let message = 'Error in updating note';
+    const result = await db.query(
+        `UPDATE yearly 
+        SET Feature_Stats_ID=${body.Feature_Stats_ID}, Year="${body.Year}"
+        WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
+    );
+    
+    let message = 'Error in updating yearly';
     
     if (result.affectedRows) {
-        message = 'note updated successfully';
+        message = 'yearly updated successfully';
     }
     
     return {message};
@@ -102,22 +92,15 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
 async function remove(key_type1, key_type2, key_value1, key_value2){
     key_value1 = parseKey(key_type1, key_value1);
     key_value2 = parseKey(key_type2, key_value2);
+
+    const result = await db.query(
+        `DELETE FROM yearly WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
+    );
     
-    if(key_value2 == null){
-        const result = await db.query(
-            `DELETE FROM note WHERE ${key_type1}=${key_value1}`
-        );
-    }
-    else{
-        const result = await db.query(
-            `DELETE FROM note WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
-        );
-    }
-    
-    let message = 'Error in deleting note';
+    let message = 'Error in deleting yearly';
     
     if (result.affectedRows) {
-        message = 'note deleted successfully';
+        message = 'yearly deleted successfully';
     }
     
     return {message};
