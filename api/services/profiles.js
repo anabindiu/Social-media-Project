@@ -22,9 +22,9 @@ async function create(profile){
   console.log(profile.Email + " " + profile.B_Date);
   const result = await db.query(
     `INSERT INTO profile 
-    (Email, Username, Password, B_Date, Name, Profile_Pic, User_Email) 
+    (Email, Username, Password, Name, B_Date, Profile_Pic) 
     VALUES 
-    ("${profile.Email}", "${profile.Username}", "${profile.Password}", "${profile.B_Date}", "${profile.Name}", "${profile.Profile_Pic}", ${profile.User_Email})`
+    ("${profile.Email}", "${profile.Username}", "${profile.Password}",  "${profile.Name}", "${profile.B_Date}", "${profile.Profile_Pic}")`
   );
 
   let message = 'Error in creating profile ';
