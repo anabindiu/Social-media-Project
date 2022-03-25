@@ -1,7 +1,13 @@
 import React from 'react'
+import TodoList from '../components/TodoList';
+import '../components/Todo_List.css';
 
-export default function Task_List() {
+function Task_List() {
   return (
-    <div>Task List</div>
-  )
+    <div className='todo-app'>
+      <TodoList />
+    </div>
+  );
 }
+
+export default Task_List;
