@@ -13,7 +13,6 @@ import Task_List from "./pages/Task_List";
 import Settings from "./pages/Settings";
 import Note_app from "./pages/Notes";
 import Features from "./pages/Features";
-import Signup from "./pages/Signup";
 import Calendar from "./pages/Calendar"
 
 function App() {
