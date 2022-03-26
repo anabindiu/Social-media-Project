@@ -21,7 +21,7 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element = {<Calendar />}></Route>
+          <Route path="/" element = {<Profile />}></Route>
           <Route path="/profile" element = {<Profile />}></Route>
           <Route path="/settings" element = {<Settings />}></Route>
           <Route path="/features" element = {<Features />}></Route>

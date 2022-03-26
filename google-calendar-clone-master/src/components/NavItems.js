@@ -16,7 +16,7 @@ export const navItems = [
   export const serviceDropdown = [
     {
       id: 1,
-      title: "Calendar",
+      title: "Schedule",
       path: "./calendar",
       cName: "submenu-item",
     },

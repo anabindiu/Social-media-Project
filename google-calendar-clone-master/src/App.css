@@ -27,3 +27,37 @@
 .profile {
   background-image: url(./images/home.jpg);
 }
+
+.border_list {
+  width: 320px;
+  padding: 10px;
+  border: 1px solid rgb(247, 240, 240);
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px 20px 20px 20px;
+  width: 600px;
+  margin: 20px;
+  margin-left: 90px;
+}
+
+.title_border{
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.4rem;
+  margin: 20px;
+  margin-left: 90px;
+  font-weight: bold;
+}
+
+.border_item {
+  font-weight: bold;
+  font-size: 1.2rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.item_description {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.search_button {
+  margin-left: 90px;
+  width: 600px;
+}
