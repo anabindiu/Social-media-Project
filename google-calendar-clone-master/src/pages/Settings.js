@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import "../App.css";
+import { Link } from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Login from './Login';
 
 export default function Settings() {
   const options= [
@@ -76,7 +79,19 @@ export default function Settings() {
         tags: [],
       },
     ]
-  }
+  },
+  {
+    header: {
+      name: "Report problem",
+    },
+    values: [
+      {
+      name: "Log",
+      description: "",
+      tags:[],
+      }
+    ],
+  },
 ];
 
 const [visibleOptions, setVisibleOptions] = useState(options);
@@ -153,7 +168,13 @@ const onChange=(e)=>{
           </div>
           ))}
         </div>
-      
+        <button className='btn ml-24'>
+            Log out
+            <Routes>
+              <Route path="/login" element = {<Login />}></Route>
+            </Routes>
+        </button>
+
       
       </div>
     </div>

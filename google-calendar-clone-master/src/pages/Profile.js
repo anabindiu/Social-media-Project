@@ -89,8 +89,6 @@ const [profile_list, setProfileList] = useState(options);
           </div>
           ))}
         </div>
-      
-      
       </div>
     </div>
   );

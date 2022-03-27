@@ -10,7 +10,7 @@ export default function Features() {
 
     values: [
       {
-        name: "Link to friends account",
+        name: "Shared friend accounts list",
         description: "www.friends.com lol",
         tags: [],
       },

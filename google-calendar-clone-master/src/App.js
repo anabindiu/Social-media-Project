@@ -14,6 +14,7 @@ import Settings from "./pages/Settings";
 import Note_app from "./pages/Notes";
 import Features from "./pages/Features";
 import Calendar from "./pages/Calendar"
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/calendar" element = {<Calendar />}></Route>
           <Route path="/notes" element = {<Note_app />}></Route>
           <Route path="/taskList" element = {<Task_List />}></Route>
+          <Route path="/login" element = {<Login />}></Route>
         </Routes>
       </BrowserRouter>
       
