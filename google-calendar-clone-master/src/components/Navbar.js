@@ -12,7 +12,7 @@ function Navbar() {
   return (
     <>
       <nav className="navbar">
-        <Link to="/" className="navbar-logo">
+        <Link to="/profile" className="navbar-logo">
           <Icons.FaBars />
         </Link>
         <ul className="nav-items">

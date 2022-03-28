@@ -6,7 +6,7 @@ export default function Login() {
   return (
     <div className="text-center m-5-auto">
     <h2>Sign in to us</h2>
-    <form action="/" className='display: inline-block'>
+    <form action="/profile" className='display: inline-block'>
         <p>
             <label>Username or email address</label><br/>
             <input type="text" name="first_name" required />
