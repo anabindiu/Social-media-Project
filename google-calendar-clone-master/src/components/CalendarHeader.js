@@ -21,8 +21,8 @@ export default function CalendarHeader() {
   }
   return (
     <header className="px-4 py-2 flex items-center">
-      <h1 className="mr-10 text-xl text-gray-500 fond-bold">
-        Calendar
+      <h1 className="mr-10 text-xl text-black fond-bold">
+        Schedule
       </h1>
       <button
         onClick={handleReset}
@@ -40,7 +40,7 @@ export default function CalendarHeader() {
           chevron_right
         </span>
       </button>
-      <h2 className="ml-4 text-xl text-gray-500 font-bold">
+      <h2 className="ml-4 text-xl text-black-500 font-bold">
         {dayjs(new Date(dayjs().year(), monthIndex)).format(
           "MMMM YYYY"
         )}

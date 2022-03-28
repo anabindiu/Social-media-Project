@@ -11,12 +11,6 @@ export const navItems = [
       path: "./features",
       cName: "nav-item",
     },
-    {
-      id: 3,
-      title: "Login",
-      path: "/login",
-      cName: "nav-item"
-    },
   ];
   
   export const serviceDropdown = [

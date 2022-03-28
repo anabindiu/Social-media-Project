@@ -6,7 +6,7 @@ import ContextWrapper from "./context/ContextWrapper";
 ReactDOM.render(
   <React.StrictMode>
     <ContextWrapper>
-      <App />,
+      <App />
     </ContextWrapper>
   </React.StrictMode>,
   document.getElementById("root")

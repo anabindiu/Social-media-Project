@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import "../App.css";
 import { Link } from "react-router-dom";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Login from './Login';
 
 export default function Settings() {
   const options= [
@@ -168,14 +166,11 @@ const onChange=(e)=>{
           </div>
           ))}
         </div>
+        <Link to="/login">
         <button className='btn ml-24'>
             Log out
-            <Routes>
-              <Route path="/login" element = {<Login />}></Route>
-            </Routes>
         </button>
-
-      
+        </Link>
       </div>
     </div>
   );
