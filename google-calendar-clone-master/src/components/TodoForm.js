@@ -52,7 +52,7 @@ function TodoForm(props) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             name='text'
-            className='todo-input'
+            className='todo-input mr-20'
             ref={inputRef}
           />
 
@@ -62,7 +62,7 @@ function TodoForm(props) {
             value={name_of_Task}
             onChange={(e) => setName(e.target.value)}
             name='title'
-            className='todo-input'
+            className='todo-input mr-20'
             ref={nameRef}
           />
           <div></div>
@@ -71,7 +71,7 @@ function TodoForm(props) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             name='description'
-            className='todo-input'
+            className='todo-input mr-20'
             ref={descrRref}
           />
           <div></div>
@@ -80,7 +80,7 @@ function TodoForm(props) {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             name='location'
-            className='todo-input'
+            className='todo-input mr-20'
             ref={locationRef}
           />
           <div></div>
@@ -89,7 +89,7 @@ function TodoForm(props) {
             value={deadline}
             onChange={(e) => setDeadline(e.target.value)}
             name='deadline'
-            className='todo-input'
+            className='todo-input mr-5'
             ref={deadlineRef}
           />
           <button onClick={handleSubmit} className='todo-button'>
