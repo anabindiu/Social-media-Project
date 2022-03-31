@@ -1,0 +1,121 @@
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "PT Sans", sans-serif;
+}
+
+.profile,
+.calendar,
+.features,
+.settings,
+.taskList,
+.notes,
+.signup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  font-size: 4rem;
+  background-position: center;
+  background-repeat: none;
+  background-size: cover;
+  text-shadow: 4px 4px 4px #fff;
+}
+.profile {
+  background-image: url(./images/home.jpg);
+}
+
+.border_list {
+  width: 320px;
+  padding: 10px;
+  border: 1px solid rgb(247, 240, 240);
+  background-color: rgb(255, 255, 255);
+  border-radius: 20px 20px 20px 20px;
+  width: 600px;
+  margin: 20px;
+  margin-left: 90px;
+}
+
+.title_border{
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.4rem;
+  margin: 20px;
+  margin-left: 90px;
+  font-weight: bold;
+}
+
+.border_item {
+  font-weight: bold;
+  font-size: 1.2rem;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.item_description {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.search_button {
+  margin-left: 90px;
+  width: 600px;
+}
+
+.m-5-auto {
+  margin: 5rem auto
+}
+
+input {
+  width: 15rem;
+  padding: .3rem;
+  border-radius: 5px;
+  outline: none;
+  border: none
+}
+
+#sub_btn {
+  display: block;
+  width: 100%;
+  padding: .3rem;
+  border: none;
+  background: #222;
+  color: #fff;
+  border-radius: 3px;
+}
+
+#sub_btn:hover {
+  background: #333;
+  transition: all .5s
+}
+
+footer p {
+  margin: 0;
+  font-size: .9rem
+}
+
+h2 {
+  font-weight: 300
+}
+
+/*
+form {
+  display: inline-block;
+  background: #f3f3f3;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  padding: 2rem;
+  margin: 2rem 0 1rem 0
+}
+*/
+
+form label {
+  float: left;
+  font-size: .9rem;
+  margin: 0;
+  padding: 0
+}
+
+.input_detail {
+  background-color: rgb(204, 201, 201);
+}
