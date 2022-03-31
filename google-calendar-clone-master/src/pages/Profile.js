@@ -9,6 +9,9 @@ export default function Profile() {
     },
 
     values: [
+      {
+        name: "",
+      }
     ],
   },
   {
@@ -16,6 +19,9 @@ export default function Profile() {
       name: "Name:",
     },
     values: [
+      {
+        name: "",
+      }
     ],
   },
   {
@@ -35,6 +41,9 @@ export default function Profile() {
     },
 
     values: [
+      {
+        name: "",
+      }
     ]
   },
   {
@@ -43,6 +52,9 @@ export default function Profile() {
     },
 
     values: [
+      {
+        name: "",
+      }
     ]
   },
   {
@@ -51,6 +63,9 @@ export default function Profile() {
     },
 
     values: [
+      {
+        name: "Add a password",
+      }
     ]
   }
 ];
@@ -80,6 +95,7 @@ const [profile_list, setProfileList] = useState(options);
                   <ul className='list-group'>
                     <li className='list-group-item mb-2'>
                       <h6 className='border_item'>{value.name}</h6>
+                      <input className='input_detail' placeholder= {value.description}></input>
                       <p className='item_description'>{value.description}</p>
                     </li>
                   </ul>

@@ -56,7 +56,7 @@ const [profile_list, setProfileList] = useState(options);
         <div>
           {profile_list.map((option) =>(
           <div key={option.header.name}>
-            <h3 className='title_border'>{option.header.name}</h3>
+            <button className='btn ml-20'>{option.header.name}</button>
             <div className="border_list">
               {option.values.map((value) => (
                 <div key={value.name} className="font-weight-bold">
@@ -72,6 +72,7 @@ const [profile_list, setProfileList] = useState(options);
           </div>
           ))}
         </div>
+              
       
       
       </div>

@@ -21,13 +21,7 @@ export default function Labels() {
       ))}
       <p className="text-black-500 font-bold mt-10">Theme</p>
       <p className="text-black-500 font-bold mt-10">Schedules</p>
-      <p className="text-black-500 font-bold mt-10">Reminders</p>
-      <p className="text-black-10 mt-10">Turn on/off alert for (Event)
-            <p>Date</p>
-            <p>Location</p>
-            <p>Title</p>
-            <p>Description</p>
-      </p>
+      
     </React.Fragment>
   );
 }

@@ -52,7 +52,7 @@ const [profile_list, setProfileList] = useState(options);
                 <div key={value.name} className="font-weight-bold">
                   <ul className='list-group'>
                     <li className='list-group-item mb-2'>
-                      <h6 className='border_item'>{value.name}</h6>
+                      <btn className='btn'>{value.name}</btn>
                       <p className='item_description'>{value.description}</p>
                     </li>
                   </ul>
