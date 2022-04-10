@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import uuid from "react-uuid";
 import "./Notes.css";
 import Note_File1 from "../components/Note_File1";
-import Note_File2 from "../components/Side_bar_Notes";
 import Side_bar_Notes from "../components/Side_bar_Notes";
 
 function Notes() {

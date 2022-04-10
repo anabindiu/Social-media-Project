@@ -1,18 +1,3 @@
-
-button {
-  background: none;
-  border: 0;
-  margin: 0;
-  padding: 0;
-  font-size: inherit;
-  font-family: inherit;
-  cursor: pointer;
-  color: #08c;
-}
-button:hover {
-  color: #04c;
-}
-
 .Notes {
   display: flex;
 }
@@ -29,7 +14,13 @@ button:hover {
   display: flex;
   justify-content: space-between;
   padding: 25px;
-}
+  background: linear-gradient(
+    90deg,
+    rgb(46, 150, 219) 0%,
+    rgb(221, 228, 255) 100%
+);}
+
+
 .notes-sidebar-header h1 {
   margin: 0;
 }
@@ -39,6 +30,7 @@ button:hover {
   overflow-y: scroll;
 }
 .notes-sidebar-note {
+    margin-top: 30px;
   padding: 25px;
   cursor: pointer;
 }
@@ -47,25 +39,31 @@ button:hover {
   justify-content: space-between;
 }
 .notes-sidebar-note button {
-  color: crimson;
+  color: rgb(143, 16, 41);
+  
 }
 .notes-sidebar-note p {
   margin: 10px 0;
 }
 .notes-sidebar-note small {
   display: block;
-  color: #999;
+  color: rgb(83, 78, 78);
 }
 
 .notes-sidebar-note:hover {
-  background: #ddd;
+    background: #ddd;
+    border-radius: 20px 20px 20px 20px;
 }
 .notes-sidebar-note.active,
 .notes-sidebar-note.active small {
-  background: #08c;
-  color: white;
+    background: linear-gradient(
+        90deg,
+        rgb(142, 65, 187) 0%,
+        rgb(93, 119, 235) 100%
+    );
+    color: rgb(255, 255, 255);
+    border-radius: 20px 20px 20px 20px;
 }
-
 /* NOTE EDITOR/PREVIEW (MAIN) STYLES */
 
 .notes-main {
@@ -83,7 +81,7 @@ button:hover {
   line-height: 100vh;
   text-align: center;
   font-size: 2rem;
-  color: #999;
+  color: rgb(83, 78, 78);
 }
 
 /* Editing */
@@ -102,6 +100,7 @@ textarea {
   resize: none;
   font-size: inherit;
   font-family: inherit;
+  border-radius: 20px 20px 20px 20px;
 }
 .notes-main-note-edit input {
   height: 50px;
