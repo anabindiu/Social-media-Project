@@ -15,6 +15,8 @@ import Note_app from "./pages/Notes";
 import Features from "./pages/Features";
 import Calendar from "./pages/Calendar"
 import Login from "./pages/Login";
+import Welcome from "./pages/Welcome";
+import Signup from "./pages/Signup";
 
 function App() {
   return (
@@ -22,7 +24,9 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element = {<Login />}></Route>
+          <Route path="/login" element = {<Login />}></Route>
+          <Route path="/signup" element = {<Signup />}></Route>
+          <Route path="/" element = {<Welcome />}></Route>
           <Route path="/profile" element = {<Profile />}></Route>
           <Route path="/settings" element = {<Settings />}></Route>
           <Route path="/features" element = {<Features />}></Route>
