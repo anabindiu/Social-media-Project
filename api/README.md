@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Social-media-Project
 
 How to run: 
@@ -6,3 +7,6 @@ How to run:
 2) on a separate terminal, cd into client and run <npm start>
 3) enter data into the profile page and hit add profile 
 4) go to browser and type <http://localhost:3001/profile> to view the changes 
+=======
+# Social-media-Project
+>>>>>>> origin/Parth_Branch
