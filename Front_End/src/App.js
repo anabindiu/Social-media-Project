@@ -6,7 +6,7 @@ import Sidebar from "./components/Sidebar";
 import Month from "./components/Month";
 import GlobalContext from "./context/GlobalContext";
 import EventModal from "./components/EventModal";
-import {BrowserRouter, Route, Routes, Link} from "react-router-dom";
+import {BrowserRouter, Route, Routes, Link, Outlet} from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import Task_List from "./pages/Task_List";
@@ -17,9 +17,12 @@ import Calendar from "./pages/Calendar"
 import Login from "./pages/Login";
 import Welcome from "./pages/Welcome";
 import Signup from "./pages/Signup";
+import { ProtectedRoute } from "./ProtectedRoutes";
+import auth from "./auth/auth";
 
 function App() {
   const [page, setPrevPage] = useState('');
+  
   return (
     <>
       <BrowserRouter>
@@ -27,14 +30,15 @@ function App() {
         <Routes>
           <Route path="/login" element = {<Login />}></Route>
           <Route path="/signup" element = {<Signup />}></Route>
-          <Route path="/" element = {<Welcome />}></Route>
-          <Route path="/profile" element = {<Profile />}></Route>
-          <Route path="/settings" element = {<Settings />}></Route>
-          <Route path="/features" element = {<Features />}></Route>
-          <Route path="/calendar" element = {<Calendar />}></Route>
-          <Route path="/notes" element = {<Note_app />}></Route>
-          <Route path="/taskList" element = {<Task_List />}></Route>
-          <Route path="/login" element = {<Login />}></Route>
+          <Route path="/welcome" element = {<Welcome />}/>
+          <Route path="/profile" element = {<ProtectedRoute> <Profile /> </ProtectedRoute>}/>
+          <Route path="/settings" element =  {<ProtectedRoute> <Settings /> </ProtectedRoute>}/>
+          <Route path="/features" element =  {<ProtectedRoute> <Features /> </ProtectedRoute>}/>
+          <Route path="/calendar" element =  {<ProtectedRoute> <Calendar /> </ProtectedRoute>}/>
+          <Route path="/notes" element =  {<ProtectedRoute> <Note_app /> </ProtectedRoute>}/>
+          <Route path="/taskList" element =  {<ProtectedRoute> <Task_List /> </ProtectedRoute>}/>
+          <Route path = "*" element ={<p> Error 404 Not found!</p>} />
+          
         </Routes>
       </BrowserRouter>
     </>
