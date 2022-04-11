@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-const port = 3000;
+const port = 3001;
 
 const administrator_Router = require("./routes/administrator");
 const event_Router = require("./routes/event");
@@ -18,6 +18,10 @@ const shared_features_Router = require("./routes/shared_features");
 const task_Router = require("./routes/task");
 const tasks_Router = require("./routes/tasks");
 const yearly_Router = require("./routes/yearly");
+
+//added cors to allow api fetch and post 
+const cors = require("cors");
+app.use(cors());
 
 app.use(express.json());
 //Express framework being URL encoded.
