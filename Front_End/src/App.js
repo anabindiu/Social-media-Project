@@ -7,6 +7,7 @@ import Month from "./components/Month";
 import GlobalContext from "./context/GlobalContext";
 import EventModal from "./components/EventModal";
 import {BrowserRouter, Route, Routes, Link} from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import Task_List from "./pages/Task_List";
@@ -15,6 +16,7 @@ import Note_app from "./pages/Notes";
 import Features from "./pages/Features";
 import Calendar from "./pages/Calendar"
 import Login from "./pages/Login";
+
 
 function App() {
   return (

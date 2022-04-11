@@ -2,6 +2,8 @@ import dayjs from "dayjs";
 import React, { useContext } from "react";
 import logo from "../assets/logo.png";
 import GlobalContext from "../context/GlobalContext";
+import {Button} from "../components/Buttons"
+import {Title} from "../components/Headers"
 // <img src={logo} alt="calendar" className="mr-2 w-12 h-12" />
 // include this after header className for return 
 export default function CalendarHeader() {
@@ -24,22 +26,9 @@ export default function CalendarHeader() {
       <h1 className="mr-10 text-xl text-black fond-bold">
         Schedule
       </h1>
-      <button
-        onClick={handleReset}
-        className="border rounded py-2 px-4 mr-5"
-      >
-        Today
-      </button>
-      <button onClick={handlePrevMonth}>
-        <span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
-          chevron_left
-        </span>
-      </button>
-      <button onClick={handleNextMonth}>
-        <span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
-          chevron_right
-        </span>
-      </button>
+      <Button onClick={handleReset}>Today</Button>
+      <Button onClick={handlePrevMonth}>&lt;</Button>
+      <Button onClick={handleNextMonth}>&gt;</Button>
       <h2 className="ml-4 text-xl text-black-500 font-bold">
         {dayjs(new Date(dayjs().year(), monthIndex)).format(
           "MMMM YYYY"

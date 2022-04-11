@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import "../App.css";
+import {Button} from "../components/Buttons"
 
 export default function Notes() {
   const options= [
@@ -38,6 +39,10 @@ export default function Notes() {
   },
 ];
 
+function clickMe(){
+  alert("Test");
+}
+
 const [profile_list, setProfileList] = useState(options);
 
  return (
@@ -45,10 +50,7 @@ const [profile_list, setProfileList] = useState(options);
       <div className='containter mt-5'>
         <h1>
           <span>
-            <button className='btn'>
-              {" "}
-              <span className>&lt;</span>Back{" "}
-            </button>
+            <Button>Back</Button>
             <h1 className='form-control mt-2 ml-20'>  Notes</h1> 
           </span>
         </h1>
@@ -72,9 +74,6 @@ const [profile_list, setProfileList] = useState(options);
           </div>
           ))}
         </div>
-              
-      
-      
       </div>
     </div>
   );

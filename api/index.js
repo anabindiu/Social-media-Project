@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-const port = 3000;
+const port = 3300;
 
 const administrator_Router = require("./routes/administrator");
 const event_Router = require("./routes/event");

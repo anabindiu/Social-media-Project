@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import React, { useContext, useEffect, useState } from "react";
 import GlobalContext from "../context/GlobalContext";
 import { getMonth } from "../util";
+import { Button } from "../components/Buttons";
 
 export default function SmallCalendar() {
   const [currentMonthIdx, setCurrentMonthIdx] = useState(
@@ -51,16 +52,8 @@ export default function SmallCalendar() {
           )}
         </p>
         <div>
-          <button onClick={handlePrevMonth}>
-            <span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
-              chevron_left
-            </span>
-          </button>
-          <button onClick={handleNextMonth}>
-            <span className="material-icons-outlined cursor-pointer text-gray-600 mx-2">
-              chevron_right
-            </span>
-          </button>
+          <Button theme="gray_transparent" onClick={handlePrevMonth}>&lt;</Button>
+          <Button onClick={handleNextMonth}>&gt;</Button>
         </div>
       </header>
       <div className="grid grid-cols-7 grid-rows-6">

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const administrator_service = require("../services/administrator");
 
-/* GET administrator by ALL, ID, Email, Username*/
+/* GET administrator by ALL, ID, Email, Username*/http://localhost:${port}
 router.get('/', (req, res, next) => {send_query(req, res, next, "GET", null, null);});
 router.get('/ID/:ID', (req, res, next) => {send_query(req, res, next, "GET", "ID", req.params.ID);});
 router.get('/Email/:Email', (req, res, next) => {send_query(req, res, next, "GET", "Email", req.params.Email);});
