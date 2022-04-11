@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import "../App.css";
-import { Link } from "react-router-dom";
+import { Link,  } from "react-router-dom";
+import auth from '../auth/auth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Settings() {
+
+  const navigate = useNavigate();
   const options= [
   {
     header: {
@@ -127,6 +131,13 @@ const onChange=(e)=>{
 
   setVisibleOptions(returnedItems);
 };
+  const handleLogOut = () =>{
+    auth.logout(() => {
+      localStorage.clear();
+      navigate("/welcome");
+      console.log("Logged out");
+    })
+  }
 
   return (
     <div className='App'>
@@ -166,8 +177,10 @@ const onChange=(e)=>{
           </div>
           ))}
         </div>
-        <Link to="/">
-        <button className='btn ml-24'>
+
+        <Link to="/login">
+        <button className='btn ml-24' onClick={handleLogOut}>
+
             Log out
         </button>
         </Link>
