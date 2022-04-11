@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import {Button} from "../components/Buttons";
 import "../App.css";
 
 export default function Features() {
@@ -35,10 +36,6 @@ const [profile_list, setProfileList] = useState(options);
       <div className='containter mt-5'>
         <h1>
           <span>
-            <button className='btn'>
-              {" "}
-              <span className>&lt;</span>Back{" "}
-            </button>
             <h1 className='form-control mt-2 ml-20'> Features</h1> 
           </span>
         </h1>
@@ -52,7 +49,7 @@ const [profile_list, setProfileList] = useState(options);
                 <div key={value.name} className="font-weight-bold">
                   <ul className='list-group'>
                     <li className='list-group-item mb-2'>
-                      <btn className='btn'>{value.name}</btn>
+                      <Button>{value.name}</Button>
                       <p className='item_description'>{value.description}</p>
                     </li>
                   </ul>

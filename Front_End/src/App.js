@@ -19,6 +19,7 @@ import Welcome from "./pages/Welcome";
 import Signup from "./pages/Signup";
 
 function App() {
+  const [page, setPrevPage] = useState('');
   return (
     <>
       <BrowserRouter>

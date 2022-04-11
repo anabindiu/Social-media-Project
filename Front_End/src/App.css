@@ -1,10 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=PT+Sans:wght@700&display=swap");
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "PT Sans", sans-serif;
+  font-family: "Montserrat_Light";
 }
 
 .profile,
@@ -40,7 +38,7 @@
 }
 
 .title_border{
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Montserrat_Light";
   font-size: 1.4rem;
   margin: 20px;
   margin-left: 90px;
@@ -50,11 +48,11 @@
 .border_item {
   font-weight: bold;
   font-size: 1.2rem;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Montserrat_Light";
 }
 
 .item_description {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Montserrat_Light";
 }
 
 .search_button {

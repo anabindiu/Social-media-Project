@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import "../App.css";
 import { Link } from "react-router-dom";
+import * as comp from "../components/Settings_Components";
+import { LinkButton } from '../components/Buttons';
 
 export default function Settings() {
   const options= [
@@ -13,6 +15,16 @@ export default function Settings() {
       {
       name: "Turn on/off notifications",
       description: "disable notifications...",
+      buttons:[
+        {
+          title: "On",
+          type: "Toggle"
+        },
+        {
+          title: "Off",
+          type: "Toggle"
+        }
+      ],
       tags: [],
       },
     ],
@@ -24,8 +36,26 @@ export default function Settings() {
     values: [
       {
         name: "-->List of countries to pick from <--",
-        description: "-------",
-        tags: [],
+        description: "Pick a country....",
+        buttons:[
+          {
+            title: "Canada",
+            type: "OneToggle"
+          },
+          {
+            title: "USA",
+            type: "OneToggle"
+          },
+          {
+            title: "Romania",
+            type: "OneToggle"
+          },
+          {
+            title: "Kenya",
+            type: "OneToggle"
+          }
+        ],
+        tags: []
       },
     ],
   },
@@ -38,16 +68,46 @@ export default function Settings() {
       {
         name: "Date Format",
         description: "the date of today",
+        buttons:[
+          {
+            title: "DD/MM/YY",
+            type: "OneToggle"
+          },
+          {
+            title: "MM/DD/YY",
+            type: "OneToggle"
+          }
+        ],
         tags: ["date_format"],
       },
       {
         name: "Time Format",
         description: "the time of today",
+        buttons:[
+          {
+            title: "1:00pm",
+            type: "OneToggle"
+          },
+          {
+            title: "13:00",
+            type: "OneToggle"
+          }
+        ],
         tags: [],
       },
       {
         name: "Time Zone",
         description: "the time zone of the location you're at",
+        buttons:[
+          {
+            title: "ET",
+            type: "OneToggle"
+          },
+          {
+            title: "MT",
+            type: "OneToggle"
+          }
+        ],
         tags:[],
       },
     ],
@@ -61,6 +121,16 @@ export default function Settings() {
       {
         name: "Change the theme colour: ",
         description: "--> list of colours <--",
+        buttons:[
+          {
+            title: "Light",
+            type: "OneToggle"
+          },
+          {
+            title: "Dark",
+            type: "OneToggle"
+          }
+        ],
         tags:[],
       },
     ]
@@ -69,11 +139,20 @@ export default function Settings() {
     header: {
       name: "Language",
     },
-
     values: [
       {
         name: "Pick the language: ",
         description: "--> list of languages <--",
+        buttons:[
+          {
+            title: "English",
+            type: "OneToggle"
+          },
+          {
+            title: "French",
+            type: "OneToggle"
+          }
+        ],
         tags: [],
       },
     ]
@@ -86,6 +165,7 @@ export default function Settings() {
       {
       name: "Log",
       description: "",
+      buttons:[],
       tags:[],
       }
     ],
@@ -129,49 +209,30 @@ const onChange=(e)=>{
 };
 
   return (
-    <div className='App'>
-      <div className='containter mt-5'>
-        <h1>
-          <span>
-            <button className='btn'>
-              {" "}
-              <span className>&lt;</span>Back{" "}
-            </button>
-            <h1 className='form-control mt-2 ml-20'>  Settings</h1> 
-          </span>
-        </h1>
-
-        <input type="text" 
-        className='search_button' 
-        onChange={onChange}
-        placeholder="Search..."
-        />
-        
-        <div>
-          {visibleOptions.map((option) =>(
-          <div key={option.header.name}>
-            <h3 className='title_border'>{option.header.name}</h3>
-            <div className="border_list">
+    <comp.Base>
+      <comp.Header1>Settings</comp.Header1>
+      <comp.Panel>
+        <comp.Input onChange={onChange} placeholder="Search..."/>
+        {visibleOptions.map((option) =>(
+          <comp.Setting>
+            <comp.Header3>{option.header.name}</comp.Header3>
+            <comp.Body>
               {option.values.map((value) => (
-                <div key={value.name} className="font-weight-bold">
-                  <ul className='list-group'>
-                    <li className='list-group-item mb-2'>
-                      <h6 className='border_item'>{value.name}</h6>
-                      <p className='item_description'>{value.description}</p>
-                    </li>
-                  </ul>
+                <div key={value.name}>
+                    <comp.Header6>{value.name}</comp.Header6>
+                    <comp.Description>{value.description}</comp.Description>
+                    {value.buttons.map((button) => (
+                      <div key={button.title}>
+                        <comp.PickButton type={button.type} title={button.title}/>
+                      </div>
+                    ))}
                 </div>
               ))}
-            </div>
-          </div>
+            </comp.Body>
+          </comp.Setting>
           ))}
-        </div>
-        <Link to="/">
-        <button className='btn ml-24'>
-            Log out
-        </button>
-        </Link>
-      </div>
-    </div>
+        <LinkButton page="/" title="Log Out"/>
+      </comp.Panel> 
+    </comp.Base>
   );
 }

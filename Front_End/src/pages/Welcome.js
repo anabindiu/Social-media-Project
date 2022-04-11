@@ -2,7 +2,6 @@ import React from 'react'
 import "../App.css";
 import Signup from './Signup'
 import Login from './Login'
-import Button from '../components/Button'
 import { useNavigate } from 'react-router-dom';
 
 

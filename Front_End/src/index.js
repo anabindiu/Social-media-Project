@@ -3,9 +3,12 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import ContextWrapper from "./context/ContextWrapper";
+import FontStyles from "./fonts/fontStyles";
+
 ReactDOM.render(
   <React.StrictMode>
     <ContextWrapper>
+      <FontStyles />
       <App />
     </ContextWrapper>
   </React.StrictMode>,

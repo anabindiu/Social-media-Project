@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import * as Icons from "react-icons/fa";
 import "./Navbar.css";
 import { navItems } from "./NavItems";
-import Button from "./Button";
+import {LinkButton} from "../components/Buttons";
 import Dropdown from "./Dropdown";
 
 function Navbar() {
@@ -12,9 +12,7 @@ function Navbar() {
   return (
     <>
       <nav className="navbar">
-        <Link to="/profile" className="navbar-logo">
-          <Icons.FaBars />
-        </Link>
+        <LinkButton page="/profile" title={<Icons.FaBars/>}/>
         <ul className="nav-items">
           {navItems.map((item) => {
             if (item.title === "Features") {
@@ -37,7 +35,7 @@ function Navbar() {
             );
           })}
         </ul>
-        <Button />
+        <LinkButton page="/settings" title="Settings"/>
       </nav>
     </>
   );

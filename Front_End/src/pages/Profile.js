@@ -77,10 +77,6 @@ const [profile_list, setProfileList] = useState(options);
       <div className='containter mt-5'>
         <h1>
           <span>
-            <button className='btn'>
-              {" "}
-              <span className>&lt;</span>Back{" "}
-            </button>
             <h1 className='form-control mt-2 ml-20'>  Profile</h1> 
           </span>
         </h1>
