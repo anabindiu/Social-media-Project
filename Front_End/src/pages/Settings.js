@@ -166,7 +166,7 @@ const onChange=(e)=>{
           </div>
           ))}
         </div>
-        <Link to="/login">
+        <Link to="/">
         <button className='btn ml-24'>
             Log out
         </button>
