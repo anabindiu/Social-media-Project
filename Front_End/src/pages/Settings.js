@@ -6,28 +6,7 @@ import * as comp from "../components/Settings_Components";
 import {Button, LinkButton} from '../components/Buttons';
 import auth from '../auth/auth';
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
-
-async function get_settings(){
-  console.log("TEST1");
-  const ID = JSON.parse(localStorage.getItem('user')).ID;
-  console.log("TEST2");
-  console.log(ID);
-  return(fetch(`http://localhost:3001/settings/Profile_ID/${ID}`)
-    .then(function(response){
-      if(!response.ok){
-        throw new Error("HTTP error " + response.status);
-      }
-      return response.json();
-    })
-    .then(result => {
-      console.log(result.data[0]);
-      return(result.data[0])
-    })
-    .catch(e => {
-      console.log(e);
-    })
-  );
-}
+import { Get_Settings } from '../auth/action/API_requests';
 
 export default function Settings() {
   const create_options = (settings) =>{
@@ -206,7 +185,7 @@ export default function Settings() {
 
   useEffect(() => {
     trackPromise(
-      get_settings().then((settings) => {
+      Get_Settings().then((settings) => {
         setOptions([...create_options(settings)]);
         setVisibleOptions([...create_options(settings)]);
       })

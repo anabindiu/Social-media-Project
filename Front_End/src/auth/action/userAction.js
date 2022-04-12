@@ -1,4 +1,5 @@
 import auth from "../auth";
+import { Create_Default_Features, Create_Default_Notes, Create_Default_Settings, Create_Default_Tasks, Create_Default_Schedule, Create_Profile} from "./API_requests";
 
 export const loginUser = async(credentials, navigate) => {
     //make checks
@@ -36,35 +37,28 @@ export const loginUser = async(credentials, navigate) => {
 
 export const signUpUser = async(formData, navigate) => {
     try{
-        console.log(JSON.stringify({"Email": formData.Email, "Username": formData.Username, "Password": formData.Password, "B_Date" : formData.B_Date, "Profile_Pic" : "NULL"}));
-        fetch('http://localhost:3001/profile', {
-          method: 'POST',
-          headers: new Headers({'content-type': 'application/json'}),
-          // Need to make sure User email is not null.
-          body: JSON.stringify({"Email": formData.Email, "Username":formData.Username, "Password":formData.Password, "B_Date" : formData.B_Date, "Profile_Pic" : 'NULL'}),
-        })
-
+        Create_Profile(formData);
+        
         while(fetch(`http://localhost:3001/profile/Email/${formData.Email}`) <= 0);
 
         const response = await fetch(`http://localhost:3001/profile/Email/${formData.Email}`);
         const data = await response.json();
         console.log(data);
-        const ID = data.data[0].ID;
-        console.log(ID);
-        console.log(JSON.stringify({"Profile_ID":ID, "Date_Format":"dd/mm/yyyy", "Time_Format":"12:00", "TimeZone":"MDT", "Language":"English", "Country":"NULL", "Notification":"Enabled"}),);
-        fetch('http://localhost:3001/settings', {
-          method: 'POST',
-          headers: new Headers({'content-type': 'application/json'}),
-          // Need to make sure Useremail is not null.
-          body: JSON.stringify({"Profile_ID":ID, "Date_Format":"dd/mm/yyyy", "Time_Format":"12:00", "TimeZone":"MDT", "Language":"English", "Theme":"Light", "Country":"NULL", "Notification":"Enabled"}),
-        });
+        const profile = data.data[0];
 
         const storage_block={
-            ID: data.data[0].ID,
-            Password: data.data[0].Password
+            ID: profile.ID,
+            Password: profile.Password
         }
+        
         auth.login(() => {
             localStorage.setItem('user', JSON.stringify(storage_block));
+            console.log(`LOOK HERE ${localStorage.getItem('user')}`);
+            Create_Default_Settings();
+            Create_Default_Notes();
+            Create_Default_Tasks();
+            Create_Default_Schedule();
+            Create_Default_Features({ID: profile.ID, Email:profile.Email, Username:profile.Username});
             console.log("Logged in");
             navigate("/profile");
         })

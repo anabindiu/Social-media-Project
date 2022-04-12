@@ -6,6 +6,8 @@ function parseKey(key_type, key_value){
     switch(key_type){
         case "ID":
             return key_value;
+        case "Profile_ID":
+            return key_value;
         case "Header":
             return `\"${key_value}\"`;
         default:
@@ -16,7 +18,7 @@ function parseKey(key_type, key_value){
 async function getAll(page = 1){
     const offset = helper.getOffset(page, config.listPerPage);
     const rows = await db.query(
-        `SELECT ID, Header
+        `SELECT ID, Profile_ID, Header
         FROM tasks LIMIT ${offset},${config.listPerPage}`
     );
     const data = helper.emptyOrRows(rows);
@@ -31,7 +33,7 @@ async function getAll(page = 1){
 async function getOne(key_type, key_value){
     key_value = parseKey(key_type, key_value);
     const rows = await db.query(
-        `SELECT ID, Header
+        `SELECT ID, Profile_ID, Header
         FROM tasks
         WHERE ${key_type}=${key_value}`
     );
@@ -45,9 +47,9 @@ async function getOne(key_type, key_value){
 async function create(body){
     const result = await db.query(
         `INSERT INTO tasks 
-        (Header) 
+        (Profile_ID, Header) 
         VALUES 
-        ("${body.Header}")`
+        (${body.Profile_ID}, "${body.Header}")`
     );
     
     let message = 'Error in creating tasks ';
@@ -63,7 +65,7 @@ async function update(key_type, key_value, body){
     key_value = parseKey(key_type, key_value);
     const result = await db.query(
         `UPDATE tasks 
-        SET Header="${body.Header}"
+        SET Profile_ID=${body.Profile_ID}, Header="${body.Header}"
         WHERE ${key_type}=${key_value}` 
     );
     
