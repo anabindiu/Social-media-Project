@@ -1,179 +1,228 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import ReactDOM from "react-dom";
 import "../App.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import * as comp from "../components/Settings_Components";
-import { LinkButton } from '../components/Buttons';
+import {Button, LinkButton} from '../components/Buttons';
+import auth from '../auth/auth';
+import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+
+async function get_settings(){
+  console.log("TEST1");
+  const ID = JSON.parse(localStorage.getItem('user')).ID;
+  console.log("TEST2");
+  console.log(ID);
+  return(fetch(`http://localhost:3001/settings/Profile_ID/${ID}`)
+    .then(function(response){
+      if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+      }
+      return response.json();
+    })
+    .then(result => {
+      console.log(result.data[0]);
+      return(result.data[0])
+    })
+    .catch(e => {
+      console.log(e);
+    })
+  );
+}
 
 export default function Settings() {
-  const options= [
-  {
-    header: {
-      name: "Notifications",
-    },
-
-    values: [
+  const create_options = (settings) =>{
+    if(settings == undefined ){
+      settings = {}
+    }
+    return([
       {
-      name: "Turn on/off notifications",
-      description: "disable notifications...",
-      buttons:[
-        {
-          title: "On",
-          type: "Toggle"
+        header: {
+          name: "Notifications",
         },
-        {
-          title: "Off",
-          type: "Toggle"
-        }
-      ],
-      tags: [],
+    
+        values: [
+          {
+          name: "Turn on/off notifications",
+          description: `${settings.Notification}`,
+          buttons:[
+            {
+              title: "On",
+              type: "Toggle"
+            },
+            {
+              title: "Off",
+              type: "Toggle"
+            }
+          ],
+          tags: [],
+          },
+        ],
       },
-    ],
-  },
-  {
-    header: {
-      name: "Country",
-    },
-    values: [
       {
-        name: "-->List of countries to pick from <--",
-        description: "Pick a country....",
-        buttons:[
+        header: {
+          name: "Country",
+        },
+        values: [
           {
-            title: "Canada",
-            type: "OneToggle"
+            name: "-->List of countries to pick from <--",
+            description: `${settings.Country}`,
+            buttons:[
+              {
+                title: "Canada",
+                type: "OneToggle"
+              },
+              {
+                title: "USA",
+                type: "OneToggle"
+              },
+              {
+                title: "Romania",
+                type: "OneToggle"
+              },
+              {
+                title: "Kenya",
+                type: "OneToggle"
+              }
+            ],
+            tags: []
+          },
+        ],
+      },
+      {
+        header: {
+          name: "Time",
+        },
+    
+        values: [
+          {
+            name: "Date Format",
+            description: `${settings.Date_Format}`,
+            buttons:[
+              {
+                title: "DD/MM/YY",
+                type: "OneToggle"
+              },
+              {
+                title: "MM/DD/YY",
+                type: "OneToggle"
+              }
+            ],
+            tags: ["date_format"],
           },
           {
-            title: "USA",
-            type: "OneToggle"
+            name: "Time Format",
+            description: `${settings.Time_Format}`,
+            buttons:[
+              {
+                title: "1:00pm",
+                type: "OneToggle"
+              },
+              {
+                title: "13:00",
+                type: "OneToggle"
+              }
+            ],
+            tags: [],
           },
           {
-            title: "Romania",
-            type: "OneToggle"
+            name: "Time Zone",
+            description: `${settings.TimeZone}`,
+            buttons:[
+              {
+                title: "ET",
+                type: "OneToggle"
+              },
+              {
+                title: "MT",
+                type: "OneToggle"
+              }
+            ],
+            tags:[],
           },
+        ],
+      },
+      {
+        header: {
+          name: "Theme",
+        },
+    
+        values: [
           {
-            title: "Kenya",
-            type: "OneToggle"
+            name: "Change the theme colour: ",
+            description: `${settings.Theme}`,
+            buttons:[
+              {
+                title: "Light",
+                type: "OneToggle"
+              },
+              {
+                title: "Dark",
+                type: "OneToggle"
+              }
+            ],
+            tags:[],
+          },
+        ]
+      },
+      {
+        header: {
+          name: "Language",
+        },
+        values: [
+          {
+            name: "Pick the language: ",
+            description: `${settings.Language}`,
+            buttons:[
+              {
+                title: "English",
+                type: "OneToggle"
+              },
+              {
+                title: "French",
+                type: "OneToggle"
+              }
+            ],
+            tags: [],
+          },
+        ]
+      },
+      {
+        header: {
+          name: "Report problem",
+        },
+        values: [
+          {
+          name: "Log",
+          description: "",
+          buttons:[],
+          tags:[],
           }
         ],
-        tags: []
       },
-    ],
-  },
-  {
-    header: {
-      name: "Time",
-    },
+    ]);
+  }
+  const [options, setOptions] = useState(create_options(null));
+  const [visibleOptions, setVisibleOptions] = useState(options);
 
-    values: [
-      {
-        name: "Date Format",
-        description: "the date of today",
-        buttons:[
-          {
-            title: "DD/MM/YY",
-            type: "OneToggle"
-          },
-          {
-            title: "MM/DD/YY",
-            type: "OneToggle"
-          }
-        ],
-        tags: ["date_format"],
-      },
-      {
-        name: "Time Format",
-        description: "the time of today",
-        buttons:[
-          {
-            title: "1:00pm",
-            type: "OneToggle"
-          },
-          {
-            title: "13:00",
-            type: "OneToggle"
-          }
-        ],
-        tags: [],
-      },
-      {
-        name: "Time Zone",
-        description: "the time zone of the location you're at",
-        buttons:[
-          {
-            title: "ET",
-            type: "OneToggle"
-          },
-          {
-            title: "MT",
-            type: "OneToggle"
-          }
-        ],
-        tags:[],
-      },
-    ],
-  },
-  {
-    header: {
-      name: "Theme",
-    },
+  useEffect(() => {
+    trackPromise(
+      get_settings().then((settings) => {
+        setOptions([...create_options(settings)]);
+        setVisibleOptions([...create_options(settings)]);
+      })
+    );
+  }, []);
+  
+const navigate = useNavigate();
+const handleLogOut = () =>{
+  auth.logout(() => {
+    localStorage.clear();
+    navigate("/welcome");
+    console.log("Logged out");
+  })
+}
 
-    values: [
-      {
-        name: "Change the theme colour: ",
-        description: "--> list of colours <--",
-        buttons:[
-          {
-            title: "Light",
-            type: "OneToggle"
-          },
-          {
-            title: "Dark",
-            type: "OneToggle"
-          }
-        ],
-        tags:[],
-      },
-    ]
-  },
-  {
-    header: {
-      name: "Language",
-    },
-    values: [
-      {
-        name: "Pick the language: ",
-        description: "--> list of languages <--",
-        buttons:[
-          {
-            title: "English",
-            type: "OneToggle"
-          },
-          {
-            title: "French",
-            type: "OneToggle"
-          }
-        ],
-        tags: [],
-      },
-    ]
-  },
-  {
-    header: {
-      name: "Report problem",
-    },
-    values: [
-      {
-      name: "Log",
-      description: "",
-      buttons:[],
-      tags:[],
-      }
-    ],
-  },
-];
-
-const [visibleOptions, setVisibleOptions] = useState(options);
-const onChange=(e)=>{
+function onChange(e){
   e.preventDefault();
   const value=e.target.value;
 
@@ -208,31 +257,43 @@ const onChange=(e)=>{
   setVisibleOptions(returnedItems);
 };
 
+const DisplaySettings = () => {
+  console.log(options);
+  return(
+    visibleOptions.map((option) =>(
+      <comp.Setting>
+        <comp.Header3>{option.header.name}</comp.Header3>
+        <comp.Body>
+        {option.values.map((value) => (
+            <div key={value.name}>
+                <comp.Header6>{value.name}</comp.Header6>
+                <comp.Description>{value.description}</comp.Description>
+                {value.buttons.map((button) => (
+                  <div key={button.title}>
+                    <comp.PickButton type={button.type} title={button.title}/>
+                  </div>
+                ))}
+            </div>
+          ))}
+        </comp.Body>
+      </comp.Setting>
+      ))
+  );
+}
+
+const {promiseInProgress} = usePromiseTracker();
+
   return (
     <comp.Base>
       <comp.Header1>Settings</comp.Header1>
       <comp.Panel>
         <comp.Input onChange={onChange} placeholder="Search..."/>
-        {visibleOptions.map((option) =>(
-          <comp.Setting>
-            <comp.Header3>{option.header.name}</comp.Header3>
-            <comp.Body>
-              {option.values.map((value) => (
-                <div key={value.name}>
-                    <comp.Header6>{value.name}</comp.Header6>
-                    <comp.Description>{value.description}</comp.Description>
-                    {value.buttons.map((button) => (
-                      <div key={button.title}>
-                        <comp.PickButton type={button.type} title={button.title}/>
-                      </div>
-                    ))}
-                </div>
-              ))}
-            </comp.Body>
-          </comp.Setting>
-          ))}
-        <LinkButton page="/" title="Log Out"/>
+        {promiseInProgress ? <h1>Loading</h1> : <DisplaySettings/>}
+        <Button onClick={handleLogOut}>Log Out</Button>
       </comp.Panel> 
     </comp.Base>
   );
 }
+
+/*
+*/
