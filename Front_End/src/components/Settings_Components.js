@@ -71,12 +71,14 @@ export const Header3 = styled.h3`
 export const Header1 = styled.h1`
 `;
 
-export function PickButton({type, title}){
-    if(type == "Toggle"){
-        return (<Button>{title}</Button>);
+export function PickButton({button}){
+    const clickChangeSetting = () =>{
+
     }
-    else if(type = "OneToggle"){
-        return (<Button>{title}</Button>);
+    if(button.type == "Toggle"){
+        return (<Button>{button.title}</Button>);
     }
-    
+    else if(button.type = "OneToggle"){
+        return (<Button>{button.title}</Button>);
+    }
 };
