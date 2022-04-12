@@ -7,6 +7,7 @@ import {Button, LinkButton} from '../components/Buttons';
 import auth from '../auth/auth';
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
 import { Get_Settings } from '../auth/action/API_requests';
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
 export default function Settings() {
   const create_options = (settings) =>{
@@ -26,11 +27,15 @@ export default function Settings() {
           buttons:[
             {
               title: "On",
-              type: "Toggle"
+              type: "Toggle",
+              change: "Notification",
+              to: "Enabled"
             },
             {
               title: "Off",
-              type: "Toggle"
+              type: "Toggle",
+              change: "Notification",
+              to: "Disabled"
             }
           ],
           tags: [],
@@ -48,19 +53,27 @@ export default function Settings() {
             buttons:[
               {
                 title: "Canada",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Country",
+                to: "Canada"
               },
               {
                 title: "USA",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Country",
+                to: "Canada"
               },
               {
                 title: "Romania",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Country",
+                to: "Canada"
               },
               {
                 title: "Kenya",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Country",
+                to: "Canada"
               }
             ],
             tags: []
@@ -79,11 +92,15 @@ export default function Settings() {
             buttons:[
               {
                 title: "DD/MM/YY",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Date_Format",
+                to: "dd/mm/yy"
               },
               {
                 title: "MM/DD/YY",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Date_Format",
+                to: "mm/dd/yy"
               }
             ],
             tags: ["date_format"],
@@ -93,12 +110,16 @@ export default function Settings() {
             description: `${settings.Time_Format}`,
             buttons:[
               {
-                title: "1:00pm",
-                type: "OneToggle"
+                title: "12:00pm",
+                type: "OneToggle",
+                change: "Time_Format",
+                to: "12:00"
               },
               {
-                title: "13:00",
-                type: "OneToggle"
+                title: "24:00",
+                type: "OneToggle",
+                change: "Time_Format",
+                to: "24:00"
               }
             ],
             tags: [],
@@ -108,12 +129,16 @@ export default function Settings() {
             description: `${settings.TimeZone}`,
             buttons:[
               {
-                title: "ET",
-                type: "OneToggle"
+                title: "MT",
+                type: "OneToggle",
+                change: "TimeZone",
+                to: "MT"
               },
               {
-                title: "MT",
-                type: "OneToggle"
+                title: "ET",
+                type: "OneToggle",
+                change: "TimeZone",
+                to: "ET"
               }
             ],
             tags:[],
@@ -132,11 +157,15 @@ export default function Settings() {
             buttons:[
               {
                 title: "Light",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Theme",
+                to: "Light"
               },
               {
                 title: "Dark",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Theme",
+                to: "Dark"
               }
             ],
             tags:[],
@@ -154,11 +183,15 @@ export default function Settings() {
             buttons:[
               {
                 title: "English",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Language",
+                to: "English"
               },
               {
                 title: "French",
-                type: "OneToggle"
+                type: "OneToggle",
+                change: "Language",
+                to: "French"
               }
             ],
             tags: [],
@@ -249,7 +282,7 @@ const DisplaySettings = () => {
                 <comp.Description>{value.description}</comp.Description>
                 {value.buttons.map((button) => (
                   <div key={button.title}>
-                    <comp.PickButton type={button.type} title={button.title}/>
+                    <comp.PickButton button={button}/>
                   </div>
                 ))}
             </div>
@@ -267,7 +300,7 @@ const {promiseInProgress} = usePromiseTracker();
       <comp.Header1>Settings</comp.Header1>
       <comp.Panel>
         <comp.Input onChange={onChange} placeholder="Search..."/>
-        {promiseInProgress ? <h1>Loading</h1> : <DisplaySettings/>}
+        {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> : <DisplaySettings/>}
         <Button onClick={handleLogOut}>Log Out</Button>
       </comp.Panel> 
     </comp.Base>
