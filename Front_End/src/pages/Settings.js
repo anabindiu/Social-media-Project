@@ -6,7 +6,7 @@ import * as comp from "../components/Settings_Components";
 import {Button, LinkButton} from '../components/Buttons';
 import auth from '../auth/auth';
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
-import { Get_Settings } from '../auth/action/API_requests';
+import { Get_Settings, Update_Settings } from '../auth/action/API_requests';
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
 export default function Settings() {
@@ -61,19 +61,19 @@ export default function Settings() {
                 title: "USA",
                 type: "OneToggle",
                 change: "Country",
-                to: "Canada"
+                to: "USA"
               },
               {
                 title: "Romania",
                 type: "OneToggle",
                 change: "Country",
-                to: "Canada"
+                to: "Romania"
               },
               {
                 title: "Kenya",
                 type: "OneToggle",
                 change: "Country",
-                to: "Canada"
+                to: "Kenya"
               }
             ],
             tags: []
@@ -94,13 +94,13 @@ export default function Settings() {
                 title: "DD/MM/YY",
                 type: "OneToggle",
                 change: "Date_Format",
-                to: "dd/mm/yy"
+                to: "dd/mm/yyyy"
               },
               {
                 title: "MM/DD/YY",
                 type: "OneToggle",
                 change: "Date_Format",
-                to: "mm/dd/yy"
+                to: "mm/dd/yyyy"
               }
             ],
             tags: ["date_format"],
@@ -269,6 +269,15 @@ function onChange(e){
   setVisibleOptions(returnedItems);
 };
 
+const OnClickEvent = async (button) => {
+  console.log(button);
+  await Update_Settings({change:button.change, to:button.to});
+  await Get_Settings().then((settings) => {
+    setOptions([...create_options(settings)]);
+    setVisibleOptions([...create_options(settings)]);
+  })
+}
+
 const DisplaySettings = () => {
   console.log(options);
   return(
@@ -282,7 +291,7 @@ const DisplaySettings = () => {
                 <comp.Description>{value.description}</comp.Description>
                 {value.buttons.map((button) => (
                   <div key={button.title}>
-                    <comp.PickButton button={button}/>
+                    <comp.PickButton action={OnClickEvent.bind(this, button)} button={button}/>
                   </div>
                 ))}
             </div>
