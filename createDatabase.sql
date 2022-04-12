@@ -79,8 +79,10 @@ create table if not exists Monthly_Stats(
 
 -- drop table notes;
 create table if not exists Notes(
-	ID int auto_increment NOT NULL,    
-	primary key(ID)
+	ID int auto_increment NOT NULL, 
+    Profile_ID int not null,
+	primary key(ID),
+    foreign key(Profile_ID) references `PROFILE`(ID)
 );
 
 create table if not exists Note(
@@ -97,8 +99,10 @@ create table if not exists Note(
 -- drop table task_list;
 create table if not exists Tasks(
 	ID int auto_increment NOT NULL, 
+    Profile_ID int not null,
 	Header TEXT,
-	primary key(ID)
+	primary key(ID),
+    foreign key(Profile_ID) references `PROFILE`(ID)
 );
 
 -- drop table task;
@@ -119,8 +123,10 @@ create table if not exists Task(
 -- drop table `schedule`;
 create table if not exists `Schedule`(
 	ID int not null auto_increment,
+    Profile_ID int not null,
 	Calendar_Name TEXT NOT NULL,
-	primary key(ID)
+	primary key(ID),
+    foreign key(Profile_ID) references `PROFILE`(ID)
 );
 
 -- drop table `Event`;
@@ -172,16 +178,3 @@ create table if not exists Shared_Features(
 	foreign key(Profile_ID_Author) references `PROFILE`(ID),
     foreign key(Profile_ID_Recipient) references `PROFILE`(ID)
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
