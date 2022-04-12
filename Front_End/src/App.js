@@ -20,9 +20,7 @@ import Signup from "./pages/Signup";
 import { ProtectedRoute } from "./ProtectedRoutes";
 import auth from "./auth/auth";
 
-function App() {
-  const [page, setPrevPage] = useState('');
-  
+function App() {  
   return (
     <>
       <BrowserRouter>
