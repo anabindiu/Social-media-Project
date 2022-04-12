@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const schedule_service = require("../services/schedule");
 
-/* GET schedule by ALL, ID, Calendar_Name */
+/* GET schedule by ALL, ID, Profile_ID, Calendar_Name */
 router.get('/', (req, res, next) => {send_query(req, res, next, "GET", null, null);});
 router.get('/ID/:ID', (req, res, next) => {send_query(req, res, next, "GET", "ID", req.params.ID);});
+router.get('/Profile_ID/:Profile_ID', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID", req.params.Profile_ID);});
 router.get('/Calendar_Name/:Calendar_Name', (req, res, next) => {send_query(req, res, next, "GET", "Calendar_Name", req.params.Calendar_Name);});
 
 /* POST schedule */

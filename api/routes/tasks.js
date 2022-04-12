@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const tasks_service = require("../services/tasks");
 
-/* GET tasks by ALL, ID, Header */
+/* GET tasks by ALL, ID, Profile_ID, Header */
 router.get('/', (req, res, next) => {send_query(req, res, next, "GET", null, null);});
 router.get('/ID/:ID', (req, res, next) => {send_query(req, res, next, "GET", "ID", req.params.ID);});
+router.get('/Profile_ID/:Profile_ID', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID", req.params.Profile_ID);});
 router.get('/Header/:Header', (req, res, next) => {send_query(req, res, next, "GET", "Header", req.params.Header);});
 
 /* POST tasks */

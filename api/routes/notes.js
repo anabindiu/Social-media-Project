@@ -2,9 +2,10 @@ const express = require("express");
 const router = express.Router();
 const notes_service = require("../services/notes");
 
-/* GET notes by ALL, ID */
+/* GET notes by ALL, ID, Profile_ID */
 router.get('/', (req, res, next) => {send_query(req, res, next, "GET", null, null);});
 router.get('/ID/:ID', (req, res, next) => {send_query(req, res, next, "GET", "ID", req.params.ID);});
+router.get('/Profile_ID/:Profile_ID', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID", req.params.Profile_ID);});
 
 /* POST notes */
 router.post('/', (req, res, next) => {send_query(req, res, next, "POST", null, null);});
