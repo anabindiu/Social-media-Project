@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { FaTemperatureHigh } from "react-icons/fa";
 
-export async function Update_Settings(formData){
-    return(fetch(`http://localhost:3001/profile`, {
-            method: 'POST',
+export async function Update_Settings({change, to}){
+    const data = await Get_Settings();
+    console.log(change, to);
+    data[change] = to;
+    return(fetch(`http://localhost:3001/settings/ID/${data.ID}`, {
+            method: 'PUT',
             headers: new Headers({'content-type': 'application/json'}),
-            body: JSON.stringify({"Email": formData.Email, "Username":formData.Username, "Password":formData.Password, "B_Date" : formData.B_Date, "Profile_Pic" : 'NULL'}),
+            body: JSON.stringify({
+                "Profile_ID":data.Profile_ID, 
+                "Date_Format":data.Date_Format, 
+                "Time_Format":data.Time_Format, 
+                "TimeZone":data.TimeZone, 
+                "Language":data.Language, 
+                "Theme":data.Theme, 
+                "Country":data.Country, 
+                "Notification":data.Notification
+            }),
         })
         .then(function(response){
             if(!response.ok){

@@ -60,6 +60,7 @@ async function create(body){
 }
 
 async function update(key_type, key_value, body){
+    
     key_value = parseKey(key_type, key_value);
     const result = await db.query(
         `UPDATE settings 

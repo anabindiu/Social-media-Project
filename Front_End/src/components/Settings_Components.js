@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import {Input_Themes} from "../components/Themes";
 import {Button} from "../components/Buttons";
 
-
 export const Input = styled.input`
     font-family: "Montserrat_Light";
     margin-left: 90px;
@@ -71,14 +70,11 @@ export const Header3 = styled.h3`
 export const Header1 = styled.h1`
 `;
 
-export function PickButton({button}){
-    const clickChangeSetting = () =>{
-
-    }
+export function PickButton({action, button}){
     if(button.type == "Toggle"){
-        return (<Button>{button.title}</Button>);
+        return (<Button onClick={action}>{button.title}</Button>);
     }
     else if(button.type = "OneToggle"){
-        return (<Button>{button.title}</Button>);
+        return (<Button onClick={action}>{button.title}</Button>);
     }
 };
