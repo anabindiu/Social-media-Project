@@ -22,7 +22,7 @@ async function send_query(req, res, next, type, key1, key2, params1, params2){
     try{
         switch(type){
             case "GET":
-                if(key == null){
+                if(key1 == null && key2 == null){
                     res.json(await task_service.getAll(req.query.page));
                 }
                 else{
@@ -41,7 +41,7 @@ async function send_query(req, res, next, type, key1, key2, params1, params2){
         }
     }
     catch(err){
-        console.error(`Error with ${type} query for ${key} key: `, err.message);
+        console.error(`Error with ${type} query for ${key1} & ${key2} key: `, err.message);
         next(err);
     }
 }

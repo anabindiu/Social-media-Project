@@ -42,7 +42,7 @@ const Signup = (signupUser)  => {
     <form action = "/profile" className='display: inline-block' onSubmit = {handleSubmit}>
         <p>
             <label>Name</label><br/>
-            <input type="text" name="Username" required onChange={handleChange}/>
+            <input type="text" name="Name" required onChange={handleChange}/>
         </p>
         
         <p>

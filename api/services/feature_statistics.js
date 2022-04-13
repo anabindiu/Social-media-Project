@@ -1,6 +1,4 @@
 const db = require('./db');
-const helper = require('../helper');
-const config = require('../config');
 
 function parseKey(key_type, key_value){
     switch(key_type){
@@ -13,33 +11,22 @@ function parseKey(key_type, key_value){
     }
 }
 
-async function getAll(page = 1){
-    const offset = helper.getOffset(page, config.listPerPage);
-    const rows = await db.query(
+async function getAll(){
+    const data = await db.query(
         `SELECT ID, Profile_ID, Statistics_type, Title
-        FROM feature_statistics LIMIT ${offset},${config.listPerPage}`
+        FROM feature_statistics`
     );
-    const data = helper.emptyOrRows(rows);
-    const meta = {page};
-    
-    return {
-        data,
-        meta
-    }
+    return(data);
 }
 
 async function getOne(key_type, key_value){
     key_value = parseKey(key_type, key_value);
-    const rows = await db.query(
+    const data = await db.query(
         `ID, Profile_ID, Statistics_type, Title
         FROM feature_statistics
         WHERE ${key_type}=${key_value}`
     );
-    const data = helper.emptyOrRows(rows);
-    
-    return {
-        data
-    }
+    return(data);
 }
 
 async function create(body){
@@ -50,13 +37,7 @@ async function create(body){
         (${body.Profile_ID}, "${body.Statistics_type}", "${body.Title}")`
     );
     
-    let message = 'Error in creating feature_statistics ';
-    
-    if (result.affectedRows) {
-        message = 'feature_statistics created successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function update(key_type, key_value, body){
@@ -67,13 +48,7 @@ async function update(key_type, key_value, body){
         WHERE ${key_type}=${key_value}` 
     );
     
-    let message = 'Error in updating feature_statistics';
-    
-    if (result.affectedRows) {
-        message = 'feature_statistics updated successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function remove(key_type, key_value){
@@ -82,13 +57,7 @@ async function remove(key_type, key_value){
         `DELETE FROM feature_statistics WHERE ${key_type}=${key_value}`
     );
     
-    let message = 'Error in deleting feature_statistics';
-    
-    if (result.affectedRows) {
-        message = 'feature_statistics deleted successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 module.exports = {
