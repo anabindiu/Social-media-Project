@@ -26,8 +26,8 @@ export async function Update_Settings({change, to}){
             return response.json();
         })
         .then(result => {
-            console.log(result.data[0]);
-            return(result.data[0])
+            console.log(result[0]);
+            return(result[0])
         })
         .catch(e => {
             console.log(e);
@@ -46,8 +46,8 @@ export async function Get_Profile(){
             return response.json();
         })
         .then(result => {
-            console.log(result.data[0]);
-            return(result.data[0])
+            console.log(result[0]);
+            return(result[0])
         })
         .catch(e => {
             console.log(e);
@@ -66,8 +66,121 @@ export async function Get_Settings(){
             return response.json();
         })
         .then(result => {
-            console.log(result.data[0]);
-            return(result.data[0])
+            console.log(result[0]);
+            return(result[0])
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Delete_Note(note){
+    return(fetch(`http://localhost:3001/note/ID/${note.ID}/Notes_ID/${note.Notes_ID}`, {
+            method: 'DELETE',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({}),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Get_Note(){
+    const notes = await Get_Notes();
+    return(fetch(`http://localhost:3001/note/Notes_ID/${notes.ID}`)
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .then(result => {
+            console.log(result);
+            return(result)
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Create_Note(formData){
+    const convert_date = (date) =>{
+        const pad = function(num){return ('00'+num).slice(-2) };
+        date = date.getUTCFullYear()        + '-' +
+                pad(date.getMonth() + 1) + '-' +
+                pad(date.getDate())      + ' ' +
+                pad(date.getHours())     + ':' +
+                pad(date.getMinutes())   + ':' +
+                pad(date.getSeconds());
+        return date;
+    }
+    formData.Date_Created = convert_date(new Date(formData.Date_Created));
+    formData.Last_Modified = convert_date(new Date(formData.Last_Modified));
+    console.log("CREATE", formData);
+    return(fetch(`http://localhost:3001/note`, {
+            method: 'POST',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "Notes_ID":formData.Notes_ID, 
+                "Date_Created":formData.Date_Created, 
+                "Last_Modified":formData.Last_Modified, 
+                "Title":formData.Title, 
+                "Content":formData.Content
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Update_Note(note, change, to){
+    const convert_date = (date) =>{
+        const pad = function(num){return ('00'+num).slice(-2) };
+        date = date.getUTCFullYear()        + '-' +
+                pad(date.getMonth() + 1) + '-' +
+                pad(date.getDate())      + ' ' +
+                pad(date.getHours())     + ':' +
+                pad(date.getMinutes())   + ':' +
+                pad(date.getSeconds());
+        return date;
+    }
+    console.log("CHANGE", note, change, to);
+    note[change] = to;
+    note.Date_Created = convert_date(new Date(note.Date_Created));
+    note.Last_Modified = convert_date(new Date(note.Last_Modified));
+    console.log("TO", note);
+    return(fetch(`http://localhost:3001/note/ID/${note.ID}/Notes_ID/${note.Notes_ID}`, {
+            method: 'PUT',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "Notes_ID":note.Notes_ID, 
+                "Date_Created":note.Date_Created, 
+                "Last_Modified":note.Last_Modified, 
+                "Title":note.Title, 
+                "Content":note.Content
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
         })
         .catch(e => {
             console.log(e);
@@ -86,8 +199,8 @@ export async function Get_Notes(){
             return response.json();
         })
         .then(result => {
-            console.log(result.data[0]);
-            return(result.data[0])
+            console.log(result[0]);
+            return(result[0])
         })
         .catch(e => {
             console.log(e);
@@ -106,8 +219,8 @@ export async function Get_Tasks(){
             return response.json();
         })
         .then(result => {
-            console.log(result.data[0]);
-            return(result.data[0])
+            console.log(result[0]);
+            return(result[0])
         })
         .catch(e => {
             console.log(e);
@@ -126,8 +239,8 @@ export async function Get_Schedule(){
             return response.json();
         })
         .then(result => {
-            console.log(result.data[0]);
-            return(result.data[0])
+            console.log(result[0]);
+            return(result[0])
         })
         .catch(e => {
             console.log(e);
@@ -139,17 +252,13 @@ export async function Create_Profile(formData){
     return(fetch(`http://localhost:3001/profile`, {
             method: 'POST',
             headers: new Headers({'content-type': 'application/json'}),
-            body: JSON.stringify({"Email": formData.Email, "Username":formData.Username, "Password":formData.Password, "B_Date" : formData.B_Date, "Profile_Pic" : 'NULL'}),
+            body: JSON.stringify({"Email": formData.Email, "Username":formData.Username, "Password":formData.Password, "Name":formData.Name, "B_Date" : formData.B_Date, "Profile_Pic" : 'NULL'}),
         })
         .then(function(response){
             if(!response.ok){
                 throw new Error("HTTP error " + response.status);
             }   
             return response.json();
-        })
-        .then(result => {
-            console.log(result.data[0]);
-            return(result.data[0])
         })
         .catch(e => {
             console.log(e);
@@ -242,6 +351,10 @@ export async function Create_Default_Features(profile){
     const data_tasks = await Get_Tasks();
     const data_schedule = await Get_Schedule();
     const data_settings = await Get_Settings();
+    console.log(data_notes);
+    console.log(data_tasks);
+    console.log(data_schedule);
+    console.log(data_settings);
     return(fetch('http://localhost:3001/features', {
         method: 'POST',
         headers: new Headers({'content-type': 'application/json'}),

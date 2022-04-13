@@ -1,6 +1,4 @@
 const db = require('./db');
-const helper = require('../helper');
-const config = require('../config');
 
 function parseKey(key_type, key_value){
     switch(key_type){
@@ -13,43 +11,32 @@ function parseKey(key_type, key_value){
     }
 }
 
-async function getAll(page = 1){
-    const offset = helper.getOffset(page, config.listPerPage);
-    const rows = await db.query(
+async function getAll(){
+    const data = await db.query(
         `SELECT Feature_Stats_ID, Month_Year, Total_Events, Total_Tasks, Total_Notes, Total_Reminders, Year
-        FROM monthly_stats LIMIT ${offset},${config.listPerPage}`
+        FROM monthly_stats`
     );
-    const data = helper.emptyOrRows(rows);
-    const meta = {page};
-    
-    return {
-        data,
-        meta
-    }
+    return(data);
 }
 
 async function getOne(key_type1, key_type2, key_value1, key_value2){
     key_value1 = parseKey(key_type1, key_value1);
     key_value2 = parseKey(key_type2, key_value2);
     if(key_value2 == null){
-        const rows = await db.query(
+        const data = await db.query(
             `SELECT Feature_Stats_ID, Month_Year, Total_Events, Total_Tasks, Total_Notes, Total_Reminders, Year
             FROM monthly_stats
             WHERE ${key_type1}=${key_value1}`
         );
+        return(data);
     }
     else{
-        const rows = await db.query(
+        const data = await db.query(
             `SELECT Feature_Stats_ID, Month_Year, Total_Events, Total_Tasks, Total_Notes, Total_Reminders, Year
             FROM monthly_stats
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
-    }
-    
-    const data = helper.emptyOrRows(rows);
-    
-    return {
-        data
+        return(data);
     }
 }
 
@@ -61,13 +48,7 @@ async function create(body){
         (${body.Feature_Stats_ID}, "${body.Month_Year}", ${body.Total_Events}, ${body.Total_Tasks}, ${body.Total_Notes}, ${body.Total_Reminders}, "${body.Year}")`
     );
     
-    let message = 'Error in creating monthly_stats ';
-    
-    if (result.affectedRows) {
-        message = 'monthly_stats created successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function update(key_type1, key_type2, key_value1, key_value2, body){
@@ -80,13 +61,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
         WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
     );
     
-    let message = 'Error in updating monthly_stats';
-    
-    if (result.affectedRows) {
-        message = 'monthly_stats updated successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function remove(key_type1, key_type2, key_value1, key_value2){

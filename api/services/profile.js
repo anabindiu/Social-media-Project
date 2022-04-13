@@ -1,6 +1,4 @@
 const db = require('./db');
-const helper = require('../helper');
-const config = require('../config');
 
 function parseKey(key_type, key_value){
     switch(key_type){
@@ -15,33 +13,22 @@ function parseKey(key_type, key_value){
     }
 }
 
-async function getAll(page = 1){
-    const offset = helper.getOffset(page, config.listPerPage);
-    const rows = await db.query(
+async function getAll(){
+    const data = await db.query(
         `SELECT ID, Email, Username, Password, B_Date, Name, Profile_Pic
-        FROM profile LIMIT ${offset},${config.listPerPage}`
+        FROM profile`
     );
-    const data = helper.emptyOrRows(rows);
-    const meta = {page};
-    
-    return {
-        data,
-        meta
-    }
+    return(data);
 }
 
 async function getOne(key_type, key_value){
     key_value = parseKey(key_type, key_value);
-    const rows = await db.query(
+    const data = await db.query(
         `SELECT ID, Email, Username, Password, B_Date, Name, Profile_Pic
         FROM profile
         WHERE ${key_type}=${key_value}`
     );
-    const data = helper.emptyOrRows(rows);
-    
-    return {
-        data
-    }
+    return(data);
 }
 
 async function create(body){
@@ -52,13 +39,7 @@ async function create(body){
         ("${body.Email}", "${body.Username}", "${body.Password}", "${body.B_Date}", "${body.Name}", "${body.Profile_Pic}")`
     );
     
-    let message = 'Error in creating profile ';
-    
-    if (result.affectedRows) {
-        message = 'Profile created successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function update(key_type, key_value, body){
@@ -69,13 +50,7 @@ async function update(key_type, key_value, body){
         WHERE ${key_type}=${key_value}` 
     );
     
-    let message = 'Error in updating profile';
-    
-    if (result.affectedRows) {
-        message = 'profile updated successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function remove(key_type, key_value){
@@ -84,13 +59,7 @@ async function remove(key_type, key_value){
         `DELETE FROM profile WHERE ${key_type}=${key_value}`
     );
     
-    let message = 'Error in deleting profile';
-    
-    if (result.affectedRows) {
-        message = 'profile deleted successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 module.exports = {

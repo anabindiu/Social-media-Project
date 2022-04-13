@@ -1,6 +1,4 @@
 const db = require('./db');
-const helper = require('../helper');
-const config = require('../config');
 
 function parseKey(key_type, key_value){
     switch(key_type){
@@ -13,61 +11,44 @@ function parseKey(key_type, key_value){
     }
 }
 
-async function getAll(page = 1){
-    const offset = helper.getOffset(page, config.listPerPage);
-    const rows = await db.query(
-        `SELECT ID, Notes_ID, Date_Created, Title, Content
-        FROM note LIMIT ${offset},${config.listPerPage}`
+async function getAll(){
+    const data = await db.query(
+        `SELECT ID, Notes_ID, Date_Created, Last_Modified, Title, Content
+        FROM note`
     );
-    const data = helper.emptyOrRows(rows);
-    const meta = {page};
-    
-    return {
-        data,
-        meta
-    }
+    return(data);
 }
 
 async function getOne(key_type1, key_type2, key_value1, key_value2){
     key_value1 = parseKey(key_type1, key_value1);
     key_value2 = parseKey(key_type2, key_value2);
     if(key_value2 == null){
-        const rows = await db.query(
-            `SELECT ID, Notes_ID, Date_Created, Title, Content
+        const data = await db.query(
+            `SELECT ID, Notes_ID, Date_Created, Last_Modified, Title, Content
             FROM note
             WHERE ${key_type1}=${key_value1}`
         );
+        return(data);
     }
     else{
-        const rows = await db.query(
-            `SELECT ID, Notes_ID, Date_Created, Title, Content
+        const data = await db.query(
+            `SELECT ID, Notes_ID, Date_Created, Last_Modified, Title, Content
             FROM note
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
-    }
-    
-    const data = helper.emptyOrRows(rows);
-    
-    return {
-        data
+        return(data);
     }
 }
 
 async function create(body){
     const result = await db.query(
         `INSERT INTO note 
-        (Notes_ID, Date_Created, Title, Content) 
+        (Notes_ID, Date_Created, Last_Modified, Title, Content) 
         VALUES 
-        (${body.Notes_ID}, "${body.Date_Created}", "${body.Title}", "${body.Content}")`
+        (${body.Notes_ID}, "${body.Date_Created}", "${body.Last_Modified}", "${body.Title}", "${body.Content}")`
     );
     
-    let message = 'Error in creating note ';
-    
-    if (result.affectedRows) {
-        message = 'note created successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function update(key_type1, key_type2, key_value1, key_value2, body){
@@ -77,50 +58,38 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
     if(key_value2 == null){
         const result = await db.query(
             `UPDATE note 
-            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Title="${body.Title}", Content="${body.Content}"
+            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Last_Modified="${body.Last_Modified}", Title="${body.Title}", Content="${body.Content}"
             WHERE ${key_type1}=${key_value1}`
         );
+
+        return result;
     }
     else{
         const result = await db.query(
             `UPDATE note 
-            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Title="${body.Title}", Content="${body.Content}"
+            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Last_Modified="${body.Last_Modified}", Title="${body.Title}", Content="${body.Content}"
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
         );
-    }
-    
 
-    let message = 'Error in updating note';
-    
-    if (result.affectedRows) {
-        message = 'note updated successfully';
+        return result;
     }
-    
-    return {message};
 }
 
 async function remove(key_type1, key_type2, key_value1, key_value2){
     key_value1 = parseKey(key_type1, key_value1);
     key_value2 = parseKey(key_type2, key_value2);
-    
     if(key_value2 == null){
         const result = await db.query(
             `DELETE FROM note WHERE ${key_type1}=${key_value1}`
         );
+        return result;
     }
     else{
         const result = await db.query(
             `DELETE FROM note WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
+        return result;
     }
-    
-    let message = 'Error in deleting note';
-    
-    if (result.affectedRows) {
-        message = 'note deleted successfully';
-    }
-    
-    return {message};
 }
 
 module.exports = {
