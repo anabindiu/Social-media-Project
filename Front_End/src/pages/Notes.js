@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import uuid from "react-uuid";
 import "./Notes.css";
 import Note from "../components/Note";
-import Side_bar_Notes from "../components/Side_bar_Notes";
+import Notes_Sidebar from "../components/Notes_SideBar";
 import {Get_Note, Get_Notes, Create_Note, Delete_Note, Update_Note} from "../auth/action/API_requests";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+import * as comp from "../components/Notes_Components";
 
 function Notes() {
   const [notes, setNotes] = useState([]);
@@ -56,8 +57,8 @@ function Notes() {
   };
 
   return (
-    <div className="Notes">
-      <Side_bar_Notes
+    <comp.Notes_Base>
+      <Notes_Sidebar
         notes={notes}
         onAddNote={onAddNote}
         onDeleteNote={onDeleteNote}
@@ -65,7 +66,7 @@ function Notes() {
         setActiveNote={setActiveNote}
       />
       <Note activeNote={getActiveNote()} setActiveNote={setActiveNote} onUpdateNote={onUpdateNote} />
-    </div>
+    </comp.Notes_Base>
   );
 }
 
