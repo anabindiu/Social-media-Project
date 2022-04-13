@@ -249,10 +249,14 @@ export async function Get_Schedule(){
 };
 
 export async function Create_Profile(formData){
+    const bcrypt = require("bcryptjs");
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(formData.Password, salt);
+
     return(fetch(`http://localhost:3001/profile`, {
             method: 'POST',
             headers: new Headers({'content-type': 'application/json'}),
-            body: JSON.stringify({"Email": formData.Email, "Username":formData.Username, "Password":formData.Password, "Name":formData.Name, "B_Date" : formData.B_Date, "Profile_Pic" : 'NULL'}),
+            body: JSON.stringify({"Email": formData.Email, "Username":formData.Username, "Password": hashedPass, "Name":formData.Name, "B_Date" : formData.B_Date, "Profile_Pic" : 'NULL'}),
         })
         .then(function(response){
             if(!response.ok){
@@ -261,7 +265,7 @@ export async function Create_Profile(formData){
             return response.json();
         })
         .catch(e => {
-            console.log(e);
+            console.log("This error: ", e);
         })
     );
 };

@@ -1,5 +1,6 @@
-CREATE SCHEMA if not exists Project;
+-- CREATE SCHEMA if not exists Project;
 
+select * from profile;
 -- drop TABLE `profile`;
 create table if not exists `Profile`(
     ID int auto_increment not null,
@@ -79,8 +80,10 @@ create table if not exists Monthly_Stats(
 
 -- drop table notes;
 create table if not exists Notes(
-	ID int auto_increment NOT NULL,    
-	primary key(ID)
+	ID int auto_increment NOT NULL, 
+    Profile_ID int not null,
+	primary key(ID),
+    foreign key(Profile_ID) references `PROFILE`(ID)
 );
 
 create table if not exists Note(
@@ -97,8 +100,10 @@ create table if not exists Note(
 -- drop table task_list;
 create table if not exists Tasks(
 	ID int auto_increment NOT NULL, 
+    Profile_ID int not null,
 	Header TEXT,
-	primary key(ID)
+	primary key(ID),
+    foreign key(Profile_ID) references `PROFILE`(ID)
 );
 
 -- drop table task;
@@ -119,8 +124,10 @@ create table if not exists Task(
 -- drop table `schedule`;
 create table if not exists `Schedule`(
 	ID int not null auto_increment,
+    Profile_ID int not null,
 	Calendar_Name TEXT NOT NULL,
-	primary key(ID)
+	primary key(ID),
+    foreign key(Profile_ID) references `PROFILE`(ID)
 );
 
 -- drop table `Event`;
