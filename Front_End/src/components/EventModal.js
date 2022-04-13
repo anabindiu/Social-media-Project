@@ -107,24 +107,28 @@ export default function EventModal() {
             <span className="material-icons-outlined text-gray-400">
               watch
             </span>
+            <form action="/action_page.php">
+            <label for="from_time">Add a start time:</label>
             <input
-              type="text"
+              type="time"
               name="from_time"
-              placeholder="Add a start time"
               value={start_time}
               className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setStart(e.target.value)}
             />
+            </form>
+
             <div></div>
+            <form action="/action_page.php">
+            <label for="to_time">Add an end time: </label>
             <input
-              type="text"
+              type="time"
               name="to_time"
-              placeholder="Add an end time"
               value={to_time}
               className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setEnd(e.target.value)}
             />
-
+            </form>
             <span className="material-icons-outlined text-gray-400">
               segment
             </span>
