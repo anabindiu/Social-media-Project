@@ -1,5 +1,6 @@
 -- CREATE SCHEMA if not exists Project;
 
+select * from profile;
 -- drop TABLE `profile`;
 create table if not exists `Profile`(
     ID int auto_increment not null,
