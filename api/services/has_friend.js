@@ -1,6 +1,4 @@
 const db = require('./db');
-const helper = require('../helper');
-const config = require('../config');
 
 function parseKey(key_type, key_value){
     switch(key_type){
@@ -13,43 +11,32 @@ function parseKey(key_type, key_value){
     }
 }
 
-async function getAll(page = 1){
-    const offset = helper.getOffset(page, config.listPerPage);
-    const rows = await db.query(
+async function getAll(){
+    const data = await db.query(
         `SELECT ID_1, ID_2
-        FROM has_friend LIMIT ${offset},${config.listPerPage}`
+        FROM has_friend`
     );
-    const data = helper.emptyOrRows(rows);
-    const meta = {page};
-    
-    return {
-        data,
-        meta
-    }
+    return(data);
 }
 
 async function getOne(key_type1, key_type2, key_value1, key_value2){
     key_value1 = parseKey(key_type1, key_value1);
     key_value2 = parseKey(key_type2, key_value2);
     if(key_value2 == null){
-        const rows = await db.query(
+        const data = await db.query(
             `SELECT ID_1, ID_2
             FROM has_friend
             WHERE ${key_type1}=${key_value1}`
         );
+        return(data);
     }
     else{
-        const rows = await db.query(
+        const data = await db.query(
             `SELECT ID_1, ID_2
             FROM has_friend
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
-    }
-    
-    const data = helper.emptyOrRows(rows);
-    
-    return {
-        data
+        return(data);
     }
 }
 
@@ -61,13 +48,7 @@ async function create(body){
         (${body.ID_1}, ${body.ID_2})`
     );
     
-    let message = 'Error in creating has_friend ';
-    
-    if (result.affectedRows) {
-        message = 'has_friend created successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function update(key_type1, key_type2, key_value1, key_value2, body){
@@ -80,13 +61,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
         WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
     );
 
-    let message = 'Error in updating has_friend';
-    
-    if (result.affectedRows) {
-        message = 'has_friend updated successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function remove(key_type1, key_type2, key_value1, key_value2){
@@ -97,13 +72,7 @@ async function remove(key_type1, key_type2, key_value1, key_value2){
         `DELETE FROM has_friend WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
     );
     
-    let message = 'Error in deleting has_friend';
-    
-    if (result.affectedRows) {
-        message = 'has_friend deleted successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 module.exports = {

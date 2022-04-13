@@ -1,6 +1,4 @@
 const db = require('./db');
-const helper = require('../helper');
-const config = require('../config');
 
 function parseKey(key_type, key_value){
     switch(key_type){
@@ -17,43 +15,32 @@ function parseKey(key_type, key_value){
     }
 }
 
-async function getAll(page = 1){
-    const offset = helper.getOffset(page, config.listPerPage);
-    const rows = await db.query(
+async function getAll(){
+    const data = await db.query(
         `SELECT Profile_ID_Author, Profile_ID_Recipient, Permissions, Feature_ID, Feature_type
-        FROM shared_features LIMIT ${offset},${config.listPerPage}`
+        FROM shared_features`
     );
-    const data = helper.emptyOrRows(rows);
-    const meta = {page};
-    
-    return {
-        data,
-        meta
-    }
+    return(data);
 }
 
 async function getOne(key_type1, key_type2, key_value1, key_value2){
     key_value1 = parseKey(key_type1, key_value1);
     key_value2 = parseKey(key_type2, key_value2);
     if(key_value2 == null){
-        const rows = await db.query(
+        const data = await db.query(
             `SELECT Profile_ID_Author, Profile_ID_Recipient, Permissions, Feature_ID, Feature_type
             FROM shared_features
             WHERE ${key_type1}=${key_value1}`
         );
+        return(data);
     }
     else{
-        const rows = await db.query(
+        const data = await db.query(
             `SELECT Profile_ID_Author, Profile_ID_Recipient, Permissions, Feature_ID, Feature_type
             FROM shared_features
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
-    }
-    
-    const data = helper.emptyOrRows(rows);
-    
-    return {
-        data
+        return(data);
     }
 }
 
@@ -65,13 +52,7 @@ async function create(body){
         (${body.Profile_ID_Author}, ${body.Profile_ID_Recipient}, "${body.Permissions}", ${body.Feature_ID}, "${body.Feature_type}")`
     );
     
-    let message = 'Error in creating shared_features ';
-    
-    if (result.affectedRows) {
-        message = 'shared_features created successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function update(key_type1, key_type2, key_value1, key_value2, body){
@@ -94,13 +75,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
     }
     
 
-    let message = 'Error in updating shared_features';
-    
-    if (result.affectedRows) {
-        message = 'shared_features updated successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 async function remove(key_type1, key_type2, key_value1, key_value2){
@@ -118,13 +93,7 @@ async function remove(key_type1, key_type2, key_value1, key_value2){
         );
     }
     
-    let message = 'Error in deleting shared_features';
-    
-    if (result.affectedRows) {
-        message = 'shared_features deleted successfully';
-    }
-    
-    return {message};
+    return result;
 }
 
 module.exports = {

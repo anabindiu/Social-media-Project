@@ -1,62 +1,72 @@
 import { useEffect, useState } from "react";
 import uuid from "react-uuid";
 import "./Notes.css";
-import Note_File1 from "../components/Note_File1";
-import Side_bar_Notes from "../components/Side_bar_Notes";
+import Note from "../components/Note";
+import Notes_Sidebar from "../components/Notes_SideBar";
+import {Get_Note, Get_Notes, Create_Note, Delete_Note, Update_Note} from "../auth/action/API_requests";
+import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+import * as comp from "../components/Notes_Components";
 
 function Notes() {
-  const [notes, setNotes] = useState(
-    localStorage.notes ? JSON.parse(localStorage.notes) : []
-  );
+  const [notes, setNotes] = useState([]);
   const [activeNote, setActiveNote] = useState(false);
 
-  useEffect(() => {
-    localStorage.setItem("notes", JSON.stringify(notes));
-  }, [notes]);
+  useEffect(async () => {
+    trackPromise(
+      Get_Note().then((note_list) => {
+        setNotes([...note_list]);
+      })
+    );
+  }, []);
 
-  const onAddNote = () => {
-    const newNote = {
-      id: uuid(),
-      title: "Untitled Note",
-      body: "",
-      lastModified: Date.now(),
+  const onAddNote = async () => {
+    const notes = await Get_Notes();
+    const note_data = {
+      "Notes_ID": notes.ID, 
+      "Date_Created":`${new Date()}`, 
+      "Last_Modified":`${new Date()}`, 
+      "Title":"Note Title", 
+      "Content":"Write your note here..."
     };
-
-    setNotes([newNote, ...notes]);
-    setActiveNote(newNote.id);
+    await Create_Note(note_data);
+    
+    await Get_Note().then((note_list) => {
+      setNotes([...note_list]);
+    })
   };
 
-  const onDeleteNote = (noteId) => {
-    setNotes(notes.filter(({ id }) => id !== noteId));
+  const onDeleteNote = async (note) => {
+    console.log("TO DELETE", note);
+    await Delete_Note(note);
+
+    await Get_Note().then((note_list) => {
+      setNotes([...note_list]);
+    })
   };
 
-  const onUpdateNote = (updatedNote) => {
-    const updatedNotesArr = notes.map((note) => {
-      if (note.id === updatedNote.id) {
-        return updatedNote;
-      }
+  const onUpdateNote = async (activeNote, field, value) => {
+    await Update_Note(activeNote, field, value);
 
-      return note;
-    });
-
-    setNotes(updatedNotesArr);
+    await Get_Note().then((note_list) => {
+      setNotes([...note_list]);
+    })
   };
 
   const getActiveNote = () => {
-    return notes.find(({ id }) => id === activeNote);
+    return notes.find(({ID}) => ID === activeNote);
   };
 
   return (
-    <div className="Notes">
-      <Side_bar_Notes
+    <comp.Notes_Base>
+      <Notes_Sidebar
         notes={notes}
         onAddNote={onAddNote}
         onDeleteNote={onDeleteNote}
         activeNote={activeNote}
         setActiveNote={setActiveNote}
       />
-      <Note_File1 activeNote={getActiveNote()} onUpdateNote={onUpdateNote} />
-    </div>
+      <Note activeNote={getActiveNote()} setActiveNote={setActiveNote} onUpdateNote={onUpdateNote} />
+    </comp.Notes_Base>
   );
 }
 

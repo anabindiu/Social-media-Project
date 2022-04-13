@@ -216,7 +216,7 @@ export default function Settings() {
   const [options, setOptions] = useState(create_options(null));
   const [visibleOptions, setVisibleOptions] = useState(options);
 
-  useEffect(() => {
+  useEffect(async () => {
     trackPromise(
       Get_Settings().then((settings) => {
         setOptions([...create_options(settings)]);
