@@ -1,5 +1,97 @@
 import React, { useState, useEffect } from "react";
 import { FaTemperatureHigh } from "react-icons/fa";
+import {Convert_Date_Notes} from "../action/helper";
+
+export async function Get_Task(){
+    const tasks = await Get_Tasks();
+    return(fetch(`http://localhost:3001/task/Tasks_ID/${tasks.ID}`)
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .then(result => {
+            console.log(result);
+            return(result)
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Create_Task(formData){
+    formData.Deadline = `\"${formData.Deadline}\"`;
+    console.log("CREATE", formData);
+    return(fetch(`http://localhost:3001/task`, {
+            method: 'POST',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "Tasks_ID": formData.Tasks_ID, 
+                "Title":formData.Title, 
+                "Description":formData.Description, 
+                "Location":formData.Location, 
+                "Deadline":formData.Deadline,
+                "Completion_Status":false
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Update_Task(new_task){
+    console.log("CHANGE TO", new_task);
+    new_task.Deadline = `\"${new_task.Deadline}\"`;
+    return(fetch(`http://localhost:3001/task/ID/${new_task.ID}/Tasks_ID/${new_task.Tasks_ID}`, {
+            method: 'PUT',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "Tasks_ID": new_task.Tasks_ID, 
+                "Title":new_task.Title, 
+                "Description":new_task.Description, 
+                "Location":new_task.Location, 
+                "Deadline":new_task.Deadline,
+                "Completion_Status":new_task.Completion_Status
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Delete_Task(task){
+    return(fetch(`http://localhost:3001/task/ID/${task.ID}/Tasks_ID/${task.Tasks_ID}`, {
+            method: 'DELETE',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({}),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
 
 export async function Update_Settings({change, to}){
     const data = await Get_Settings();
@@ -113,18 +205,8 @@ export async function Get_Note(){
 };
 
 export async function Create_Note(formData){
-    const convert_date = (date) =>{
-        const pad = function(num){return ('00'+num).slice(-2) };
-        date = date.getUTCFullYear()        + '-' +
-                pad(date.getMonth() + 1) + '-' +
-                pad(date.getDate())      + ' ' +
-                pad(date.getHours())     + ':' +
-                pad(date.getMinutes())   + ':' +
-                pad(date.getSeconds());
-        return date;
-    }
-    formData.Date_Created = convert_date(new Date(formData.Date_Created));
-    formData.Last_Modified = convert_date(new Date(formData.Last_Modified));
+    formData.Date_Created = Convert_Date_Notes(new Date(formData.Date_Created));
+    formData.Last_Modified = Convert_Date_Notes(new Date(formData.Last_Modified));
     console.log("CREATE", formData);
     return(fetch(`http://localhost:3001/note`, {
             method: 'POST',
@@ -150,20 +232,10 @@ export async function Create_Note(formData){
 };
 
 export async function Update_Note(note, change, to){
-    const convert_date = (date) =>{
-        const pad = function(num){return ('00'+num).slice(-2) };
-        date = date.getUTCFullYear()        + '-' +
-                pad(date.getMonth() + 1) + '-' +
-                pad(date.getDate())      + ' ' +
-                pad(date.getHours())     + ':' +
-                pad(date.getMinutes())   + ':' +
-                pad(date.getSeconds());
-        return date;
-    }
     console.log("CHANGE", note, change, to);
     note[change] = to;
-    note.Date_Created = convert_date(new Date(note.Date_Created));
-    note.Last_Modified = convert_date(new Date(note.Last_Modified));
+    note.Date_Created = Convert_Date_Notes(new Date(note.Date_Created));
+    note.Last_Modified = Convert_Date_Notes(new Date(note.Last_Modified));
     console.log("TO", note);
     return(fetch(`http://localhost:3001/note/ID/${note.ID}/Notes_ID/${note.Notes_ID}`, {
             method: 'PUT',

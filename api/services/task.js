@@ -13,7 +13,7 @@ function parseKey(key_type, key_value){
 
 async function getAll(){
     const data = await db.query(
-        `SELECT ID, Tasks_ID, Deadline, Completion_Status, Description, Title, Location
+        `SELECT ID, Tasks_ID, Title, Description, Location, Deadline, Completion_Status
         FROM task`
     );
     return(data);
@@ -24,7 +24,7 @@ async function getOne(key_type1, key_type2, key_value1, key_value2){
     key_value2 = parseKey(key_type2, key_value2);
     if(key_value2 == null){
         const data = await db.query(
-            `SELECT ID, Tasks_ID, Deadline, Completion_Status, Description, Title, Location
+            `SELECT ID, Tasks_ID, Title, Description, Location, Deadline, Completion_Status
             FROM task
             WHERE ${key_type1}=${key_value1}`
         );
@@ -32,7 +32,7 @@ async function getOne(key_type1, key_type2, key_value1, key_value2){
     }
     else{
         const data = await db.query(
-            `SELECT ID, Tasks_ID, Deadline, Completion_Status, Description, Title, Location
+            `SELECT ID, Tasks_ID, Title, Description, Location, Deadline, Completion_Status
             FROM task
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
@@ -43,9 +43,9 @@ async function getOne(key_type1, key_type2, key_value1, key_value2){
 async function create(body){
     const result = await db.query(
         `INSERT INTO task 
-        (Tasks_ID, Deadline, Completion_Status, Description, Title, Location) 
+        (Tasks_ID, Title, Description, Location, Deadline, Completion_Status) 
         VALUES 
-        (${body.Tasks_ID}, "${body.Deadline}", "${body.Completion_Status}", "${body.Description}", "${body.Title}", "${body.Location}")`
+        (${body.Tasks_ID}, "${body.Title}", "${body.Description}", "${body.Location}", ${body.Deadline}, ${body.Completion_Status})`
     );
     
     return result;
@@ -58,7 +58,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
     if(key_value2 == null){
         const result = await db.query(
             `UPDATE task 
-            SET Notes_ID=${body.Tasks_ID}, Deadline="${body.Deadline}", Completion_Status="${body.Completion_Status}", Description="${body.Description}", Title="${body.Title}", Location="${body.Location}"
+            SET Tasks_ID=${body.Tasks_ID}, Title="${body.Title}", Description="${body.Description}", Location="${body.Location}", Deadline=${body.Deadline}, Completion_Status=${body.Completion_Status}
             WHERE ${key_type1}=${key_value1}`
         );
 
@@ -67,7 +67,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
     else{
         const result = await db.query(
             `UPDATE task 
-            SET Notes_ID=${body.Tasks_ID}, Deadline="${body.Deadline}", Completion_Status="${body.Completion_Status}", Description="${body.Description}", Title="${body.Title}", Location="${body.Location}"
+            SET Tasks_ID=${body.Tasks_ID}, Title="${body.Title}", Description="${body.Description}", Location="${body.Location}", Deadline=${body.Deadline}, Completion_Status=${body.Completion_Status}
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
         );
 
@@ -83,14 +83,14 @@ async function remove(key_type1, key_type2, key_value1, key_value2){
         const result = await db.query(
             `DELETE FROM task WHERE ${key_type1}=${key_value1}`
         );
+        return result;
     }
     else{
         const result = await db.query(
             `DELETE FROM task WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
+        return result;
     }
-    
-    return result;
 }
 
 module.exports = {

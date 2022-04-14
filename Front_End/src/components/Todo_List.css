@@ -15,7 +15,7 @@
     );
   }
   .todo-app {
-    border-radius: 350px 350px 350px 350px;
+    border-radius: 30px 30px 30px 30px;
     display: flex;
     flex-direction:column;
     justify-content: start;
@@ -153,3 +153,50 @@
     color: #fff;
   }
   
+  .todo-input-disabled {
+    padding: 14px 32px 14px 16px;
+    border-radius: 30px 30px 30px 30px;
+    border: 2px solid #7f63b8;
+    outline: none;
+    width: 320px;
+    background: transparent;
+    color: #fff;
+    flex-direction:column;
+    opacity: 0.6;
+  }
+  
+  .todo-input-disabled::placeholder {
+    color: #e2e2e2;
+    opacity: 0.6;
+  }
+  
+  .todo-button-disabled {
+    padding: 16px;
+    border: none;
+    border-radius: 30px 30px 30px 30px;
+    cursor: pointer;
+    outline: none;
+    background: linear-gradient(
+      90deg,
+      rgb(199, 196, 204) 0%,
+      rgb(102, 78, 117) 100%
+    );
+    color: #fff;
+    text-transform: capitalize;
+    opacity: 0.6;
+  }
+  
+  .todo-input-disabled.edit {
+    border: 2px solid #a267b4;
+    opacity: 0.6;
+  }
+  
+  .todo-button-disabled.edit {
+    background: linear-gradient(
+      90deg,
+      rgb(199, 196, 204) 0%,
+      rgb(102, 78, 117) 100%
+    );
+    padding: 16px 22px;
+    opacity: 0.6;
+  }
