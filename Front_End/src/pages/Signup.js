@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import {signUpUser} from  '../auth/action/userAction';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import {LinkButton} from '../components/Buttons';
 
 
 const Signup = (signupUser)  => {
@@ -74,6 +75,7 @@ const Signup = (signupUser)  => {
         <p>
           <button id="sub_btn" type="submit">Create Account</button>
         </p>
+        <LinkButton title={"or Log in"} page={"/login"}/>
   </form>
   </div>
   )
