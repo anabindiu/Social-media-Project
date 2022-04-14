@@ -138,8 +138,8 @@ export async function Get_Friends(){
             return response.json();
         })
         .then(result => {
-            console.log(result[0]);
-            return(result[0])
+            console.log(result);
+            return(result)
         })
         .catch(e => {
             console.log(e);
@@ -150,7 +150,7 @@ export async function Get_Friends(){
 export async function Get_Profile(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     console.log(ID);
-    return(fetch(`http://localhost:3001/profile/Profile_ID/${ID}`)
+    return(fetch(`http://localhost:3001/profile/ID/${ID}`)
         .then(function(response){
             if(!response.ok){
                 throw new Error("HTTP error " + response.status);
@@ -167,8 +167,8 @@ export async function Get_Profile(){
     );
 };
 
-export async function Get_Profile_Identifier(ID){
-    return(fetch(`http://localhost:3001/profile/Profile_ID/${ID}`)
+export async function Get_All_Profile_Identifier(){
+    return(fetch(`http://localhost:3001/profile`)
         .then(function(response){
             if(!response.ok){
                 throw new Error("HTTP error " + response.status);
@@ -176,8 +176,49 @@ export async function Get_Profile_Identifier(ID){
             return response.json();
         })
         .then(result => {
-            console.log(result[0]);
-            return(result[0])
+            console.log(result);
+            return(result)
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Delete_Friend(friend){
+    const ID = await JSON.parse(localStorage.getItem('user')).ID;
+    return(fetch(`http://localhost:3001/has_friend/ID_1/${ID}/ID_2/${friend.ID}`, {
+            method: 'DELETE',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({}),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Create_Friend(friend){
+    const ID = await JSON.parse(localStorage.getItem('user')).ID;
+    return(fetch(`http://localhost:3001/has_friend`, {
+            method: 'POST',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "ID_1":ID, 
+                "ID_2":friend.ID,
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
         })
         .catch(e => {
             console.log(e);
