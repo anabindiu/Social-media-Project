@@ -1,6 +1,5 @@
 -- CREATE SCHEMA if not exists Project;
 
-select * from profile;
 -- drop TABLE `profile`;
 create table if not exists `Profile`(
     ID int auto_increment not null,
@@ -8,7 +7,7 @@ create table if not exists `Profile`(
 	Username varchar(255) UNIQUE NOT NULL,
     `Password` varchar(255) NOT NULL,
 	`Name` varchar(255),
-    B_Date DATE, 
+    B_Date TEXT, 
     Profile_Pic TEXT,
     PRIMARY KEY(ID, Email, Username)
 );
@@ -65,7 +64,7 @@ create table if not exists Yearly(
 -- drop table monthly_stats;
 create table if not exists Monthly_Stats(
 	Feature_Stats_ID int NOT NULL,
-	Month_Year DATE,
+	Month_Year varchar(10),
 	primary key(Month_Year),
 	foreign key(Feature_Stats_ID) references Feature_Statistics(ID),
     
@@ -92,8 +91,9 @@ create table if not exists Note(
     primary key(ID, Notes_ID),
     foreign key (Notes_ID) references Notes(ID),
     
-	Date_Created DATETIME,
-    Title varchar(50),
+	Date_Created TEXT,
+    Last_Modified TEXT,
+    Title TEXT,
     Content TEXT    
 );
 
@@ -113,12 +113,12 @@ create table if not exists Task(
     
     Tasks_ID int not null, 
     foreign key (Tasks_ID) references Tasks(ID),
-        
-    Deadline DATETIME,
-    Completion_Status BOOLEAN default false, 
-    `Description` TEXT,
+    
     Title TEXT,
-    Location TEXT
+    `Description` TEXT,
+    Location TEXT,
+    Deadline TEXT,
+    Completion_Status BOOLEAN default false
 );
 
 -- drop table `schedule`;
@@ -138,8 +138,8 @@ create table if not exists `Event`(
     Location TEXT,
     `Description` TEXT,
     Title TEXT NOT NULL, 
-    Start_Date DATETIME, 
-    End_Date DATETIME, 
+    Start_Date TEXT, 
+    End_Date TEXT, 
     foreign key (ID) references `Schedule`(ID)
 );
 
