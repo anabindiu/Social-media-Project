@@ -130,7 +130,7 @@ export async function Update_Settings({change, to}){
 export async function Get_Profile(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     console.log(ID);
-    return(fetch(`http://localhost:3001/profile/Profile_ID/${ID}`)
+    return(fetch(`http://localhost:3001/profile/ID/${ID}`)
         .then(function(response){
             if(!response.ok){
                 throw new Error("HTTP error " + response.status);

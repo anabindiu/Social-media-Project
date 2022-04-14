@@ -9,8 +9,6 @@ export const loginUser = async(credentials, navigate) => {
         const data = await response.json();
 
         const bcrypt = require("bcryptjs");
-
-
         const storage_block={
             ID: data[0].ID,
             Password: data[0].Password
