@@ -1,9 +1,9 @@
-import '../components/Todo_List.css';
 import { useEffect, useState } from "react";
 import {Get_Task, Get_Tasks, Create_Task, Delete_Task, Update_Task} from "../auth/action/API_requests";
 import {trackPromise} from "react-promise-tracker";
 import TaskForm from '../components/TaskForm';
 import Task from '../components/Task';
+import * as comp from "../components/Tasks_Components";
 
 function Task_List() {
   const [task_list, setTaskList] = useState([]);
@@ -72,9 +72,8 @@ function Task_List() {
   }
 
   return (
-    <div className='todo-app'>
-    <>
-      <h1>To do list</h1>
+    <comp.Task_List_Base>
+      <comp.Task_List_Header>Task List</comp.Task_List_Header>
       <TaskForm edit={false} disabled={isDisabled} callingFunction={onAddTask} start={{title:"", description:"", location:"", deadline:""}}/>
       <Task
         task_list={task_list}
@@ -84,8 +83,7 @@ function Task_List() {
         blockMainForm={blockMainForm}
         cancelUpdate={cancelUpdate}
       />
-    </>
-    </div>
+    </comp.Task_List_Base>
   );
 }
 

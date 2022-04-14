@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {convert_date} from "../auth/action/API_requests";
+import * as comp from "../components/Tasks_Components";
 
 function TaskForm({edit, disabled, callingFunction, start, edit_task}) {
   const [title, setTitle] = useState(`${start.title}`);
   const [description, setDescription] = useState(`${start.description}`);
   const [location, setLocation] = useState(`${start.location}`);
-  console.log("Start", start.deadline);
-  console.log("After", start.deadline);
   const [deadline, setDeadline] = useState(`${start.deadline}`);
 
   const handleSubmit = (e) => {
@@ -34,8 +32,6 @@ function TaskForm({edit, disabled, callingFunction, start, edit_task}) {
       };
     }
 
-    console.log(task_data);
-
     callingFunction(task_data);
     setTitle("");
     setDescription("");
@@ -44,73 +40,66 @@ function TaskForm({edit, disabled, callingFunction, start, edit_task}) {
   };
 
   return (
-    <form onSubmit={handleSubmit.bind(this)} className='todo-form'>
+    <comp.Task_Form onSubmit={handleSubmit.bind(this)}>
       {disabled ? 
         <>
-          <input
+          <comp.Task_Form_Input
             disabled={true}
             value="Title..."
-            className='todo-input-disabled mr-20'
           />
-          <input
+          <comp.Task_Form_Input
             disabled={true}
             value="Description..."
-            className='todo-input-disabled mr-20'
           />
-          <input
+          <comp.Task_Form_Input
             disabled={true}
             value="Location..."
-            className='todo-input-disabled mr-20'
           />
-          <input
+          <comp.Task_Form_Input
             disabled={true}
             value="Deadline"
-            className='todo-input-disabled mr-5'
           />
-          <button disabled={true} className='todo-button-disabled'>Add</button> 
+          <>
+          <comp.Task_Form_Button disabled={true}>Add</comp.Task_Form_Button></>
       </>
       :
       <>
-        <input
+        <comp.Task_Form_Input
           type="text"
           name="Title"
           placeholder="Title..."
           value={title}
           onChange={(e) => {setTitle(e.target.value)}}
-          className='todo-input mr-20'
           required
         />
-        <input
+        <comp.Task_Form_Input
           type="text"
           name="Description"
           placeholder="Description..."
           value={description}
           onChange={(e) => {setDescription(e.target.value)}}
-          className='todo-input mr-20'
         />
-        <input
+        <comp.Task_Form_Input
           type="text"
           name="Location"
           placeholder="Location..."
           value={location}
           onChange={(e) => {setLocation(e.target.value)}}
-          className='todo-input mr-20'
         />
-        <input
+        <comp.Task_Form_Input
           type="datetime-local"
           name="Deadline"
           value={deadline}
           onChange={(e) => {console.log(e.target.value); setDeadline(e.target.value)}}
-          className='todo-input mr-5'
         />
         {edit ? 
-          <button type="submit" className='todo-button'>Update</button>
+          <comp.Task_Form_Button type="submit">Update</comp.Task_Form_Button>
           :
-          <button type="submit" className='todo-button'>Add</button>
+          <comp.Task_Form_Button type="submit">Add</comp.Task_Form_Button>
         }
         </>
       }
-    </form>
+    </comp.Task_Form>
   );
 }
 
