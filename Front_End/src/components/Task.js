@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import TaskForm from './TaskForm';
 import { RiCloseCircleLine } from 'react-icons/ri';
 import { TiEdit } from 'react-icons/ti';
+import * as comp from "../components/Tasks_Components";
 
 const Task = ({task_list, setCompletion, onDeleteTask, onUpdateTask, blockMainForm, cancelUpdate}) => {
   const [edit, setEdit] = useState({isEditing: false, edit_task:null});
@@ -26,36 +27,30 @@ const Task = ({task_list, setCompletion, onDeleteTask, onUpdateTask, blockMainFo
     console.log("Edit", task);
     return(
     <>
-      <TaskForm 
+      <TaskForm
         edit={true} 
         callingFunction={submitUpdate}
         start={{title:task.Title, description:task.Description, location:task.Location, deadline:task.Deadline}}
         edit_task={task}
-        />
-        <button className='todo-button' onClick={CancelUpdate}>Cancel</button>
+      />
+      <comp.Task_Form_Button className='todo-button' onClick={CancelUpdate}>Cancel</comp.Task_Form_Button>
       </>
     );
   }
 
   return task_list.map((task) => (
-    <div
+    <comp.Task_Base
       className={task.Completion_Status ? 'todo-row complete' : 'todo-row'}
       key={task.ID}
     >
-      <div key={task.ID} onClick={() => setCompletion(task.ID)}>
+      <comp.Task_Title key={task.ID} onClick={() => setCompletion(task.ID)}>
         {task.Title}
-      </div>
-      <div className='icons'>
-        <RiCloseCircleLine
-          onClick={() => onDeleteTask(task)}
-          className='delete-icon'
-        />
-        <TiEdit
-          onClick={() => editTask(task)}
-          className='edit-icon'
-        />
-      </div>
-    </div>
+      </comp.Task_Title>
+      <comp.Task_Icons>
+        <RiCloseCircleLine onClick={() => onDeleteTask(task)}/>
+        <TiEdit onClick={() => editTask(task)}/>
+      </comp.Task_Icons>
+    </comp.Task_Base>
   ));
 };
 
