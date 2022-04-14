@@ -1,76 +1,9 @@
 import React, { useState } from 'react'
 import "../App.css";
+import UploadImages from '../components/UploadImages';
+import { Button } from "../components/Buttons";
 
 export default function Profile() {
-  const options= [
-  {
-    header: {
-      name: "Profile pic upload: ",
-    },
-
-    values: [
-      {
-        name: "",
-      }
-    ],
-  },
-  {
-    header: {
-      name: "Name:",
-    },
-    values: [
-      {
-        name: "",
-      }
-    ],
-  },
-  {
-    header: {
-      name: "Birthday",
-    },
-
-    values: [
-      {
-        name: "DD-MM-YYYY",
-      }
-    ],
-  },
-  {
-    header: {
-      name: "Username",
-    },
-
-    values: [
-      {
-        name: "",
-      }
-    ]
-  },
-  {
-    header: {
-      name: "Email",
-    },
-
-    values: [
-      {
-        name: "",
-      }
-    ]
-  },
-  {
-    header: {
-      name: "Password",
-    },
-
-    values: [
-      {
-        name: "Add a password",
-      }
-    ]
-  }
-];
-
-const [profile_list, setProfileList] = useState(options);
 
  return (
     <div className='App'>
@@ -82,25 +15,49 @@ const [profile_list, setProfileList] = useState(options);
         </h1>
         
         <div>
-          {profile_list.map((option) =>(
-          <div key={option.header.name}>
-            <h3 className='title_border'>{option.header.name}</h3>
-            <div className="border_list">
-              {option.values.map((value) => (
-                <div key={value.name} className="font-weight-bold">
-                  <ul className='list-group'>
-                    <li className='list-group-item mb-2'>
-                      <h6 className='border_item'>{value.name}</h6>
-                      <input className='input_detail' placeholder= {value.description}></input>
-                      <p className='item_description'>{value.description}</p>
-                    </li>
-                  </ul>
-                </div>
-              ))}
-            </div>
+        <h3 className='title_border'>Profile pic upload </h3>
+          <div className='border_list'>
+            <div className="font-weight-bold">
+              <UploadImages/>
+            </div>  
           </div>
-          ))}
         </div>
+        
+        <h3 className='title_border'>Name </h3>
+        <div className='border_list'>
+          <div className='font-weight-bold'>
+          <input className='input_detail' placeholder="Enter your name"></input>
+          </div>
+        </div>
+
+        <h3 className='title_border'>Birthday</h3>
+        <div className='border_list'>
+          <div className='font-weight-bold'>
+            <input type="date" className='input_detail'></input>
+          </div>
+        </div>
+
+        <h3 className='title_border'>Username</h3>
+        <div className='border_list'>
+          <div className='font-weight-bold'>
+            <input className='input_detail' placeholder='Enter your username'></input>
+          </div>
+        </div>
+
+        <h3 className='title_border'>Email</h3>
+        <div className='border_list'>
+          <div className='font-weight-bold'>
+            <input className='input_detail' placeholder='Enter your email'></input>
+          </div>
+        </div>
+
+        <h3 className='title_border'>Password</h3>
+        <div className='border_list'>
+          <div className='font-weight-bold'>
+            <input className='input_detail' placeholder='Enter your password'></input>
+          </div>
+        </div>
+        <Button>Edit profile</Button>
       </div>
     </div>
   );
