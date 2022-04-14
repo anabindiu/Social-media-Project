@@ -45,7 +45,7 @@ async function create(body){
         `INSERT INTO note 
         (Notes_ID, Date_Created, Last_Modified, Title, Content) 
         VALUES 
-        (${body.Notes_ID}, "${body.Date_Created}", "${body.Last_Modified}", "${body.Title}", "${body.Content}")`
+        (${body.Notes_ID}, ${body.Date_Created}, ${body.Last_Modified}, "${body.Title}", "${body.Content}")`
     );
     
     return result;
@@ -58,7 +58,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
     if(key_value2 == null){
         const result = await db.query(
             `UPDATE note 
-            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Last_Modified="${body.Last_Modified}", Title="${body.Title}", Content="${body.Content}"
+            SET Notes_ID=${body.Notes_ID}, Date_Created=${body.Date_Created}, Last_Modified=${body.Last_Modified}, Title="${body.Title}", Content="${body.Content}"
             WHERE ${key_type1}=${key_value1}`
         );
 
@@ -67,7 +67,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
     else{
         const result = await db.query(
             `UPDATE note 
-            SET Notes_ID=${body.Notes_ID}, Date_Created="${body.Date_Created}", Last_Modified="${body.Last_Modified}", Title="${body.Title}", Content="${body.Content}"
+            SET Notes_ID=${body.Notes_ID}, Date_Created=${body.Date_Created}, Last_Modified=${body.Last_Modified}, Title="${body.Title}", Content="${body.Content}"
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
         );
 
