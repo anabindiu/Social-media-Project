@@ -32,7 +32,7 @@
   border: 1px solid rgb(247, 240, 240);
   background-color: rgb(255, 255, 255);
   border-radius: 20px 20px 20px 20px;
-  width: 600px;
+  width: 350px;
   margin: 20px;
   margin-left: 90px;
 }
@@ -95,17 +95,6 @@ footer p {
 h2 {
   font-weight: 300
 }
-
-/*
-form {
-  display: inline-block;
-  background: #f3f3f3;
-  border: 1px solid #ddd;
-  border-radius: 2px;
-  padding: 2rem;
-  margin: 2rem 0 1rem 0
-}
-*/
 
 form label {
   float: left;
