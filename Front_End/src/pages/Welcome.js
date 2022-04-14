@@ -1,11 +1,6 @@
 import React from 'react'
 import "../App.css";
-import Signup from './Signup'
-import Login from './Login'
 import { useNavigate } from 'react-router-dom';
-
-
-import {BrowserRouter, Route, Routes, Link} from "react-router-dom";
 
 
 export default function Welcome() {

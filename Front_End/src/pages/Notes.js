@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import uuid from "react-uuid";
-import "./Notes.css";
 import Note from "../components/Note";
 import Notes_Sidebar from "../components/Notes_SideBar";
 import {Get_Note, Get_Notes, Create_Note, Delete_Note, Update_Note} from "../auth/action/API_requests";
