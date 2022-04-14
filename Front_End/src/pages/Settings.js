@@ -302,7 +302,7 @@ const DisplaySettings = () => {
   );
 }
 
-const {promiseInProgress} = usePromiseTracker();
+  const {promiseInProgress} = usePromiseTracker();
 
   return (
     <comp.Base>
@@ -315,6 +315,3 @@ const {promiseInProgress} = usePromiseTracker();
     </comp.Base>
   );
 }
-
-/*
-*/

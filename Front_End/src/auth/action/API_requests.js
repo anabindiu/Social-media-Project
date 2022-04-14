@@ -127,9 +127,47 @@ export async function Update_Settings({change, to}){
     );
 };
 
+export async function Get_Friends(){
+    const ID = await JSON.parse(localStorage.getItem('user')).ID;
+    console.log(ID);
+    return(fetch(`http://localhost:3001/has_friend/ID_1/${ID}`)
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .then(result => {
+            console.log(result[0]);
+            return(result[0])
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
 export async function Get_Profile(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     console.log(ID);
+    return(fetch(`http://localhost:3001/profile/Profile_ID/${ID}`)
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .then(result => {
+            console.log(result[0]);
+            return(result[0])
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Get_Profile_Identifier(ID){
     return(fetch(`http://localhost:3001/profile/Profile_ID/${ID}`)
         .then(function(response){
             if(!response.ok){
