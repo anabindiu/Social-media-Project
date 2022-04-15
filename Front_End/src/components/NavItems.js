@@ -40,12 +40,6 @@ export const navItems = [
     },
     {
       id: 3,
-      title: "Statistics",
-      path: "../statistics",
-      cName: "submenu-item",
-    },
-    {
-      id: 4,
       title: "Logout",
       path: "../welcome",
       cName: "submenu-item",

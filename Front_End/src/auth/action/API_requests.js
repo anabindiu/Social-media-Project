@@ -1,4 +1,3 @@
-import { ConstructionOutlined } from "@mui/icons-material";
 import React, { useState, useEffect } from "react";
 import { FaTemperatureHigh } from "react-icons/fa";
 import {Convert_Date_Notes} from "../action/helper";
@@ -342,7 +341,7 @@ export async function Get_Friends(){
 export async function Get_Profile(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     console.log(ID);
-    return(fetch(`http://localhost:3001/profile/ID/${ID}`)
+    return(await fetch(`http://localhost:3001/profile/ID/${ID}`)
         .then(function(response){
             if(!response.ok){
                 throw new Error("HTTP error " + response.status);
