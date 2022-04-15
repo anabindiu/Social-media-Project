@@ -46,7 +46,7 @@ async function update(key_type, key_value, body){
     key_value = parseKey(key_type, key_value);
     const result = await db.query(
         `UPDATE features 
-        SET Profile_ID=${body.Profile_ID}, Profile_Email="${body.Profile_Email}", Profile_Username="${body.Profile_Username}", Schedule_ID=${body.Schedule_ID}, Notes_ID=${body.Notes_ID}, Tasks_ID=${body.Tasks_ID}, Setting_ID=${body.Setting_ID},
+        SET Profile_ID=${body.Profile_ID}, Profile_Email="${body.Profile_Email}", Profile_Username="${body.Profile_Username}", Schedule_ID=${body.Schedule_ID}, Notes_ID=${body.Notes_ID}, Tasks_ID=${body.Tasks_ID}, Setting_ID=${body.Setting_ID}
         WHERE ${key_type}=${key_value}` 
     );
     

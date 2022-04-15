@@ -3,8 +3,8 @@ const config = {
     /* don't expose password or any sensitive info, done only for demo */
     /* University Address : 10.13.130.15 */
 
-    // host: "192.168.1.86",
-    // host: 'localhost',
+    // host: "10.13.90.65",
+
     user: "root",
     password: "password",
     database: "project",

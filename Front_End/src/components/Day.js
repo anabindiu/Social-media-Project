@@ -13,10 +13,10 @@ export default function Day({ day, start_date, end_date, rowIdx }) {
 
   useEffect(() => {
     const events = filteredEvents.filter(
-      (evt) =>
-        dayjs(evt.day).format("DD-MM-YY") === day.format("DD-MM-YY")
+      (evt) => 
+        dayjs(new Date(evt.Day).getTime()).format("DD-MM-YY") === day.format("DD-MM-YY")
     );
-    setDayEvents(events);
+    setDayEvents([...events]);
   }, [filteredEvents, day]);
 
   function getStartDateClass(){
@@ -49,15 +49,16 @@ export default function Day({ day, start_date, end_date, rowIdx }) {
         onClick={() => {
           setDaySelected(day);
           setShowEventModal(true);
+          
         }}
       >
         {dayEvents.map((evt, idx) => (
           <div
             key={idx}
             onClick={() => setSelectedEvent(evt)}
-            className={`bg-${evt.label}-200 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
+            className={`bg-${evt.Label}-200 p-1 mr-3 text-gray-600 text-sm rounded mb-1 truncate`}
           >
-            {evt.title}
+            {evt.Title}
           </div>
         ))}
       </div>
