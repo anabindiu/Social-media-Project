@@ -9,36 +9,28 @@ export const loginUser = async(credentials, navigate) => {
         const data = await response.json();
 
         const bcrypt = require("bcryptjs");
-        const storage_block={
-            ID: data[0].ID,
-            Password: data[0].Password
-        }
-
-        // console.log(data[0].Password);
-        // console.log(credentials.Password);
-        // console.log(await bcrypt.compare(credentials.Password, data[0].Password));
-
-        // const salt2 = await bcrypt.genSalt(10);
-        // const hashedPass2 = await bcrypt.hash('password', salt);
-
-        // console.log(await bcrypt.compare('password', hashedPass2));
 
         if(data.length >= 1){
+            const response = "Incorrect Password! Please try again\n";
            if(await bcrypt.compare(credentials.Password, data[0].Password)){
+                const storage_block={
+                    ID: data[0].ID,
+                    Password: data[0].Password
+                }
                auth.login(() => {
                    localStorage.setItem('user', JSON.stringify(storage_block));
                    console.log("Logged in");
                    navigate("/profile");
+
                })
            }
+           return response;
         }
         else{
-            // auth.logout(() => {
-            //     localStorage.clear();
-            //     console.log("Logged out");
-            //     navigate("/welcome");
-            // })
+            const response = "Email does not exist! Please try again";
+            
             console.log("Credentials not found\n");
+            return response;
         }
     }
     catch(error){
@@ -48,6 +40,19 @@ export const loginUser = async(credentials, navigate) => {
 
 export const signUpUser = async(formData, navigate) => {
     try{
+
+        try{
+            const response = await fetch(`http://localhost:3001/profile/Email/${formData.Email}`);
+            const data = await response.json();
+            if(data.length >= 1){
+                return "Email already exists!";
+            }
+
+        }catch(error){
+            console.log(error);
+        }
+
+        
         await Create_Profile(formData);
         
         const response = await fetch(`http://localhost:3001/profile/Email/${formData.Email}`);

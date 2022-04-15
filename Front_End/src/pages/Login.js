@@ -10,6 +10,8 @@ import {LinkButton} from '../components/Buttons';
 
 const Login = (signupUser)  => {
 
+    const [error, setError] = useState("");
+
     const navigate = useNavigate();
 
     const initFormData = Object.freeze({
@@ -29,15 +31,21 @@ const Login = (signupUser)  => {
         };
     
         const handleSubmit = (e) =>{
+            setError("");
             e.preventDefault();
-            loginUser(formData, navigate);
-            // console.log(formData);
+            const response = loginUser(formData, navigate).then(response => {
+              if(response.length>0){
+                setError(response);
+              };
+            });
+
         };
     
         return (
       
           <div className="text-center m-5-auto">
           <h1>Login</h1>
+
           <form action="/profile" className='display: inline-block' onSubmit={handleSubmit}>
               <p>
                 <label>Email address</label><br/>
@@ -48,11 +56,15 @@ const Login = (signupUser)  => {
                 <br/>
                 <input type="password" name="Password" required onChange={handleChange}/>
               </p>
+
               <p>
                 <button id="sub_btn" type="submit" >Login</button>
               </p>
               <LinkButton title={"or Sign Up"} page={"/signup"}/>
         </form>
+        <p>
+          {error}
+        </p>
         </div>
         )
 }
