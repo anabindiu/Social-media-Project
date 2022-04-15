@@ -4,6 +4,8 @@ import {trackPromise} from "react-promise-tracker";
 import TaskForm from '../components/TaskForm';
 import Task from '../components/Task';
 import * as comp from "../components/Tasks_Components";
+import { Link } from "react-router-dom";
+import {Button} from "../components/Buttons";
 
 function Task_List() {
   const [task_list, setTaskList] = useState([]);
@@ -83,6 +85,15 @@ function Task_List() {
         blockMainForm={blockMainForm}
         cancelUpdate={cancelUpdate}
       />
+      <div class="dropdown">
+        <Button className="dropbtn">Share</Button>
+        <div class="dropdown-content"> 
+          <>
+          <Link to="/friends"> Friend </Link>
+          {console.log("Shared task list with friend")}
+          </>
+        </div>
+      </div>
     </comp.Task_List_Base>
   );
 }
