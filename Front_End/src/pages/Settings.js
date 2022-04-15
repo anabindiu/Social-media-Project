@@ -260,51 +260,44 @@ function onChange(e){
 };
 
 const OnClickEvent = async (button) => {
-  console.log(button);
-  await Update_Settings({change:button.change, to:button.to});
-  await Get_Settings().then((settings) => {
+  await trackPromise(Update_Settings({change:button.change, to:button.to}));
+  await trackPromise(Get_Settings().then((settings) => {
     setOptions([...create_options(settings)]);
     setVisibleOptions([...create_options(settings)]);
-  })
+  }));
 }
-
-const DisplaySettings = () => {
-  return(
-    visibleOptions.map((option) =>(
-      <comp.Setting>
-        <comp.Header3>{option.header.name}</comp.Header3>
-        <comp.Body>
-        {option.values.map((value) => (
-            <div key={value.name}>
-                <comp.Header6>{value.name}</comp.Header6>
-                <comp.Description>{value.description}</comp.Description>
-                {value.buttons.map((button) => (
-                  <div key={button.title}>
-                    <comp.PickButton action={OnClickEvent.bind(this, button)} button={button}/>
-                  </div>
-                ))}
-            </div>
-          ))}
-        </comp.Body>
-      </comp.Setting>
-      ))
-  );
-}
-
   const {promiseInProgress} = usePromiseTracker();
 
   return (
     <comp.Base>
       <comp.Header1>Settings</comp.Header1>
+      {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :
       <comp.Panel>
         <comp.Input onChange={onChange} placeholder="Search..."/>
-        {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> : <DisplaySettings/>}
+        {visibleOptions.map((option) =>(
+        <comp.Setting>
+          <comp.Header3>{option.header.name}</comp.Header3>
+          <comp.Body>
+          {option.values.map((value) => (
+              <div key={value.name}>
+                  <comp.Header6>{value.name}</comp.Header6>
+                  <comp.Description>{value.description}</comp.Description>
+                  {value.buttons.map((button) => (
+                    <div key={button.title}>
+                      <comp.PickButton action={OnClickEvent.bind(this, button)} button={button}/>
+                    </div>
+                  ))}
+              </div>
+            ))}
+          </comp.Body>
+        </comp.Setting>
+        ))};
         <comp.Header6>Report a Problem</comp.Header6>
         <comp.Description>Please type below your problem, and one of our developers will respond ASAP!</comp.Description>
         <Note_TextArea value = {report} placeholder="Send report here" onChange={(e)=>(setReport(e.target.value))}></Note_TextArea>
         <Button onClick={()=>{alert("Sending your report, thank you!"); setReport("")}}>Send Report</Button>
         <Button onClick={handleLogOut}>Log Out</Button>
-      </comp.Panel> 
+      </comp.Panel>}
     </comp.Base>
   );
 }
