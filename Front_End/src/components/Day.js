@@ -49,6 +49,7 @@ export default function Day({ day, start_date, end_date, rowIdx }) {
         onClick={() => {
           setDaySelected(day);
           setShowEventModal(true);
+          
         }}
       >
         {dayEvents.map((evt, idx) => (

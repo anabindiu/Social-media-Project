@@ -85,19 +85,6 @@ function Task_List() {
         blockMainForm={blockMainForm}
         cancelUpdate={cancelUpdate}
       />
-      <div class="dropdown">
-        <Button className="dropbtn">Share</Button>
-        <div class="dropdown-content"> 
-          <>
-          <Link to="/friends"> Friend </Link>
-          <Link to="/friends"> Friend </Link>
-          <Link to="/friends"> Friend </Link>
-          <Link to="/friends"> Friend </Link>
-          <Link to="/friends"> Friend </Link>
-          {console.log("Shared task list with friend")}
-          </>
-        </div>
-      </div>
     </comp.Task_List_Base>
   );
 }

@@ -77,6 +77,9 @@ export const Task_Base = styled.div`
     border-radius: 30px 30px 30px 30px;
     width: 60%;
 
+    text-decoration: ${props => props.primary ? "line-through" : "none"};
+    opacity: ${props => props.primary ? 0.7 : 1.0};
+
     &:nth-child(4n + 1) {
         background: linear-gradient(
             90deg,

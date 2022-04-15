@@ -8,11 +8,12 @@ import Features from "./pages/Features";
 import Calendar from "./pages/Calendar"
 import Welcome from "./pages/Welcome";
 import Signup from "./pages/Signup";
+import "./App.css";
 
 const routes = (isLoggedIn) => [
   {
     path: '/',
-    element: isLoggedIn ? <Welcome /> : <Navigate to="/login" />,
+    element: isLoggedIn ? <Welcome/> : <Navigate to="/login" />,
     children: [
       { path: '/profile', element: <Profile /> },
       { path: '/features', element: <Features /> },
