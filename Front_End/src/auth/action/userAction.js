@@ -1,13 +1,15 @@
 import auth from "../auth";
 import { Create_Default_Features, Create_Default_Notes, Create_Default_Settings, Create_Default_Tasks, Create_Default_Schedule, Create_Profile, Create_Default_Stats} from "./API_requests";
 import bcrypt from 'bcryptjs';
+import {check_http_response, Failed_To_Connect} from "./helper";
+
 
 export const loginUser = async(credentials, navigate) => {
     //make checks
     try{
         const response = await fetch(`http://localhost:3001/profile/Email/${credentials.Email}`);
+        check_http_response(response);
         const data = await response.json();
-
         const bcrypt = require("bcryptjs");
 
         if(data.length >= 1){
@@ -34,7 +36,8 @@ export const loginUser = async(credentials, navigate) => {
         }
     }
     catch(error){
-    console.log(error);
+        Failed_To_Connect();
+        console.log(error);
     }
 }
 
@@ -43,12 +46,14 @@ export const signUpUser = async(formData, navigate) => {
 
         try{
             const response = await fetch(`http://localhost:3001/profile/Email/${formData.Email}`);
+            check_http_response(response);
             const data = await response.json();
             if(data.length >= 1){
                 return "Email already exists!";
             }
 
             const response2 = await fetch(`http://localhost:3001/profile/Username/${formData.Username}`);
+            check_http_response(response2);
             const data2 = await response2.json();
             if(data2.length >= 1){
                 return "Username already exists!";
@@ -61,7 +66,8 @@ export const signUpUser = async(formData, navigate) => {
         
         await Create_Profile(formData);
         
-        const response = await fetch(`http://localhost:3001/profile/Email/${formData.Email}`);
+        const response = await fetch(`http://localhost:3001/profile/Username/${formData.Username}`);
+        check_http_response(response);
         const data = await response.json();
         console.log(data);
         const profile = data[0];
@@ -74,6 +80,8 @@ export const signUpUser = async(formData, navigate) => {
             ID: profile.ID,
             Password: hashedPass
         }
+
+        console.log("PROFILE", profile);
         
         auth.login(async () => {
             localStorage.setItem('user', JSON.stringify(storage_block));
@@ -82,14 +90,15 @@ export const signUpUser = async(formData, navigate) => {
             await Create_Default_Notes();
             await Create_Default_Tasks();
             await Create_Default_Schedule();
-            await Create_Default_Features({ID: profile.ID, Email:profile.Email, Username:profile.Username});
+            await Create_Default_Features(profile);
             await Create_Default_Stats();
             console.log("Logged in");
             navigate("/profile");
         })
     }
     catch(error){
-    console.log(error);
+        Failed_To_Connect();
+        console.log(error);
     }
 }
 

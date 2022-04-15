@@ -1,8 +1,5 @@
 import React, { useContext } from "react";
-//import plusImg from "../assets/plus.svg";
 import GlobalContext from "../context/GlobalContext";
-//<img src={plusImg} alt="create_event" className="w-7 h-7" /> 
-// include this after button onClick
 export default function CreateEventButton() {
   const { setShowEventModal } = useContext(GlobalContext);
   return (

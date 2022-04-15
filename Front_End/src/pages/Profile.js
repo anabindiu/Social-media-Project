@@ -3,6 +3,7 @@ import "../App.css";
 import UploadImages from '../components/UploadImages';
 import { Button } from "../components/Buttons";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import { Update_Profile, Get_Profile } from '../auth/action/API_requests';
 
 export default function Profile() {
@@ -45,9 +46,11 @@ export default function Profile() {
     setEditing(false);
   }
 
+  const {promiseInProgress} = usePromiseTracker();
 
  return (
     <div className='App'>
+      {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :
       <div className='containter mt-5'>
         <h1>
           <span>
@@ -115,7 +118,7 @@ export default function Profile() {
         </div>
         <Button onClick={setEditing.bind(this, !is_editing)}>{is_editing ? "Cancel" : "Edit Profile"}</Button>
         {is_editing ? <Button onClick={update_profile.bind(this)}>Save Changes</Button> : <></>}
-      </div>
+      </div>}
     </div>
   );
 }

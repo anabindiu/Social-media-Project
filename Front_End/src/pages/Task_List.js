@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {Get_Task, Get_Tasks, Create_Task, Delete_Task, Update_Task} from "../auth/action/API_requests";
-import {trackPromise} from "react-promise-tracker";
+import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import TaskForm from '../components/TaskForm';
 import Task from '../components/Task';
 import * as comp from "../components/Tasks_Components";
@@ -73,9 +74,11 @@ function Task_List() {
     setDisabled(true);
   }
 
+  const {promiseInProgress} = usePromiseTracker();
   return (
     <comp.Task_List_Base>
       <comp.Task_List_Header>Task List</comp.Task_List_Header>
+      {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :<>
       <TaskForm edit={false} disabled={isDisabled} callingFunction={onAddTask} start={{title:"", description:"", location:"", deadline:""}}/>
       <Task
         task_list={task_list}
@@ -84,7 +87,7 @@ function Task_List() {
         onUpdateTask={onUpdateTask}
         blockMainForm={blockMainForm}
         cancelUpdate={cancelUpdate}
-      />
+      /></>}
     </comp.Task_List_Base>
   );
 }
