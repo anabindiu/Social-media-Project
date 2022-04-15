@@ -1,13 +1,14 @@
 const db = require('./db');
+const mysql = require('mysql');
 
 function parseKey(key_type, key_value){
     switch(key_type){
         case "ID":
             return key_value;
         case "Email":
-            return `\"${key_value}\"`;
+            return `${key_value}`;
         case "Username":
-            return `\"${key_value}\"`;
+            return `${key_value}`;
         default:
             return key_value;
     }
@@ -23,12 +24,11 @@ async function getAll(){
 
 async function getOne(key_type, key_value){
     key_value = parseKey(key_type, key_value);
+    console.log(key_value);
     const data = await db.query(
         `SELECT ID, Email, Username, Password, B_Date, Name, Profile_Pic
         FROM profile
-
-        WHERE ${key_type} = ${key_value}`
-
+        WHERE ${key_type} = `+mysql.escape(key_value)
     );
     return(data);
 }

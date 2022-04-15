@@ -76,7 +76,6 @@ export default function Labels() {
   const {promiseInProgress} = usePromiseTracker();
   return (
     <React.Fragment>
-      {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :<>
       <p className="text-black-500 font-bold mt-10">Label</p>
       {labels.map(({ label: lbl, checked }, idx) => (
         <label key={idx} className="items-center mt-3 block">
@@ -124,7 +123,6 @@ export default function Labels() {
       onClick={setAddingNew.bind(this, true)}>
       <span className="pl-3 pr-7">Create</span>
       </button>
-      </>}
       </>}
     </React.Fragment>
   );

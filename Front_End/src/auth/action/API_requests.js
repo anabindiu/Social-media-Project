@@ -1,7 +1,6 @@
-import { ConstructionOutlined } from "@mui/icons-material";
+
 import React, { useState, useEffect } from "react";
-import { FaTemperatureHigh } from "react-icons/fa";
-import {Convert_Date_Notes, check_http_response, Failed_To_Connect} from "../action/helper";
+import {Convert_Date_Notes, Failed_To_Connect} from "../action/helper";
 
 export async function Create_Shared_Feature({friend:friend, feature_type:type, feature_ID:ID}){
     return(fetch(`http://localhost:3001/event`, {
@@ -11,21 +10,51 @@ export async function Create_Shared_Feature({friend:friend, feature_type:type, f
             }),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
 };
 
+export async function Create_Stats( profileID, month, year, events,tasks, notes){
+    return(fetch(`http://localhost:3001/monthly_stats`, {
+            method: 'POST',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                Profile_ID: profileID,
+                Month: month,
+                Year: year,
+                Total_Events: events,
+                Total_Tasks: tasks,
+                Total_Notes: notes,
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
+            return response.json();
+        })
+        .catch(e => {
+            Failed_To_Connect(e);
+            console.log(e);
+        })
+    );
+}
+
 export async function Get_Events(){
     const features = await Get_Features();
     return(fetch(`http://localhost:3001/event/Schedule_ID/${features.Schedule_ID}`)
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .then(result => {
@@ -33,7 +62,7 @@ export async function Get_Events(){
             return(result)
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -86,11 +115,13 @@ export async function Create_Event(event){
             }),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -115,11 +146,13 @@ export async function Update_Event(ID, new_event){
             }),
         })
         .then(function(response){
-            check_http_response(response);
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    } 
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -152,7 +185,9 @@ export async function Delete_Event(event){
             body: JSON.stringify({}),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
@@ -165,7 +200,9 @@ export async function Get_Task(){
     const tasks = await Get_Tasks();
     return(fetch(`http://localhost:3001/task/Tasks_ID/${tasks.ID}`)
         .then(function(response){
-            check_http_response(response);
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    } 
             return response.json();
         })
         .then(result => {
@@ -173,7 +210,7 @@ export async function Get_Task(){
             return(result)
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -194,11 +231,13 @@ export async function Create_Task(formData){
             }),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -209,10 +248,7 @@ export async function Update_Task(new_task){
 
     const pID = await JSON.parse(localStorage.getItem('user')).ID;
     console.log(new_task.Deadline);
-    const year =new_task.Deadline.replaceAll('"', '').split("-")[0];
-    const month = new_task.Deadline.split("-")[1];
-    console.log("DATA: ", year, month);
-    await fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`)
+    await fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/2022/Month/4`)
     .then(function(response){
         if(!response.ok){
             throw new Error("HTTP error " + response.status);
@@ -222,10 +258,10 @@ export async function Update_Task(new_task){
     .then(result => {
         console.log("RESULT: ", result);
         if (new_task.Completion_Status == 1){
-            Update_Stats(pID, month, year, result[0].Total_Events ,result[0].Total_Tasks + 1, result[0].Total_Notes );
+            Update_Stats(pID, 4, 2022, result[0].Total_Events ,result[0].Total_Tasks + 1, result[0].Total_Notes );
         }
         else{
-            Update_Stats(pID, month, year, result[0].Total_Events ,result[0].Total_Tasks - 1, result[0].Total_Notes );
+            Update_Stats(pID, 4, 2022, result[0].Total_Events ,result[0].Total_Tasks - 1, result[0].Total_Notes );
         }
         return(result)
     })
@@ -243,11 +279,13 @@ export async function Update_Task(new_task){
             }),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -260,11 +298,13 @@ export async function Delete_Task(task){
             body: JSON.stringify({}),
         })
         .then(function(response){
-            check_http_response(response);   
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }    
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -296,7 +336,9 @@ export async function Update_Profile(profile){
             })
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .then(result => {
@@ -304,7 +346,7 @@ export async function Update_Profile(profile){
             return(result[0])
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -328,7 +370,9 @@ export async function Update_Settings({change, to}){
             }),
         })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .then(result => {
@@ -336,7 +380,7 @@ export async function Update_Settings({change, to}){
             return(result[0])
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -346,7 +390,9 @@ export async function Get_Friends(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     return(fetch(`http://localhost:3001/has_friend/ID_1/${ID}`)
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .then(result => {
@@ -354,7 +400,7 @@ export async function Get_Friends(){
             return(result)
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -364,7 +410,9 @@ export async function Get_Profile(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     return(fetch(`http://localhost:3001/profile/ID/${ID}`)
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .then(result => {
@@ -372,7 +420,7 @@ export async function Get_Profile(){
             return(result[0])
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -381,7 +429,9 @@ export async function Get_Profile(){
 export async function Get_All_Profile_Identifier(){
     return(fetch(`http://localhost:3001/profile`)
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .then(result => {
@@ -389,7 +439,7 @@ export async function Get_All_Profile_Identifier(){
             return(result)
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -403,11 +453,13 @@ export async function Delete_Friend(friend){
             body: JSON.stringify({}),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -424,11 +476,13 @@ export async function Create_Friend(friend){
             }),
         })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -438,7 +492,9 @@ export async function Get_Settings(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     return(fetch(`http://localhost:3001/settings/Profile_ID/${ID}`)
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .then(result => {
@@ -446,7 +502,7 @@ export async function Get_Settings(){
             return(result[0])
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -459,11 +515,13 @@ export async function Delete_All_Note(Schedule_ID){
             body: JSON.stringify({}),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -476,11 +534,13 @@ export async function Delete_Note(note){
             body: JSON.stringify({}),
         })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -490,7 +550,9 @@ export async function Get_Note(){
     const notes = await Get_Notes();
     return(fetch(`http://localhost:3001/note/Notes_ID/${notes.ID}`)
         .then(function(response){
-            check_http_response(response);
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    } 
             return response.json();
         })
         .then(result => {
@@ -498,7 +560,7 @@ export async function Get_Note(){
             return(result)
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -523,11 +585,13 @@ export async function Create_Note(formData){
             }),
         })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -547,11 +611,13 @@ export async function Update_Stats(profileID, month, year,  events,tasks, notes,
             }),
         })
         .then(function(response){
-            check_http_response(response);
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    } 
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -580,11 +646,13 @@ export async function Update_Note(note, change, to){
             }),
         })
         .then(function(response){
-            check_http_response(response);
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    } 
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -594,7 +662,9 @@ export async function Get_Notes(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     return(fetch(`http://localhost:3001/notes/Profile_ID/${ID}`)
         .then(function(response){
-            check_http_response(response);
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    } 
             return response.json();
         })
         .then(result => {
@@ -602,7 +672,7 @@ export async function Get_Notes(){
             return(result[0])
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -612,7 +682,9 @@ export async function Get_Tasks(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     return(fetch(`http://localhost:3001/tasks/Profile_ID/${ID}`)
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .then(result => {
@@ -620,7 +692,7 @@ export async function Get_Tasks(){
             return(result[0])
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -630,7 +702,9 @@ export async function Get_Schedules(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     return(fetch(`http://localhost:3001/schedule/Profile_ID/${ID}`)
         .then(function(response){
-            check_http_response(response);
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    } 
             return response.json();
         })
         .then(result => {
@@ -638,7 +712,7 @@ export async function Get_Schedules(){
             return(result)
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -651,11 +725,13 @@ export async function Delete_Schedule(schedule){
         body: JSON.stringify({}),
         })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -669,19 +745,20 @@ export async function Create_Schedule(name){
         body: JSON.stringify({"Profile_ID":ID, "Calendar_Name":name}),
         })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
 };
 
 export async function Update_Schedule(schedule){
-    const ID = await JSON.parse(localStorage.getItem('user')).ID;
-    return(fetch(`http://localhost:3001/schedule/Profile_ID/${ID}`, {
+    return(fetch(`http://localhost:3001/schedule/ID/${schedule.ID}`, {
             method: 'PUT',
             headers: new Headers({'content-type': 'application/json'}),
             body: JSON.stringify({
@@ -691,11 +768,13 @@ export async function Update_Schedule(schedule){
             }),
         })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -717,11 +796,13 @@ export async function Update_Features(change, to){
             }),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -731,7 +812,9 @@ export async function Get_Features(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     return(fetch(`http://localhost:3001/features/Profile_ID/${ID}`)
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .then(result => {
@@ -739,7 +822,7 @@ export async function Get_Features(){
             return(result[0])
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -749,7 +832,7 @@ export async function Create_Profile(formData){
     const bcrypt = require("bcryptjs");
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(formData.Password, salt);
-
+    console.log(formData);
     return(fetch(`http://localhost:3001/profile`, {
             method: 'POST',
             headers: new Headers({'content-type': 'application/json'}),
@@ -762,11 +845,13 @@ export async function Create_Profile(formData){
                 "Profile_Pic" : 'NULL'}),
             })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            } 
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -780,11 +865,13 @@ export async function Create_Default_Settings(){
         body: JSON.stringify({"Profile_ID":ID, "Date_Format":"dd/mm/yyyy", "Time_Format":"12:00", "TimeZone":"MT", "Language":"English", "Theme":"Light", "Country":"NULL", "Notification":"Enabled"}),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -798,11 +885,13 @@ export async function Create_Default_Notes(){
         body: JSON.stringify({"Profile_ID":ID}),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -816,11 +905,13 @@ export async function Create_Default_Tasks(){
         body: JSON.stringify({"Profile_ID":ID, "Header":"Task List"}),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -834,11 +925,13 @@ export async function Create_Default_Schedule(){
         body: JSON.stringify({"Profile_ID":ID, "Calendar_Name":"Calendar"}),
         })
         .then(function(response){
-            check_http_response(response); 
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }  
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -851,7 +944,7 @@ export async function Create_Default_Stats(){
         headers: new Headers({'content-type': 'application/json'}),
         body: JSON.stringify({
             "Profile_ID": ID, 
-            "Month": 1, 
+            "Month": 4, 
             "Year": 2022, 
             "Total_Events": 0, 
             "Total_Tasks": 0, 
@@ -860,11 +953,13 @@ export async function Create_Default_Stats(){
         }),
         })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );
@@ -888,11 +983,13 @@ export async function Create_Default_Features(profile){
         }),
         })
         .then(function(response){
-            check_http_response(response);  
+            if(!response.ok){
+        throw new Error("HTTP error " + response.status);
+    }   
             return response.json();
         })
         .catch(e => {
-            Failed_To_Connect();
+            Failed_To_Connect(e);
             console.log(e);
         })
     );

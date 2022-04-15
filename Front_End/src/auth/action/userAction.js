@@ -1,14 +1,16 @@
 import auth from "../auth";
 import { Create_Default_Features, Create_Default_Notes, Create_Default_Settings, Create_Default_Tasks, Create_Default_Schedule, Create_Profile, Create_Default_Stats} from "./API_requests";
 import bcrypt from 'bcryptjs';
-import {check_http_response, Failed_To_Connect} from "./helper";
+import {Failed_To_Connect} from "./helper";
 
 
 export const loginUser = async(credentials, navigate) => {
     //make checks
     try{
         const response = await fetch(`http://localhost:3001/profile/Email/${credentials.Email}`);
-        check_http_response(response);
+        if(!response.ok){
+            throw new Error("HTTP error " + response.status);
+        } 
         const data = await response.json();
         const bcrypt = require("bcryptjs");
 
@@ -36,24 +38,27 @@ export const loginUser = async(credentials, navigate) => {
         }
     }
     catch(error){
-        Failed_To_Connect();
+        Failed_To_Connect(error);
         console.log(error);
     }
 }
 
 export const signUpUser = async(formData, navigate) => {
     try{
-
         try{
             const response = await fetch(`http://localhost:3001/profile/Email/${formData.Email}`);
-            check_http_response(response);
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            } 
             const data = await response.json();
             if(data.length >= 1){
                 return "Email already exists!";
             }
 
             const response2 = await fetch(`http://localhost:3001/profile/Username/${formData.Username}`);
-            check_http_response(response2);
+            if(!response2.ok){
+                throw new Error("HTTP error " + response.status);
+            } 
             const data2 = await response2.json();
             if(data2.length >= 1){
                 return "Username already exists!";
@@ -65,23 +70,21 @@ export const signUpUser = async(formData, navigate) => {
 
         
         await Create_Profile(formData);
-        
+        console.log(formData.Username);
         const response = await fetch(`http://localhost:3001/profile/Username/${formData.Username}`);
-        check_http_response(response);
         const data = await response.json();
-        console.log(data);
-        const profile = data[0];
+        const profile=data[0];
 
         const bcrypt = require("bcryptjs");
         const salt = await bcrypt.genSalt(10);
-        const hashedPass = await bcrypt.hash(formData.Password, salt);
+        const hashedPass = await bcrypt.hash(profile.Password, salt);
 
         const storage_block={
             ID: profile.ID,
             Password: hashedPass
         }
 
-        console.log("PROFILE", profile);
+        console.log("PROFILE", storage_block);
         
         auth.login(async () => {
             localStorage.setItem('user', JSON.stringify(storage_block));
@@ -97,7 +100,7 @@ export const signUpUser = async(formData, navigate) => {
         })
     }
     catch(error){
-        Failed_To_Connect();
+        Failed_To_Connect(error);
         console.log(error);
     }
 }

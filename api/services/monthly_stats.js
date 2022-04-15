@@ -3,9 +3,9 @@ const db = require('./db');
 function parseKey(key_type, key_value){
     switch(key_type){
         case "Year":
-            return `\"${key_value}\"`;
+            return `${key_value}`;
         case "Month":
-            return `\"${key_value}\"`;
+            return `${key_value}`;
         default:
             return key_value;
     }
@@ -43,7 +43,7 @@ async function getOne(key_type1, key_type2, key_type3, key_value1, key_value2, k
         const data = await db.query(
             `SELECT *
             FROM monthly_stats
-            WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2} AND  ${key_type3}=${key_value3}`
+            WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2} AND ${key_type3}=${key_value3}`
         );
         return(data);
     }
@@ -68,7 +68,7 @@ async function update(key_type1, key_type2, key_type3, key_value1, key_value2, k
     
     const result = await db.query(
         `UPDATE monthly_stats 
-        SET Profile_ID = ${body.Profile_ID}, Month="${body.Month}", Year="${body.Year}", Total_Events= ${body.Total_Events}, Total_Tasks= ${body.Total_Tasks}, Total_Notes=${body.Total_Notes}
+        SET Profile_ID=${body.Profile_ID}, Month="${body.Month}", Year="${body.Year}", Total_Events= ${body.Total_Events}, Total_Tasks= ${body.Total_Tasks}, Total_Notes=${body.Total_Notes}
         WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2} AND  ${key_type3}=${key_value3}`
     );
     
