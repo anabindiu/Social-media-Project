@@ -43,37 +43,23 @@ create table if not exists Settings(
     Notification varchar(255)
 );
 
--- drop table usage_statistics;
-create table if not exists Feature_statistics(
-	ID int not null auto_increment,
-    Profile_ID int not null, 
-	Statistics_type enum('Schedule', 'Notes', 'Tasks') not null,
-    Title varchar(255) NOT NULL,
-    primary key(ID),
-    foreign key (Profile_ID) references `Profile`(ID)
-);
 
--- drop table yearly;
-create table if not exists Yearly(
-	Feature_Stats_ID int NOT NULL,
-	`Year` YEAR NOT NULL,
-	primary key(`Year`),
-	foreign key(Feature_Stats_ID) references Feature_Statistics(ID)
-);
+
 
 -- drop table monthly_stats;
 create table if not exists Monthly_Stats(
-	Feature_Stats_ID int NOT NULL,
-	Month_Year varchar(10),
-	primary key(Month_Year),
-	foreign key(Feature_Stats_ID) references Feature_Statistics(ID),
+	
+	ProfileID int NOT NULL,
+	`Month` varchar(15),
+    `Year` varchar(5),
+    
+	primary key(`Year`, ProfileID, `Month`),
     
     Total_Events int,
     Total_Tasks int,
     Total_Notes int,
     Total_Reminders int,
-    `Year` YEAR NOT NULL,
-    foreign key(`Year`) references Yearly(`Year`)
+    foreign key(ProfileID) references `Profile`(ID)
 );
 
 
