@@ -3,6 +3,7 @@ import Note from "../components/Note";
 import Notes_Sidebar from "../components/Notes_SideBar";
 import {Get_Note, Get_Notes, Create_Note, Delete_Note, Update_Note} from "../auth/action/API_requests";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import * as comp from "../components/Notes_Components";
 
 function Notes() {
@@ -54,8 +55,11 @@ function Notes() {
     return notes.find(({ID}) => ID === activeNote);
   };
 
+  const {promiseInProgress} = usePromiseTracker();
+
   return (
     <comp.Notes_Base>
+      {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :<>
       <Notes_Sidebar
         notes={notes}
         onAddNote={onAddNote}
@@ -64,6 +68,7 @@ function Notes() {
         setActiveNote={setActiveNote}
       />
       <Note activeNote={getActiveNote()} setActiveNote={setActiveNote} onUpdateNote={onUpdateNote} />
+      </>}
     </comp.Notes_Base>
   );
 }

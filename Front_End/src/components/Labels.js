@@ -3,6 +3,8 @@ import React, { useState, useContext, useEffect } from "react";
 import { Create_Schedule, Delete_Schedule, Get_Features, Get_Schedules, Update_Features, Update_Schedule, Delete_All_Note, Get_Events} from "../auth/action/API_requests";
 import GlobalContext from "../context/GlobalContext";
 import { TiEdit, TiTick, TiTimes, TiTrash} from 'react-icons/ti';
+import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
 export default function Labels() {
   const { labels, updateLabel, setSavedEvents} = useContext(GlobalContext);
@@ -71,9 +73,10 @@ export default function Labels() {
     setAddingNew(false);
     await Update_Local_Schedules();
   }
-
+  const {promiseInProgress} = usePromiseTracker();
   return (
     <React.Fragment>
+      {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :<>
       <p className="text-black-500 font-bold mt-10">Label</p>
       {labels.map(({ label: lbl, checked }, idx) => (
         <label key={idx} className="items-center mt-3 block">
@@ -122,7 +125,7 @@ export default function Labels() {
       <span className="pl-3 pr-7">Create</span>
       </button>
       </>}
-
+      </>}
     </React.Fragment>
   );
 }

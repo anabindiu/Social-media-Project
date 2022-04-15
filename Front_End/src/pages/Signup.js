@@ -6,6 +6,8 @@ import {signUpUser} from  '../auth/action/userAction';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import {LinkButton} from '../components/Buttons';
+import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
 
 const Signup = (signupUser)  => {
@@ -35,14 +37,16 @@ const Signup = (signupUser)  => {
         const handleSubmit = (e) =>{
           setError("");
             e.preventDefault();
-            signUpUser(formData, navigate).then(response => {
+            trackPromise(signUpUser(formData, navigate).then(response => {
               setError(response);
-            });
+            }));
             // console.log(formData);
         };
-    
+     const {promiseInProgress} = usePromiseTracker();
     return (
     <div className="text-center m-5-auto">
+      {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> 
+      :<>
     <h1>Sign Up</h1>
     <form action = "/profile" className='display: inline-block' onSubmit = {handleSubmit}>
         <p>
@@ -77,7 +81,7 @@ const Signup = (signupUser)  => {
   <p>
     {error}
   </p>
-
+  </>}
   </div>
   )
 }
