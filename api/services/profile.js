@@ -1,17 +1,5 @@
 const db = require('./db');
-
-function parseKey(key_type, key_value){
-    switch(key_type){
-        case "ID":
-            return key_value;
-        case "Email":
-            return `\"${key_value}\"`;
-        case "Username":
-            return `\"${key_value}\"`;
-        default:
-            return key_value;
-    }
-}
+const mysql = require('mysql')
 
 async function getAll(){
     const data = await db.query(
@@ -22,11 +10,11 @@ async function getAll(){
 }
 
 async function getOne(key_type, key_value){
-    key_value = parseKey(key_type, key_value);
+
     const data = await db.query(
         `SELECT ID, Email, Username, Password, B_Date, Name, Profile_Pic
         FROM profile
-        WHERE ${key_type} = ${key_value}`
+        WHERE ${key_type} = ` + mysql.escape(key_value)
     ); 
     return(data);
 }
@@ -36,27 +24,26 @@ async function create(body){
         `INSERT INTO profile 
         (Email, Username, Password, B_Date, Name, Profile_Pic) 
         VALUES 
-        ("${body.Email}", "${body.Username}", "${body.Password}", "${body.B_Date}", "${body.Name}", "${body.Profile_Pic}")`
+        (` + mysql.escape(body.Email) + `, ` + mysql.escape(body.Username) + `,` + mysql.escape(body.Password) + `, ` + mysql.escape(body.B_Date) + `, ` + mysql.escape(body.Name) + `, ` + mysql.escape(body.Profile_Pic) + `)`
     );
     
     return result;
 }
 
 async function update(key_type, key_value, body){
-    key_value = parseKey(key_type, key_value);
+
     const result = await db.query(
         `UPDATE profile 
-        SET Email="${body.Email}", Username="${body.Username}", Password="${body.Password}", B_Date="${body.B_Date}", Name="${body.Name}", Profile_Pic="${body.Profile_Pic}"
-        WHERE ${key_type}=${key_value}` 
+        SET Email= ` + mysql.escape(body.Email) + `, Username=` + mysql.escape(body.Username) + `, Password=` + mysql.escape(body.Password) + `, B_Date=` + mysql.escape(body.B_Date) + `, Name=` + mysql.escape(body.Name) + `, Profile_Pic=` + mysql.escape(body.Profile_Pic) + `
+        WHERE ${key_type}=` + mysql.escape(key_value) 
     );
     
     return result;
 }
 
 async function remove(key_type, key_value){
-    key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `DELETE FROM profile WHERE ${key_type}=${key_value}`
+        `DELETE FROM profile WHERE ${key_type}=` + mysql.escape(key_value) 
     );
     
     return result;

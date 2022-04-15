@@ -1,15 +1,6 @@
 const db = require('./db');
+const mysql = require('mysql')
 
-function parseKey(key_type, key_value){
-    switch(key_type){
-        case "ID":
-            return key_value;
-        case "Profile_ID":
-            return key_value;
-        default:
-            return key_value;
-    }
-}
 
 async function getAll(){
     const data = await db.query(
@@ -20,11 +11,10 @@ async function getAll(){
 }
 
 async function getOne(key_type, key_value){
-    key_value = parseKey(key_type, key_value);
     const data = await db.query(
         `ID, Profile_ID, Statistics_type, Title
         FROM feature_statistics
-        WHERE ${key_type}=${key_value}`
+        WHERE ${key_type}= ` + mysql.escape(key_value) 
     );
     return(data);
 }
@@ -34,27 +24,25 @@ async function create(body){
         `INSERT INTO feature_statistics 
         (Profile_ID, Statistics_type, Title) 
         VALUES 
-        (${body.Profile_ID}, "${body.Statistics_type}", "${body.Title}")`
+        (` + mysql.escape(body.Profile_ID) +`, ` + mysql.escape(body.Statistics_type) +`, ` + mysql.escape(body.Title) +`)`
     );
     
     return result;
 }
 
 async function update(key_type, key_value, body){
-    key_value = parseKey(key_type, key_value);
     const result = await db.query(
         `UPDATE feature_statistics 
-        SET Profile_ID=${body.Profile_ID}, Statistics_type="${body.Statistics_type}", Title="${body.Title}"
-        WHERE ${key_type}=${key_value}` 
+        SET Profile_ID=` + mysql.escape(body.Profile_ID) +`, Statistics_type=` + mysql.escape(body.Statistics_type) +`, Title=` + mysql.escape(body.Title) +`
+        WHERE ${key_type}= `  + mysql.escape(key_value) 
     );
     
     return result;
 }
 
 async function remove(key_type, key_value){
-    key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `DELETE FROM feature_statistics WHERE ${key_type}=${key_value}`
+        `DELETE FROM feature_statistics WHERE ${key_type}= ` + mysql.escape(key_value) 
     );
     
     return result;

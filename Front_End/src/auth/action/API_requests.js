@@ -3,7 +3,7 @@ import { FaTemperatureHigh } from "react-icons/fa";
 import {Convert_Date_Notes} from "../action/helper";
 
 export async function Create_Shared_Feature({friend:friend, feature_type:type, feature_ID:ID}){
-    return(fetch(`http://localhost:3001/event`, {
+    return(await fetch(`http://localhost:3001/event`, {
             method: 'POST',
             headers: new Headers({'content-type': 'application/json'}),
             body: JSON.stringify({
@@ -995,7 +995,8 @@ export async function Create_Default_Features(profile){
     console.log(data_tasks);
     console.log(data_schedule[0]);
     console.log(data_settings);
-    return(fetch('http://localhost:3001/features', {
+    console.log(profile.ID);
+    return(await fetch('http://localhost:3001/features', {
         method: 'POST',
         headers: new Headers({'content-type': 'application/json'}),
         body: JSON.stringify({

@@ -1,15 +1,5 @@
 const db = require('./db');
-
-function parseKey(key_type, key_value){
-    switch(key_type){
-        case "ID":
-            return key_value;
-        case "Schedule_ID":
-            return key_value;
-        default:
-            return key_value;
-    }
-}
+const mysql = require('mysql')
 
 async function getAll(){
     const data = await db.query(
@@ -20,11 +10,10 @@ async function getAll(){
 }
 
 async function getOne(key_type, key_value){
-    key_value = parseKey(key_type, key_value);
     const data = await db.query(
         `SELECT ID, Schedule_ID, Title, Description, Location, Day, Start_Time, End_Time, Label
         FROM event
-        WHERE ${key_type}=${key_value}`
+        WHERE ${key_type}= ` + (mysql.escape(key_value))
     );
     return(data);
 }
@@ -34,27 +23,25 @@ async function create(body){
         `INSERT INTO event 
         (Schedule_ID, Title, Description, Location, Day, Start_Time, End_Time, Label) 
         VALUES 
-        (${body.Schedule_ID}, "${body.Title}", "${body.Description}", "${body.Location}", "${body.Day}", ${body.Start_Time}, ${body.End_Time}, "${body.Label}")`
+        (` + mysql.escape(body.Schedule_ID) + `,` + mysql.escape(body.Title) + `, ` + mysql.escape(body.Description) + `, ` + mysql.escape(body.Location) + `, ` + mysql.escape(body.Day) + `, ` + mysql.escape(body.Start_Time) + `, ` + mysql.escape(body.End_Time) + `, ` + mysql.escape(body.Label) +`)`
     );
     
     return result;
 }
 
 async function update(key_type, key_value, body){
-    key_value = parseKey(key_type, key_value);
     const result = await db.query(
         `UPDATE event 
         SET Schedule_ID=${body.Schedule_ID}, Title="${body.Title}", Description="${body.Description}", Location="${body.Location}", Day="${body.Day}", Start_Time=${body.Start_Time}, End_Time=${body.End_Time}, Label="${body.Label}"
-        WHERE ${key_type}=${key_value}` 
+        WHERE ${key_type}=` + (mysql.escape(key_value)) 
     );
     
     return result;
 }
 
 async function remove(key_type, key_value){
-    key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `DELETE FROM event WHERE ${key_type}=${key_value}`
+        `DELETE FROM event WHERE ${key_type}=` + (mysql.escape(key_value))
     );
     
     return result;
