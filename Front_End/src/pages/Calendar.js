@@ -6,7 +6,6 @@ import Sidebar from "../components/Sidebar";
 import Month from "../components/Month";
 import GlobalContext from "../context/GlobalContext";
 import EventModal from "../components/EventModal";
-import '../App.css';
 
 export default function Calendar() {
     const [currentMonth, setCurrentMonth] = useState(getMonth());

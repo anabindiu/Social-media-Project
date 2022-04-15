@@ -16,6 +16,7 @@ export default function ContextWrapper(props) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [labels, setLabels] = useState([]);
   const [savedEvents, setSavedEvents] = useState([]);
+  console.log(daySelected);
 
   const filteredEvents = useMemo(() => {
     return savedEvents.filter((evt) =>
