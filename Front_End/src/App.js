@@ -18,6 +18,7 @@ import Login from "./pages/Login";
 import Welcome from "./pages/Welcome";
 import Signup from "./pages/Signup";
 import { ProtectedRoute } from "./ProtectedRoutes";
+import ContextWrapper from "./context/ContextWrapper";
 import auth from "./auth/auth";
 
 function App() {  
@@ -32,7 +33,7 @@ function App() {
           <Route path="/profile" element = {<ProtectedRoute> <Profile /> </ProtectedRoute>}/>
           <Route path="/settings" element =  {<ProtectedRoute> <Settings /> </ProtectedRoute>}/>
           <Route path="/features" element =  {<ProtectedRoute> <Features /> </ProtectedRoute>}/>
-          <Route path="/calendar" element =  {<ProtectedRoute> <Calendar /> </ProtectedRoute>}/>
+          <Route path="/calendar" element =  {<ProtectedRoute> <ContextWrapper><Calendar/></ContextWrapper></ProtectedRoute>}/>
           <Route path="/notes" element =  {<ProtectedRoute> <Note_app /> </ProtectedRoute>}/>
           <Route path="/taskList" element =  {<ProtectedRoute> <Task_List /> </ProtectedRoute>}/>
           <Route path = "*" element ={<p> Error 404 Not found!</p>} />

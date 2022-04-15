@@ -6,26 +6,7 @@ import React, {
 } from "react";
 import GlobalContext from "./GlobalContext";
 import dayjs from "dayjs";
-
-function savedEventsReducer(state, { type, payload }) {
-  switch (type) {
-    case "push":
-      return [...state, payload];
-    case "update":
-      return state.map((evt) =>
-        evt.id === payload.id ? payload : evt
-      );
-    case "delete":
-      return state.filter((evt) => evt.id !== payload.id);
-    default:
-      throw new Error();
-  }
-}
-function initEvents() {
-  const storageEvents = localStorage.getItem("savedEvents");
-  const parsedEvents = storageEvents ? JSON.parse(storageEvents) : [];
-  return parsedEvents;
-}
+import { Get_Events } from "../auth/action/API_requests";
 
 export default function ContextWrapper(props) {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
@@ -34,29 +15,29 @@ export default function ContextWrapper(props) {
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [labels, setLabels] = useState([]);
-  const [savedEvents, dispatchCalEvent] = useReducer(
-    savedEventsReducer,
-    [],
-    initEvents
-  );
+  const [savedEvents, setSavedEvents] = useState([]);
 
   const filteredEvents = useMemo(() => {
     return savedEvents.filter((evt) =>
       labels
         .filter((lbl) => lbl.checked)
         .map((lbl) => lbl.label)
-        .includes(evt.label)
+        .includes(evt.Label)
     );
   }, [savedEvents, labels]);
 
-  useEffect(() => {
-    localStorage.setItem("savedEvents", JSON.stringify(savedEvents));
-  }, [savedEvents]);
+  useEffect(async () => {
+    Get_Events().then((events)=>{
+      setSavedEvents([...events]);
+    });
+  }, []);
 
   useEffect(() => {
     setLabels((prevLabels) => {
-      return [...new Set(savedEvents.map((evt) => evt.label))].map(
+      console.log(prevLabels);
+      return [...new Set(savedEvents.map((evt) => evt.Label))].map(
         (label) => {
+          console.log(label);
           const currentLabel = prevLabels.find(
             (lbl) => lbl.label === label
           );
@@ -73,13 +54,13 @@ export default function ContextWrapper(props) {
     if (smallCalendarMonth !== null) {
       setMonthIndex(smallCalendarMonth);
     }
-  }, [smallCalendarMonth]);
+  }, []);
 
   useEffect(() => {
     if (!showEventModal) {
       setSelectedEvent(null);
     }
-  }, [showEventModal]);
+  }, []);
 
   function updateLabel(label) {
     setLabels(
@@ -98,14 +79,14 @@ export default function ContextWrapper(props) {
         setDaySelected,
         showEventModal,
         setShowEventModal,
-        dispatchCalEvent,
+        setSavedEvents,
         selectedEvent,
         setSelectedEvent,
         savedEvents,
         setLabels,
         labels,
         updateLabel,
-        filteredEvents,
+        filteredEvents
       }}
     >
       {props.children}
