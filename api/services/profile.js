@@ -24,7 +24,9 @@ async function getAll(){
 async function getOne(key_type, key_value){
     key_value = parseKey(key_type, key_value);
     const data = await db.query(
-        'SELECT ID, Email, Username, Password, B_Date, Name, Profile_Pic FROM profile WHERE ? = ?', [key_type, key_value]
+        `SELECT ID, Email, Username, Password, B_Date, Name, Profile_Pic
+        FROM profile
+        WHERE ${key_type} = ${key_value}`
     ); 
     return(data);
 }
