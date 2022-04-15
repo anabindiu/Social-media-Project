@@ -3,46 +3,47 @@ import "../App.css";
 import UploadImages from '../components/UploadImages';
 import { Button } from "../components/Buttons";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
-import { Get_Profile } from '../auth/action/API_requests';
-import {Create_Profile, Get_Task, Get_Tasks, Create_Task, Delete_Task, Update_Task} from "../auth/action/API_requests";
-import ProfileForm from '../components/ProfileForm';
-import Profile_edits from '../components/Profile_edits';
-import * as comp from "../components/Tasks_Components";
+import { Update_Profile, Get_Profile } from '../auth/action/API_requests';
 
 export default function Profile() {
   const [profile_info, setProfileInfo] = useState({});
-  //const [isDisabled, setDisabled] = useState(false);
+  const [is_editing, setEditing] = useState(false);
+  const [Name, setName] = useState("");
+  const [Birthday, setBirthday] = useState("");
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
+
+
   useEffect(async () => {
-    trackPromise(
-      Get_Profile().then((profile) => {
-        setProfileInfo(profile);
-      })
-    );
+    await Get_Profile().then((profile) => {
+      setProfileInfo(profile);
+      console.log(profile);
+      setName(profile.Name);
+      setBirthday(profile.B_Date);
+      setEmail(profile.Email);
+      setPassword("");
+    })
   }, []);
 
-  console.log(profile_info);
-  // console.log(profile_info.Name, profile_info.Username);
-
-  /*
-  const onAddTask = async (profile) => {
-    const profiles = await Get_Tasks();
-    const profile_data = {
-      "ID": profiles.ID,
-      "Name": profile.Name, 
-      "Birthday":profile.Birthday, 
-      "Username":profile.Username, 
-      "Email":profile.Email, 
-      "Password":profile.password,
-      "Completion_Status":false
-    };
-    console.log(profile_data);
-    await Create_Profile(profile_data);
-      
-    await Get_Task().then((profile_info) => {
-      setProfileInfo([...profile_info]);
+  const update_profile = async () => {
+    const new_profile = {
+      "Email": Email, 
+      "Username":profile_info.Username, 
+      "Password": Password, 
+      "Name":Name, 
+      "B_Date":Birthday, 
+    }
+    await Update_Profile(new_profile);
+    await Get_Profile().then((profile) => {
+      setProfileInfo(profile);
+      console.log(profile);
+      setName(profile.Name);
+      setBirthday(profile.B_Date);
+      setEmail(profile.Email);
+      setPassword("");
     })
-  };
-  */
+    setEditing(false);
+  }
 
 
  return (
@@ -50,7 +51,7 @@ export default function Profile() {
       <div className='containter mt-5'>
         <h1>
           <span>
-            <h1 className='form-control mt-2 ml-20'>  Profile</h1> 
+            <h1 className='form-control mt-2 ml-20'>Profile</h1> 
           </span>
         </h1>
         
@@ -66,16 +67,22 @@ export default function Profile() {
         <h3 className='title_border'>Name </h3>
         <div className='border_list'>
           <div className='font-weight-bold'>
+            {is_editing ? 
+            <input className='input_detail' placeholder="Enter your name" value={Name} onChange={(e)=>(setName(e.target.value))}></input>
+            :
             <h1>{profile_info.Name}</h1>
-          <input className='input_detail' placeholder="Enter your name"></input>
+            }
           </div>
         </div>
 
         <h3 className='title_border'>Birthday</h3>
         <div className='border_list'>
           <div className='font-weight-bold'>
+            {is_editing ? 
+            <input type="date" className='input_detail' value={Birthday} onChange={(e)=>(setBirthday(e.target.value))}></input>
+            :
             <h1>{profile_info.B_Date}</h1>
-            <input type="date" className='input_detail'></input>
+            }
           </div>
         </div>
 
@@ -83,25 +90,31 @@ export default function Profile() {
         <div className='border_list'>
           <div className='font-weight-bold'>
             <h1>{profile_info.Username}</h1>
-            <input className='input_detail' placeholder='Enter your username'></input>
           </div>
         </div>
 
         <h3 className='title_border'>Email</h3>
         <div className='border_list'>
           <div className='font-weight-bold'>
+            {is_editing ? 
+            <input className='input_detail' placeholder='Enter your email' value={Email} onChange={(e)=>(setEmail(e.target.value))}></input>
+            :
             <h1>{profile_info.Email}</h1>
-            <input className='input_detail' placeholder='Enter your email'></input>
+            }
           </div>
         </div>
 
         <h3 className='title_border'>Password</h3>
         <div className='border_list'>
           <div className='font-weight-bold'>
-            <input className='input_detail' placeholder='Enter your password'></input>
+            {is_editing ? 
+            <input className='input_detail' placeholder='Enter your password' value={Password} onChange={(e)=>(setPassword(e.target.value))}></input>
+            :
+            <></>}
           </div>
         </div>
-        <Button>Edit profile</Button>
+        <Button onClick={setEditing.bind(this, !is_editing)}>{is_editing ? "Cancel" : "Edit Profile"}</Button>
+        {is_editing ? <Button onClick={update_profile.bind(this)}>Save Changes</Button> : <></>}
       </div>
     </div>
   );
