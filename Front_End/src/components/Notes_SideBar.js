@@ -38,6 +38,10 @@ const Notes_Sidebar = ({
             <div class="dropdown-content"> 
               <>
                 <Link to="/friends"> Friend </Link>
+                <Link to="/friends"> Friend </Link>
+                <Link to="/friends"> Friend </Link>
+                <Link to="/friends"> Friend </Link>
+                <Link to="/friends"> Friend </Link>
                 {console.log("Shared note with friend")}
               </>
             </div>
