@@ -34,6 +34,7 @@ async function send_query(req, res, next, type, key1, key2, key3, params1, param
                 res.json(await monthly_stats_service.create(req.body));
                 break;
             case "PUT":
+                console.log(req.body);
                 res.json(await monthly_stats_service.update(key1, key2, key3, params1, params2, params3, req.body));
                 break;
             case "DELETE":

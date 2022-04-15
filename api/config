@@ -3,7 +3,7 @@ const config = {
     /* don't expose password or any sensitive info, done only for demo */
     /* University Address : 10.13.130.15 */
 
-    host: "10.13.90.65",
+    // host: "10.13.90.65",
 
     user: "root",
     password: "password",
