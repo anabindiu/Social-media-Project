@@ -2,15 +2,9 @@ import React, { useState } from "react";
 import { serviceDropdown } from "./NavItems";
 import { Link } from "react-router-dom";
 import "./Dropdown.css";
-import { logoutUser } from "../auth/action/userAction";
 
 function Dropdown() {
   const [dropdown, setDropdown] = useState(false);
-
-  const handleLogOut = () => {
-    logoutUser();
-    setDropdown(false);
-  };
 
   return (
     <>
@@ -24,7 +18,7 @@ function Dropdown() {
               <Link
                 to={item.path}
                 className={item.cName}
-                onClick={handleLogOut}
+                onClick={() => setDropdown(false)}
               >
                 {item.title}
               </Link>
