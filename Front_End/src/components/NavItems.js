@@ -50,25 +50,4 @@ export const navItems = [
       path: "../welcome",
       cName: "submenu-item",
     },
-    {
-      id: 5,
-      title: "Share",
-      cName: "submenu-item",
-    },
-  ];
-
-  export const shareDropdown = [
-    {
-      id: 1,
-      title: "Friend",
-      path: "../friends",
-      cName: "submenu-item",
-    },
-    {
-      id: 2,
-      title: "Friend",
-      path: "../friends",
-      cName: "submenu-item",
-    },
-    
   ];

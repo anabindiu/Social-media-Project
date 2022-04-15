@@ -1,5 +1,5 @@
 import auth from "../auth";
-import { Create_Default_Features, Create_Default_Notes, Create_Default_Settings, Create_Default_Tasks, Create_Default_Schedule, Create_Profile} from "./API_requests";
+import { Create_Default_Features, Create_Default_Notes, Create_Default_Settings, Create_Default_Tasks, Create_Default_Schedule, Create_Profile, Create_Default_Stats} from "./API_requests";
 import bcrypt from 'bcryptjs';
 
 export const loginUser = async(credentials, navigate) => {
@@ -48,6 +48,12 @@ export const signUpUser = async(formData, navigate) => {
                 return "Email already exists!";
             }
 
+            const response2 = await fetch(`http://localhost:3001/profile/Username/${formData.Username}`);
+            const data2 = await response2.json();
+            if(data2.length >= 1){
+                return "Username already exists!";
+            }
+
         }catch(error){
             console.log(error);
         }
@@ -77,6 +83,7 @@ export const signUpUser = async(formData, navigate) => {
             await Create_Default_Tasks();
             await Create_Default_Schedule();
             await Create_Default_Features({ID: profile.ID, Email:profile.Email, Username:profile.Username});
+            await Create_Default_Stats();
             console.log("Logged in");
             navigate("/profile");
         })
@@ -87,5 +94,12 @@ export const signUpUser = async(formData, navigate) => {
 }
 
 export const logoutUser = () =>{
+    auth.logout(() => {
+        localStorage.clear();
+    });
+
+    auth.logout(() =>{
+        localStorage.clear();
+    })
 
 }
