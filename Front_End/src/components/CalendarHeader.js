@@ -2,8 +2,7 @@ import dayjs from "dayjs";
 import React, { useContext } from "react";
 import logo from "../assets/logo.png";
 import GlobalContext from "../context/GlobalContext";
-// <img src={logo} alt="calendar" className="mr-2 w-12 h-12" />
-// include this after header className for return 
+
 export default function CalendarHeader() {
   const { monthIndex, setMonthIndex } = useContext(GlobalContext);
   function handlePrevMonth() {

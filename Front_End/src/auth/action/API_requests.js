@@ -2,6 +2,104 @@ import React, { useState, useEffect } from "react";
 import { FaTemperatureHigh } from "react-icons/fa";
 import {Convert_Date_Notes} from "../action/helper";
 
+export async function Get_Events(){
+    const features = await Get_Features();
+    return(fetch(`http://localhost:3001/event/Schedule_ID/${features.Schedule_ID}`)
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .then(result => {
+            console.log(result);
+            return(result)
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Create_Event(event){
+    const features = await Get_Features();
+    event.Start_Time = `\"${event.Start_Time}\"`;
+    event.End_Time = `\"${event.End_Time}\"`;
+    return(fetch(`http://localhost:3001/event`, {
+            method: 'POST',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "Schedule_ID":features.Schedule_ID, 
+                "Location":event.Location, 
+                "Description":event.Description, 
+                "Title":event.Title, 
+                "Day":event.Day, 
+                "Start_Time":event.Start_Time, 
+                "End_Time":event.End_Time,
+                "Label":event.Label
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Update_Event(ID, new_event){
+    console.log(new_event);
+    const features = await Get_Features();
+    new_event.Start_Time = `\"${new_event.Start_Time}\"`;
+    new_event.End_Time = `\"${new_event.End_Time}\"`;
+    return(fetch(`http://localhost:3001/event/ID/${ID}`, {
+            method: 'PUT',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "Schedule_ID":features.Schedule_ID, 
+                "Location":new_event.Location, 
+                "Description":new_event.Description, 
+                "Title":new_event.Title, 
+                "Day":new_event.Day, 
+                "Start_Time":new_event.Start_Time, 
+                "End_Time":new_event.End_Time,
+                "Label":new_event.Label
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Delete_Event(event){
+    return(fetch(`http://localhost:3001/event/ID/${event.ID}`, {
+            method: 'DELETE',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({}),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
 export async function Get_Task(){
     const tasks = await Get_Tasks();
     return(fetch(`http://localhost:3001/task/Tasks_ID/${tasks.ID}`)
@@ -246,6 +344,24 @@ export async function Get_Settings(){
     );
 };
 
+export async function Delete_All_Note(Schedule_ID){
+    return(fetch(`http://localhost:3001/event/Schedule_ID/${Schedule_ID}`, {
+            method: 'DELETE',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({}),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
 export async function Delete_Note(note){
     return(fetch(`http://localhost:3001/note/ID/${note.ID}/Notes_ID/${note.Notes_ID}`, {
             method: 'DELETE',
@@ -407,7 +523,7 @@ export async function Get_Tasks(){
     );
 };
 
-export async function Get_Schedule(){
+export async function Get_Schedules(){
     const ID = await JSON.parse(localStorage.getItem('user')).ID;
     console.log(ID);
     return(fetch(`http://localhost:3001/schedule/Profile_ID/${ID}`)
@@ -418,7 +534,117 @@ export async function Get_Schedule(){
             return response.json();
         })
         .then(result => {
-            console.log(result[0]);
+            console.log(result);
+            return(result)
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Delete_Schedule(schedule){
+    return(fetch(`http://localhost:3001/schedule/ID/${schedule.ID}`, {
+        method: 'DELETE',
+        headers: new Headers({'content-type': 'application/json'}),
+        body: JSON.stringify({}),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Create_Schedule(name){
+    const ID = await JSON.parse(localStorage.getItem('user')).ID;
+    console.log(ID);
+    return(fetch('http://localhost:3001/schedule', {
+        method: 'POST',
+        headers: new Headers({'content-type': 'application/json'}),
+        body: JSON.stringify({"Profile_ID":ID, "Calendar_Name":name}),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Update_Schedule(schedule){
+    const ID = await JSON.parse(localStorage.getItem('user')).ID;
+    return(fetch(`http://localhost:3001/schedule/Profile_ID/${ID}`, {
+            method: 'PUT',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "ID":schedule.ID, 
+                "Profile_ID":schedule.Profile_ID, 
+                "Calendar_Name":schedule.Calendar_Name, 
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Update_Features(change, to){
+    const ID = await JSON.parse(localStorage.getItem('user')).ID;
+    const features = await Get_Features();
+    features[change] = to;
+    return(fetch(`http://localhost:3001/features/Profile_ID/${ID}`, {
+            method: 'PUT',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "Profile_ID":ID, 
+                "Profile_Email":features.Profile_Email, 
+                "Profile_Username":features.Profile_Username, 
+                "Schedule_ID":features.Schedule_ID, 
+                "Notes_ID":features.Notes_ID, 
+                "Tasks_ID":features.Tasks_ID, 
+                "Setting_ID":features.Setting_ID
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Get_Features(){
+    const ID = await JSON.parse(localStorage.getItem('user')).ID;
+    console.log(ID);
+    return(fetch(`http://localhost:3001/features/Profile_ID/${ID}`)
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .then(result => {
+            console.log(result);
             return(result[0])
         })
         .catch(e => {
@@ -560,11 +786,11 @@ export async function Create_Default_Stats(){
 export async function Create_Default_Features(profile){
     const data_notes = await Get_Notes();
     const data_tasks = await Get_Tasks();
-    const data_schedule = await Get_Schedule();
+    const data_schedule = await Get_Schedules();
     const data_settings = await Get_Settings();
     console.log(data_notes);
     console.log(data_tasks);
-    console.log(data_schedule);
+    console.log(data_schedule[0]);
     console.log(data_settings);
     return(fetch('http://localhost:3001/features', {
         method: 'POST',

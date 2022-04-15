@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Create_Event, Delete_Event, Get_Events, Update_Event } from "../auth/action/API_requests";
 import GlobalContext from "../context/GlobalContext";
 
 const labelsClasses = [
@@ -14,51 +15,78 @@ export default function EventModal() {
   const {
     setShowEventModal,
     daySelected,
-    dispatchCalEvent,
+    setSavedEvents,
     selectedEvent,
+    setSelectedEvent
   } = useContext(GlobalContext);
 
-  const [title, setTitle] = useState(
-    selectedEvent ? selectedEvent.title : ""
+  const [Title, setTitle] = useState(
+    selectedEvent ? selectedEvent.Title : ""
   );
-  const [start_time, setStart] = useState(
-    selectedEvent ? selectedEvent.start_time : ""
+  const [Start_Time, setStart] = useState(
+    selectedEvent ? selectedEvent.Start_Time : ""
   );
-  const [to_time, setEnd] = useState(
-    selectedEvent ? selectedEvent.to_time : ""
+  const [End_Time, setEnd] = useState(
+    selectedEvent ? selectedEvent.End_Time : ""
   );
-  const [description, setDescription] = useState(
-    selectedEvent ? selectedEvent.description : ""
+  const [Description, setDescription] = useState(
+    selectedEvent ? selectedEvent.Description : ""
   );
-  const [location, setLocation] = useState(
-    selectedEvent ? selectedEvent.location : ""
+  const [Location, setLocation] = useState(
+    selectedEvent ? selectedEvent.Location : ""
   );
   const [selectedLabel, setSelectedLabel] = useState(
     selectedEvent
-      ? labelsClasses.find((lbl) => lbl === selectedEvent.label)
+      ? labelsClasses.find((lbl) => lbl === selectedEvent.Label)
       : labelsClasses[0]
   );
+  
+  const add_event = async (event) => {
+    await Create_Event(event);
+    await Get_Events().then((events)=>{
+      setSavedEvents([...events]);
+    });
+  };
+  
+  const update_event = async (ID, event) => {
+    await Update_Event(ID, event);
+    await Get_Events().then((events)=>{
+      setSavedEvents([...events]);
+    });
+  };
+  
+  const delete_event = async (event) => {
+    await Delete_Event(event);
+    await Get_Events().then((events)=>{
+      setSavedEvents([...events]);
+    });
+
+    reset_modal();
+  };
+
+  const reset_modal = () => {
+    setSelectedEvent(null);
+    setShowEventModal(false);
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
     const calendarEvent = {
-      title,
-      description,
-      label: selectedLabel,
-      day: daySelected.valueOf(),
-      location,
-      start_time,
-      to_time,
-      id: selectedEvent ? selectedEvent.id : Date.now(),
+      Title,
+      Description,
+      Label: selectedLabel,
+      Day: new Date(daySelected.valueOf()),
+      Location,
+      Start_Time,
+      End_Time,
     };
-    if (selectedEvent) {
-      //add stuff to database here
-      dispatchCalEvent({ type: "update", payload: calendarEvent });
+    if(selectedEvent) {
+      update_event(selectedEvent.ID, calendarEvent);
     } else {
-      dispatchCalEvent({ type: "push", payload: calendarEvent });
+      add_event(calendarEvent);
     }
 
-    setShowEventModal(false);
+    reset_modal();
   }
   return (
     <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center">
@@ -70,19 +98,13 @@ export default function EventModal() {
           <div>
             {selectedEvent && (
               <span
-                onClick={() => {
-                  dispatchCalEvent({
-                    type: "delete",
-                    payload: selectedEvent,
-                  });
-                  setShowEventModal(false);
-                }}
+                onClick={delete_event.bind(this, selectedEvent)}
                 className="material-icons-outlined text-gray-400 cursor-pointer"
               >
                 delete
               </span>
             )}
-            <button onClick={() => setShowEventModal(false)}>
+            <button onClick={reset_modal}>
               <span className="material-icons-outlined text-gray-400">
                 close
               </span>
@@ -96,7 +118,7 @@ export default function EventModal() {
               type="text"
               name="title"
               placeholder="Add title"
-              value={title}
+              value={Title}
               required
               className="pt-3 border-0 text-gray-600 text-xl font-semibold pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setTitle(e.target.value)}
@@ -109,11 +131,11 @@ export default function EventModal() {
               watch
             </span>
             <form action="/action_page.php">
-            <label for="from_time">Add a start time:</label>
+            <label htmlFor="from_time">Add a start time:</label>
             <input
               type="time"
               name="from_time"
-              value={start_time}
+              value={Start_Time}
               className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setStart(e.target.value)}
             />
@@ -121,11 +143,11 @@ export default function EventModal() {
 
             <div></div>
             <form action="/action_page.php">
-            <label for="to_time">Add an end time: </label>
+            <label htmlFor="to_time">Add an end time: </label>
             <input
               type="time"
               name="to_time"
-              value={to_time}
+              value={End_Time}
               className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setEnd(e.target.value)}
             />
@@ -137,8 +159,8 @@ export default function EventModal() {
               type="text"
               name="description"
               placeholder="Add a description"
-              value={description}
-              className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
+              value={Description}
+              className="pt-3 borDer-0 text-gray-600 pb-2 w-full borDer-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setDescription(e.target.value)}
             />
             <span className="material-icons-outlined text-gray-400">
@@ -148,7 +170,7 @@ export default function EventModal() {
               type="text"
               name="location"
               placeholder="Add a location"
-              value={location}
+              value={Location}
               className="pt-3 border-0 text-gray-600 pb-2 w-full border-b-2 border-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               onChange={(e) => setLocation(e.target.value)}
             />

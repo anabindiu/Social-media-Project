@@ -13,7 +13,7 @@ function parseKey(key_type, key_value){
 
 async function getAll(){
     const data = await db.query(
-        `SELECT ID, Schedule_ID, Location, Description, Title, Start_Date, End_Date
+        `SELECT ID, Schedule_ID, Title, Description, Location, Day, Start_Time, End_Time, Label
         FROM event`
     );
     return(data);
@@ -22,7 +22,7 @@ async function getAll(){
 async function getOne(key_type, key_value){
     key_value = parseKey(key_type, key_value);
     const data = await db.query(
-        `SELECT ID, Schedule_ID, Location, Description, Title, Start_Date, End_Date
+        `SELECT ID, Schedule_ID, Title, Description, Location, Day, Start_Time, End_Time, Label
         FROM event
         WHERE ${key_type}=${key_value}`
     );
@@ -32,9 +32,9 @@ async function getOne(key_type, key_value){
 async function create(body){
     const result = await db.query(
         `INSERT INTO event 
-        (Schedule_ID, Location, Description, Title, Start_Date, End_Date) 
+        (Schedule_ID, Title, Description, Location, Day, Start_Time, End_Time, Label) 
         VALUES 
-        (${body.Schedule_ID}, "${body.Location}", "${body.Description}", "${body.Title}", "${body.Start_Date}", "${body.End_Date}")`
+        (${body.Schedule_ID}, "${body.Title}", "${body.Description}", "${body.Location}", "${body.Day}", ${body.Start_Time}, ${body.End_Time}, "${body.Label}")`
     );
     
     return result;
@@ -44,7 +44,7 @@ async function update(key_type, key_value, body){
     key_value = parseKey(key_type, key_value);
     const result = await db.query(
         `UPDATE event 
-        SET Schedule_ID=${body.Schedule_ID}, Location="${body.Location}", Description="${body.Description}", Title="${body.Title}", Start_Date="${body.Start_Date}", End_Date="${body.End_Date}"
+        SET Schedule_ID=${body.Schedule_ID}, Title="${body.Title}", Description="${body.Description}", Location="${body.Location}", Day="${body.Day}", Start_Time=${body.Start_Time}, End_Time=${body.End_Time}, Label="${body.Label}"
         WHERE ${key_type}=${key_value}` 
     );
     

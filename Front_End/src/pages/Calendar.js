@@ -9,7 +9,7 @@ import EventModal from "../components/EventModal";
 import '../App.css';
 
 export default function Calendar() {
-    const [currenMonth, setCurrentMonth] = useState(getMonth());
+    const [currentMonth, setCurrentMonth] = useState(getMonth());
     const { monthIndex, showEventModal } = useContext(GlobalContext);
   
     useEffect(() => {
@@ -24,7 +24,7 @@ export default function Calendar() {
       <CalendarHeader />
       <div className="flex flex-1">
         <Sidebar />
-        <Month month={currenMonth} />
+        <Month month={currentMonth} />
       </div>
     </div>
     </React.Fragment>
