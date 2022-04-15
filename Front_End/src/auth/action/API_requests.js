@@ -42,12 +42,15 @@ export async function Get_Events(){
 };
 
 export async function Create_Event(event){
+
     const features = await Get_Features();
     event.Start_Time = `\"${event.Start_Time}\"`;
     event.End_Time = `\"${event.End_Time}\"`;
 
-    const year = event.End_Time.replaceAll('"', '').split("-")[0];
-    const month = event.End_Time.split("-")[2].split("T")[0];
+    const eventDate= Convert_Date_Notes(event.Day);
+
+    const year = eventDate.split("-")[0].replaceAll('"', '');
+    const month = eventDate.split("-")[2].split("T")[0];
     const pID = await JSON.parse(localStorage.getItem('user')).ID;
 
     await fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`)
@@ -128,11 +131,12 @@ export async function Update_Event(ID, new_event){
 };
 
 export async function Delete_Event(event){
+    const eventDate= Convert_Date_Notes(event.Day);
 
-    const year = event.End_Time.replaceAll('"', '').split("-")[0];
-    const month = event.End_Time.split("-")[2].split("T")[0];
+    const year = eventDate.split("-")[0].replaceAll('"', '');
+    const month = eventDate.split("-")[2].split("T")[0];
     const pID = await JSON.parse(localStorage.getItem('user')).ID;
-    
+
     await fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`)
     .then(function(response){
         if(!response.ok){
