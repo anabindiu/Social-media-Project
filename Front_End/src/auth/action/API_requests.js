@@ -501,6 +501,34 @@ export async function Create_Default_Schedule(){
     );
 };
 
+export async function Create_Default_Stats(){
+    const ID = await JSON.parse(localStorage.getItem('user')).ID;
+    console.log("STAS ID: ", ID);
+    return(fetch('http://localhost:3001/monthly_stats', {
+        method: 'POST',
+        headers: new Headers({'content-type': 'application/json'}),
+        body: JSON.stringify({
+            "Profile_ID": ID, 
+            "Month": 1, 
+            "Year": 2022, 
+            "Total_Events": 0, 
+            "Total_Tasks": 0, 
+            "Total_Notes": 0, 
+            "Total_Reminders": 0
+        }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+}
+
 export async function Create_Default_Features(profile){
     const data_notes = await Get_Notes();
     const data_tasks = await Get_Tasks();
