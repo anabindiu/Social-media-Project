@@ -88,4 +88,8 @@ export const signUpUser = async(formData, navigate) => {
 
 export const logoutUser = () =>{
 
+    auth.logout(() =>{
+        localStorage.clear();
+    })
+
 }
