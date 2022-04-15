@@ -3,6 +3,25 @@ import React, { useState, useEffect } from "react";
 import { FaTemperatureHigh } from "react-icons/fa";
 import {Convert_Date_Notes} from "../action/helper";
 
+export async function Create_Shared_Feature({friend:friend, feature_type:type, feature_ID:ID}){
+    return(fetch(`http://localhost:3001/event`, {
+            method: 'POST',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+            }),
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
 export async function Get_Events(){
     const features = await Get_Features();
     return(fetch(`http://localhost:3001/event/Schedule_ID/${features.Schedule_ID}`)
@@ -274,6 +293,47 @@ export async function Delete_Task(task){
                 throw new Error("HTTP error " + response.status);
             }   
             return response.json();
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    );
+};
+
+export async function Update_Profile(profile){
+    const ID = await JSON.parse(localStorage.getItem('user')).ID;
+
+    const bcrypt = require("bcryptjs");
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(profile.Password, salt);
+
+    const storage_block={
+        ID: ID,
+        Password: hashedPass
+    }
+    localStorage.setItem('user', JSON.stringify(storage_block));
+
+    return(fetch(`http://localhost:3001/profile/ID/${ID}`, {
+            method: 'PUT',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                "Email": profile.Email, 
+                "Username":profile.Username, 
+                "Password": hashedPass, 
+                "Name":profile.Name, 
+                "B_Date" : profile.B_Date, 
+                "Profile_Pic" : 'NULL'
+            })
+        })
+        .then(function(response){
+            if(!response.ok){
+                throw new Error("HTTP error " + response.status);
+            }   
+            return response.json();
+        })
+        .then(result => {
+            console.log(result[0]);
+            return(result[0])
         })
         .catch(e => {
             console.log(e);
@@ -749,8 +809,6 @@ export async function Update_Features(change, to){
             headers: new Headers({'content-type': 'application/json'}),
             body: JSON.stringify({
                 "Profile_ID":ID, 
-                "Profile_Email":features.Profile_Email, 
-                "Profile_Username":features.Profile_Username, 
                 "Schedule_ID":features.Schedule_ID, 
                 "Notes_ID":features.Notes_ID, 
                 "Tasks_ID":features.Tasks_ID, 
@@ -797,8 +855,14 @@ export async function Create_Profile(formData){
     return(fetch(`http://localhost:3001/profile`, {
             method: 'POST',
             headers: new Headers({'content-type': 'application/json'}),
-            body: JSON.stringify({"Email": formData.Email, "Username":formData.Username, "Password": hashedPass, "Name":formData.Name, "B_Date" : formData.B_Date, "Profile_Pic" : 'NULL'}),
-        })
+            body: JSON.stringify({
+                "Email": formData.Email, 
+                "Username":formData.Username, 
+                "Password": hashedPass, 
+                "Name":formData.Name, 
+                "B_Date" : formData.B_Date, 
+                "Profile_Pic" : 'NULL'}),
+            })
         .then(function(response){
             if(!response.ok){
                 throw new Error("HTTP error " + response.status);
@@ -933,8 +997,6 @@ export async function Create_Default_Features(profile){
         headers: new Headers({'content-type': 'application/json'}),
         body: JSON.stringify({
             "Profile_ID":profile.ID, 
-            "Profile_Email":profile.Email, 
-            "Profile_Username":profile.Username, 
             "Schedule_ID":data_schedule.ID, 
             "Notes_ID":data_notes.ID, 
             "Tasks_ID":data_tasks.ID, 

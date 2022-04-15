@@ -110,7 +110,6 @@ export default function EventModal() {
                 close
               </span>
             </button>
-            
           </div>
         </header>
         <div className="p-3">
@@ -209,14 +208,3 @@ export default function EventModal() {
     </div>
   );
 }
-
-/*
-<div class="dropdown">
-            <TiExport className="dropbtn">Share</TiExport>
-              <div class="dropdown-content"> 
-            <>
-            <h1> Friend </h1>
-            {console.log("Shared schedule with friend")}
-          </>
-        </div>
-      </div>*/

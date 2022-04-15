@@ -5,6 +5,7 @@ import {Get_Friends, Get_Profile_Identifier, Get_All_Profile_Identifier, Create_
 import "../App.css";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
+
 export default function Friends() {
   const [friends_list, setFriendsList] = useState([]);
   const [friends_search, setFriendsSearch] = useState([]);
@@ -101,110 +102,3 @@ export default function Friends() {
   );
 
 }
-
-/*
-
-const [options, setOptions] = useState(create_options(null));
-  const [visibleOptions, setVisibleOptions] = useState(options);
-
-  useEffect(async () => {
-    trackPromise(
-      Get_Settings().then((settings) => {
-        setOptions([...create_options(settings)]);
-        setVisibleOptions([...create_options(settings)]);
-      })
-    );
-  }, []);
-  
-const navigate = useNavigate();
-const handleLogOut = () =>{
-  auth.logout(() => {
-    localStorage.clear();
-    navigate("/welcome");
-    console.log("Logged out");
-  })
-}
-
-function onChange(e){
-  e.preventDefault();
-  const value=e.target.value;
-
-  if(value.trim().length === 0) {
-    setVisibleOptions(options);
-    return;
-  }
-
-  const returnedItems= [];
-  visibleOptions.forEach((option, index) => {
-    const foundOptions=option.values.filter((item)=>{
-      return item.name.toLocaleLowerCase().search(value.trim().toLowerCase()) !==-1 || item.name.toLocaleLowerCase().search(value.trim().toLowerCase()) !==-1;
-    });
-
-    returnedItems[index]={
-      header:{
-        name:option.header.name,
-      },
-      values: foundOptions,
-    };
-
-    if(option.header.name.toLocaleLowerCase().search(value.trim().toLowerCase()) !==-1 ){ 
-      returnedItems[index]={
-        header:{
-          name:option.header.name,
-        },
-        values: options[index].values,
-      };
-    }
-  });
-
-  setVisibleOptions(returnedItems);
-};
-
-const OnClickEvent = async (button) => {
-  console.log(button);
-  await Update_Settings({change:button.change, to:button.to});
-  await Get_Settings().then((settings) => {
-    setOptions([...create_options(settings)]);
-    setVisibleOptions([...create_options(settings)]);
-  })
-}
-
-const DisplaySettings = () => {
-  console.log(options);
-  return(
-    visibleOptions.map((option) =>(
-      <comp.Setting>
-        <comp.Header3>{option.header.name}</comp.Header3>
-        <comp.Body>
-        {option.values.map((value) => (
-            <div key={value.name}>
-                <comp.Header6>{value.name}</comp.Header6>
-                <comp.Description>{value.description}</comp.Description>
-                {value.buttons.map((button) => (
-                  <div key={button.title}>
-                    <comp.PickButton action={OnClickEvent.bind(this, button)} button={button}/>
-                  </div>
-                ))}
-            </div>
-          ))}
-        </comp.Body>
-      </comp.Setting>
-      ))
-  );
-}
-
-const {promiseInProgress} = usePromiseTracker();
-
-  return (
-    <comp.Base>
-      <comp.Header1>Settings</comp.Header1>
-      <comp.Panel>
-        <comp.Input onChange={onChange} placeholder="Search..."/>
-        {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> : <DisplaySettings/>}
-        <Button onClick={handleLogOut}>Log Out</Button>
-      </comp.Panel> 
-    </comp.Base>
-  );
-}
-
-*/
