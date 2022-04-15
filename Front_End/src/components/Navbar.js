@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import * as Icons from "react-icons/fa";
 import "./Navbar.css";
-import { navItems } from "./NavItems";
+import { navItems, shareDropdown } from "./NavItems";
 import {LinkButton} from "../components/Buttons";
 import Dropdown from "./Dropdown";
 
@@ -13,9 +13,10 @@ function Navbar() {
     <>
       <nav className="navbar">
         <LinkButton page="/profile" title={<Icons.FaBars/>}/>
+        
         <ul className="nav-items">
           {navItems.map((item) => {
-            if (item.title === "Features") {
+            if (item.title === "Profile") {
               return (
                 <li
                   key={item.id}
@@ -35,7 +36,7 @@ function Navbar() {
             );
           })}
         </ul>
-        <LinkButton page="/settings" title="Settings"/>
+        {/* <LinkButton page="/profile" title="Profile"/> */}
       </nav>
     </>
   );

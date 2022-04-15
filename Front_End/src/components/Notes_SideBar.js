@@ -1,4 +1,6 @@
 import * as comp from "./Notes_Components";
+import { Link } from "react-router-dom";
+import {Button} from "../components/Buttons";
 
 const Notes_Sidebar = ({
     notes,
@@ -31,6 +33,19 @@ const Notes_Sidebar = ({
             </comp.Notes_SideBar_Note>
           ))}
         </comp.Notes_SideBar_Notes_List>
+        <div class="dropdown">
+            <Button className="dropbtn">Share</Button>
+            <div class="dropdown-content"> 
+              <>
+                <Link to="/friends"> Friend </Link>
+                <Link to="/friends"> Friend </Link>
+                <Link to="/friends"> Friend </Link>
+                <Link to="/friends"> Friend </Link>
+                <Link to="/friends"> Friend </Link>
+                {console.log("Shared note with friend")}
+              </>
+            </div>
+          </div>
       </comp.Notes_SideBar_Base>
     );
 };

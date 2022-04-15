@@ -1,3 +1,4 @@
+
 import React, { useState, useContext, useEffect } from "react";
 import { Create_Schedule, Delete_Schedule, Get_Features, Get_Schedules, Update_Features, Update_Schedule, Delete_All_Note, Get_Events} from "../auth/action/API_requests";
 import GlobalContext from "../context/GlobalContext";
@@ -88,6 +89,7 @@ export default function Labels() {
         </label>
       ))}
       <p className="text-black-500 font-bold mt-10">Schedules</p>
+
       {schedules.map((ele, idx) => (
         <>
           <input
@@ -120,6 +122,23 @@ export default function Labels() {
       <span className="pl-3 pr-7">Create</span>
       </button>
       </>}
+
+
+      <div class="dropdown">
+        <Button className="dropbtn">Share</Button>
+        <div class="dropdown-content"> 
+          <>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          {console.log("Shared schedule with friend")}
+          </>
+        </div>
+      </div>
+
     </React.Fragment>
   );
 }

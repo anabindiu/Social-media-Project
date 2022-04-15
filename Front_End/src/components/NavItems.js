@@ -1,14 +1,26 @@
 export const navItems = [
     {
       id: 1,
-      title: "Profile",
-      path: "./profile",
+      title: "Task List",
+      path: "../taskList",
       cName: "nav-item",
     },
     {
       id: 2,
-      title: "Features",
-      path: "./features",
+      title: "Schedule",
+      path: "../calendar",
+      cName: "nav-item",
+    },
+    {
+      id: 3,
+      title: "Notes",
+      path: "../notes",
+      cName: "nav-item",
+    },
+    {
+      id: 4,
+      title: "Profile",
+      path: "../profile",
       cName: "nav-item",
     },
   ];
@@ -16,20 +28,26 @@ export const navItems = [
   export const serviceDropdown = [
     {
       id: 1,
-      title: "Schedule",
-      path: "./calendar",
+      title: "Friends",
+      path: "../friends",
       cName: "submenu-item",
     },
     {
       id: 2,
-      title: "Task List",
-      path: "./taskList",
+      title: "Settings",
+      path: "../settings",
       cName: "submenu-item",
     },
     {
       id: 3,
-      title: "Notes",
-      path: "./notes",
+      title: "Statistics",
+      path: "../statistics",
+      cName: "submenu-item",
+    },
+    {
+      id: 4,
+      title: "Logout",
+      path: "../welcome",
       cName: "submenu-item",
     },
   ];

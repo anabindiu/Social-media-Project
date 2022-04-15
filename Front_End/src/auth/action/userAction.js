@@ -1,5 +1,5 @@
 import auth from "../auth";
-import { Create_Default_Features, Create_Default_Notes, Create_Default_Settings, Create_Default_Tasks, Create_Default_Schedule, Create_Profile} from "./API_requests";
+import { Create_Default_Features, Create_Default_Notes, Create_Default_Settings, Create_Default_Tasks, Create_Default_Schedule, Create_Profile, Create_Default_Stats} from "./API_requests";
 import bcrypt from 'bcryptjs';
 
 export const loginUser = async(credentials, navigate) => {
@@ -10,37 +10,27 @@ export const loginUser = async(credentials, navigate) => {
 
         const bcrypt = require("bcryptjs");
 
-
-        const storage_block={
-            ID: data[0].ID,
-            Password: data[0].Password
-        }
-
-        // console.log(data[0].Password);
-        // console.log(credentials.Password);
-        // console.log(await bcrypt.compare(credentials.Password, data[0].Password));
-
-        // const salt2 = await bcrypt.genSalt(10);
-        // const hashedPass2 = await bcrypt.hash('password', salt);
-
-        // console.log(await bcrypt.compare('password', hashedPass2));
-
         if(data.length >= 1){
+            const response = "Incorrect Password! Please try again\n";
            if(await bcrypt.compare(credentials.Password, data[0].Password)){
+                const storage_block={
+                    ID: data[0].ID,
+                    Password: data[0].Password
+                }
                auth.login(() => {
                    localStorage.setItem('user', JSON.stringify(storage_block));
                    console.log("Logged in");
                    navigate("/profile");
+
                })
            }
+           return response;
         }
         else{
-            // auth.logout(() => {
-            //     localStorage.clear();
-            //     console.log("Logged out");
-            //     navigate("/welcome");
-            // })
+            const response = "Email does not exist! Please try again";
+            
             console.log("Credentials not found\n");
+            return response;
         }
     }
     catch(error){
@@ -50,6 +40,25 @@ export const loginUser = async(credentials, navigate) => {
 
 export const signUpUser = async(formData, navigate) => {
     try{
+
+        try{
+            const response = await fetch(`http://localhost:3001/profile/Email/${formData.Email}`);
+            const data = await response.json();
+            if(data.length >= 1){
+                return "Email already exists!";
+            }
+
+            const response2 = await fetch(`http://localhost:3001/profile/Username/${formData.Username}`);
+            const data2 = await response2.json();
+            if(data2.length >= 1){
+                return "Username already exists!";
+            }
+
+        }catch(error){
+            console.log(error);
+        }
+
+        
         await Create_Profile(formData);
         
         const response = await fetch(`http://localhost:3001/profile/Email/${formData.Email}`);
@@ -74,6 +83,7 @@ export const signUpUser = async(formData, navigate) => {
             await Create_Default_Tasks();
             await Create_Default_Schedule();
             await Create_Default_Features({ID: profile.ID, Email:profile.Email, Username:profile.Username});
+            await Create_Default_Stats();
             console.log("Logged in");
             navigate("/profile");
         })
@@ -84,5 +94,12 @@ export const signUpUser = async(formData, navigate) => {
 }
 
 export const logoutUser = () =>{
+    auth.logout(() => {
+        localStorage.clear();
+    });
+
+    auth.logout(() =>{
+        localStorage.clear();
+    })
 
 }

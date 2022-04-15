@@ -21,6 +21,7 @@ const Signup = (signupUser)  => {
     });
 
     const [formData, updateFormData] = React.useState(initFormData);
+    const [error, setError] = useState("");
 
 
     const handleChange = (e) => {
@@ -32,8 +33,11 @@ const Signup = (signupUser)  => {
         };
     
         const handleSubmit = (e) =>{
+          setError("");
             e.preventDefault();
-            signUpUser(formData, navigate);
+            signUpUser(formData, navigate).then(response => {
+              setError(response);
+            });
             // console.log(formData);
         };
     
@@ -65,18 +69,15 @@ const Signup = (signupUser)  => {
           <br/>
           <input type="date" name="B_Date" required onChange={handleChange}/>
         </p>
-
-        {/* <p>
-          <label>Confirm Password</label>
-          <br/>
-          <input type="password" name="password" required />
-        </p> */}
-
         <p>
           <button id="sub_btn" type="submit">Create Account</button>
         </p>
         <LinkButton title={"or Log in"} page={"/login"}/>
   </form>
+  <p>
+    {error}
+  </p>
+
   </div>
   )
 }
