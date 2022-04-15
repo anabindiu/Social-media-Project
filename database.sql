@@ -127,6 +127,7 @@ create table if not exists `Event`(
     `Day` TEXT,
     Start_Time TEXT, 
     End_Time TEXT, 
+    Label TEXT,
     foreign key (ID) references `Schedule`(ID)
 );
 
