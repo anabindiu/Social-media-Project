@@ -1,4 +1,4 @@
--- CREATE SCHEMA if not exists Project;
+ -- CREATE SCHEMA if not exists Project;
 
 -- drop TABLE `profile`;
 create table if not exists `Profile`(
@@ -49,17 +49,17 @@ create table if not exists Settings(
 -- drop table monthly_stats;
 create table if not exists Monthly_Stats(
 	
-	ProfileID int NOT NULL,
+	Profile_ID int NOT NULL,
 	`Month` varchar(15),
     `Year` varchar(5),
     
-	primary key(`Year`, ProfileID, `Month`),
+	primary key(`Year`, Profile_ID, `Month`),
     
     Total_Events int,
     Total_Tasks int,
     Total_Notes int,
     Total_Reminders int,
-    foreign key(ProfileID) references `Profile`(ID)
+    foreign key(Profile_ID) references `Profile`(ID)
 );
 
 
@@ -128,6 +128,7 @@ create table if not exists `Event`(
     Start_Time TEXT, 
     End_Time TEXT, 
     Label TEXT,
+    foreign key (ID) references `Schedule`(ID),
     foreign key (Schedule_ID) references `Schedule`(ID)
 );
 
@@ -140,10 +141,8 @@ create table if not exists Features(
     Tasks_ID int not null,
     Setting_ID int NOT NULL,
     
-    primary key(Profile_ID, Profile_Email, Profile_Username),
+    primary key(Profile_ID),
 	foreign key(Profile_ID) references `PROFILE`(ID),
-	foreign key(Profile_Email) references `PROFILE`(Email),
-    foreign key(Profile_Username) references `PROFILE`(Username),
     
     foreign key(Setting_ID) references settings(ID),
     foreign key(Notes_ID) references Notes(ID),
