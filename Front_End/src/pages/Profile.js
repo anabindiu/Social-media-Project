@@ -21,7 +21,7 @@ export default function Profile() {
   }, []);
 
   console.log(profile_info);
-  console.log(profile_info.Name, profile_info.Username);
+  // console.log(profile_info.Name, profile_info.Username);
 
   /*
   const onAddTask = async (profile) => {

@@ -49,17 +49,17 @@ create table if not exists Settings(
 -- drop table monthly_stats;
 create table if not exists Monthly_Stats(
 	
-	ProfileID int NOT NULL,
+	Profile_ID int NOT NULL,
 	`Month` varchar(15),
     `Year` varchar(5),
     
-	primary key(`Year`, ProfileID, `Month`),
+	primary key(`Year`, Profile_ID, `Month`),
     
     Total_Events int,
     Total_Tasks int,
     Total_Notes int,
     Total_Reminders int,
-    foreign key(ProfileID) references `Profile`(ID)
+    foreign key(Profile_ID) references `Profile`(ID)
 );
 
 
