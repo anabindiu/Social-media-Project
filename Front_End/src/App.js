@@ -18,6 +18,7 @@ import Login from "./pages/Login";
 import Welcome from "./pages/Welcome";
 import Signup from "./pages/Signup";
 import Friends from "./pages/Friends";
+import Statistics from "./pages/Statistics";
 import { ProtectedRoute } from "./ProtectedRoutes";
 import auth from "./auth/auth";
 
@@ -38,6 +39,7 @@ function App() {
         <Route path="/notes" element =  {<ProtectedRoute><Navbar /> <Note_app /> </ProtectedRoute>}/>
         <Route path="/taskList" element =  {<ProtectedRoute> <Navbar /><Task_List /> </ProtectedRoute>}/>
         <Route path="/friends" element = {<ProtectedRoute> <Navbar /> <Friends /> </ProtectedRoute>}/>
+        <Route path="/statistics" element ={<ProtectedRoute> <Navbar /> <Statistics /> </ProtectedRoute>}/>
         <Route path = "*" element ={<p> Error 404 Not found!</p>} />
           
         </Routes>
