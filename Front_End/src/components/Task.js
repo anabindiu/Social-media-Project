@@ -40,7 +40,7 @@ const Task = ({task_list, setCompletion, onDeleteTask, onUpdateTask, blockMainFo
 
   return task_list.map((task) => (
     <comp.Task_Base
-      className={task.Completion_Status ? 'todo-row complete' : 'todo-row'}
+      primary={task.Completion_Status ? true : false} 
       key={task.ID}
     >
       <comp.Task_Title key={task.ID} onClick={() => setCompletion(task.ID)}>
