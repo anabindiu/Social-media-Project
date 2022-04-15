@@ -5,6 +5,7 @@ import "./Navbar.css";
 import { navItems, shareDropdown } from "./NavItems";
 import {LinkButton} from "../components/Buttons";
 import Dropdown from "./Dropdown";
+import bunga_logo from "../images/Bunga_logo.png"
 
 function Navbar() {
   const [dropdown, setDropdown] = useState(false);
@@ -12,8 +13,8 @@ function Navbar() {
   return (
     <>
       <nav className="navbar">
-        <LinkButton page="/profile" title={<Icons.FaBars/>}/>
-        
+        <img classname="navbar-logo"src={bunga_logo} alt="Bunga_logo" />
+
         <ul className="nav-items">
           {navItems.map((item) => {
             if (item.title === "Profile") {
