@@ -26,7 +26,7 @@ async function getOne(key_type, key_value){
     const data = await db.query(
         `SELECT ID, Email, Username, Password, B_Date, Name, Profile_Pic
         FROM profile
-        WHERE ?=?`,[key_type],[key_value]
+        WHERE ${key_type} = ${key_value}`
     );
     return(data);
 }
