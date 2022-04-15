@@ -1,15 +1,5 @@
 const db = require('./db');
-
-function parseKey(key_type, key_value){
-    switch(key_type){
-        case "ID":
-            return key_value;
-        case "Tasks_ID":
-            return key_value;
-        default:
-            return key_value;
-    }
-}
+const mysql = require('mysql');
 
 async function getAll(){
     const data = await db.query(
@@ -20,13 +10,11 @@ async function getAll(){
 }
 
 async function getOne(key_type1, key_type2, key_value1, key_value2){
-    key_value1 = parseKey(key_type1, key_value1);
-    key_value2 = parseKey(key_type2, key_value2);
     if(key_value2 == null){
         const data = await db.query(
             `SELECT ID, Tasks_ID, Title, Description, Location, Deadline, Completion_Status
             FROM task
-            WHERE ${key_type1}=${key_value1}`
+            WHERE ${key_type1}=`+mysql.escape(key_value1)+``
         );
         return(data);
     }
@@ -34,7 +22,7 @@ async function getOne(key_type1, key_type2, key_value1, key_value2){
         const data = await db.query(
             `SELECT ID, Tasks_ID, Title, Description, Location, Deadline, Completion_Status
             FROM task
-            WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
+            WHERE ${key_type1}=`+mysql.escape(key_value1)+` AND ${key_type2}=`+mysql.escape(key_value2)+``
         );
         return(data);
     }
@@ -45,21 +33,18 @@ async function create(body){
         `INSERT INTO task 
         (Tasks_ID, Title, Description, Location, Deadline, Completion_Status) 
         VALUES 
-        (${body.Tasks_ID}, "${body.Title}", "${body.Description}", "${body.Location}", ${body.Deadline}, ${body.Completion_Status})`
+        (`+mysql.escape(body.Tasks_ID)+`, `+mysql.escape(body.Title)+`, `+mysql.escape(body.Description)+`, `+mysql.escape(body.Location)+`, `+mysql.escape(body.Deadline)+`, `+mysql.escape(body.Completion_Status)+`)`
     );
     
     return result;
 }
 
 async function update(key_type1, key_type2, key_value1, key_value2, body){
-    key_value1 = parseKey(key_type1, key_value1);
-    key_value2 = parseKey(key_type2, key_value2);
-
     if(key_value2 == null){
         const result = await db.query(
             `UPDATE task 
-            SET Tasks_ID=${body.Tasks_ID}, Title="${body.Title}", Description="${body.Description}", Location="${body.Location}", Deadline=${body.Deadline}, Completion_Status=${body.Completion_Status}
-            WHERE ${key_type1}=${key_value1}`
+            SET Tasks_ID=`+mysql.escape(body.Tasks_ID)+`, Title=`+mysql.escape(body.Title)+`, Description=`+mysql.escape(body.Description)+`, Location=`+mysql.escape(body.Location)+`, Deadline=`+mysql.escape(body.Deadline)+`, Completion_Status=`+mysql.escape(body.Completion_Status)+`
+            WHERE ${key_type1}=`+mysql.escape(key_value1)+``
         );
 
         return result;
@@ -67,8 +52,8 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
     else{
         const result = await db.query(
             `UPDATE task 
-            SET Tasks_ID=${body.Tasks_ID}, Title="${body.Title}", Description="${body.Description}", Location="${body.Location}", Deadline=${body.Deadline}, Completion_Status=${body.Completion_Status}
-            WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
+            SET Tasks_ID=`+mysql.escape(body.Tasks_ID)+`, Title=`+mysql.escape(body.Title)+`, Description=`+mysql.escape(body.Description)+`, Location=`+mysql.escape(body.Location)+`, Deadline=`+mysql.escape(body.Deadline)+`, Completion_Status=`+mysql.escape(body.Completion_Status)+`
+            WHERE ${key_type1}=`+mysql.escape(key_value1)+` AND ${key_type2}=`+mysql.escape(key_value2)+`` 
         );
 
         return result;
@@ -76,18 +61,15 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
 }
 
 async function remove(key_type1, key_type2, key_value1, key_value2){
-    key_value1 = parseKey(key_type1, key_value1);
-    key_value2 = parseKey(key_type2, key_value2);
-    
     if(key_value2 == null){
         const result = await db.query(
-            `DELETE FROM task WHERE ${key_type1}=${key_value1}`
+            `DELETE FROM task WHERE ${key_type1}=`+mysql.escape(key_value1)+``
         );
         return result;
     }
     else{
         const result = await db.query(
-            `DELETE FROM task WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
+            `DELETE FROM task WHERE ${key_type1}=`+mysql.escape(key_value1)+` AND ${key_type2}=`+mysql.escape(key_value2)+``
         );
         return result;
     }

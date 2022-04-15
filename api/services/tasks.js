@@ -1,17 +1,5 @@
 const db = require('./db');
-
-function parseKey(key_type, key_value){
-    switch(key_type){
-        case "ID":
-            return key_value;
-        case "Profile_ID":
-            return key_value;
-        case "Header":
-            return `\"${key_value}\"`;
-        default:
-            return key_value;
-    }
-}
+const mysql = require('mysql');
 
 async function getAll(){
     const data = await db.query(
@@ -22,11 +10,10 @@ async function getAll(){
 }
 
 async function getOne(key_type, key_value){
-    key_value = parseKey(key_type, key_value);
     const data = await db.query(
         `SELECT ID, Profile_ID, Header
         FROM tasks
-        WHERE ${key_type}=${key_value}`
+        WHERE ${key_type}=`+mysql.escape(key_value)+``
     );
     return(data);
 }
@@ -43,11 +30,10 @@ async function create(body){
 }
 
 async function update(key_type, key_value, body){
-    key_value = parseKey(key_type, key_value);
     const result = await db.query(
         `UPDATE tasks 
-        SET Profile_ID=${body.Profile_ID}, Header="${body.Header}"
-        WHERE ${key_type}=${key_value}` 
+        SET Profile_ID=`+mysql.escape(body.Profile_ID)+`, Header=`+mysql.escape(body.Header)+`
+        WHERE ${key_type}=`+mysql.escape(key_value)+`` 
     );
     
     return result;
@@ -56,7 +42,7 @@ async function update(key_type, key_value, body){
 async function remove(key_type, key_value){
     key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `DELETE FROM tasks WHERE ${key_type}=${key_value}`
+        `DELETE FROM tasks WHERE ${key_type}=`+mysql.escape(key_value)+``
     );
     
     return result;
