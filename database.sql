@@ -121,9 +121,10 @@ create table if not exists `Event`(
 	ID int auto_increment not null, 
     Schedule_ID int not null,
     primary key(ID),
-    Location TEXT,
-    `Description` TEXT,
     Title TEXT NOT NULL, 
+    `Description` TEXT,
+    Location TEXT,
+    Day TEXT,
     Start_Date TEXT, 
     End_Date TEXT, 
     foreign key (ID) references `Schedule`(ID)
