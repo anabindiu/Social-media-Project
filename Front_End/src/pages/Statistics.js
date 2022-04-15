@@ -1,12 +1,15 @@
 import React from 'react'
+import { useState } from 'react';
 import "../App.css"
 import {Button} from "../components/Buttons";
 import Months from '../components/Months';
 
 export default function Statistics() {
+
+  const [year, setYear] = useState("");
   return (
     <>
-    <h1>Statistics</h1>
+
     <div className='Statistics_box'>
     <div className='Statistics_header'> 2020 </div>
     <Button>2020</Button> 
@@ -25,6 +28,8 @@ export default function Statistics() {
     <Button>2021</Button>
     {<Months />}
     </div>
+
+
     </>
   )
 }

@@ -1,6 +1,6 @@
 .navbar {
     height: 10vh;
-    background: #1b1919;
+    background: #bbbbbb;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,6 +14,11 @@
     align-items: center;
     justify-content: space-between;
     width: 10rem;
+  }
+
+  .navbar-logo:hover {
+    background: url("../images/Bunga_hover.png") no-repeat;
+    background-size: contain;
   }
   
   .nav-items {

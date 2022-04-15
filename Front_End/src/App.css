@@ -110,7 +110,7 @@ form label {
 
 .Statistics_header {
   padding: 60px;
-  text-align:left;
+  text-align:center;
   color: rgb(7, 1, 1);
   width: 10px;
   font-size: 30px;
@@ -124,4 +124,15 @@ form label {
   justify-content:center;
   padding: 50px;
   margin: 20px;
+}
+
+.Statistics_box_right{
+  width: 300px;
+  background-color: rgb(158, 164, 231);
+  border: 15px solid rgb(181, 147, 219);
+  border-radius: 30px 30px 30px 30px;
+  display: inline-block;
+  vertical-align: text-top;
+  margin: 0 auto;
+  /* justify-content:right; */
 }

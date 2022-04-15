@@ -49,17 +49,17 @@ create table if not exists Settings(
 -- drop table monthly_stats;
 create table if not exists Monthly_Stats(
 	
-	Profile_ID int NOT NULL,
+	ProfileID int NOT NULL,
 	`Month` varchar(15),
     `Year` varchar(5),
     
-	primary key(`Year`, Profile_ID, `Month`),
+	primary key(`Year`, ProfileID, `Month`),
     
     Total_Events int,
     Total_Tasks int,
     Total_Notes int,
     Total_Reminders int,
-    foreign key(Profile_ID) references `Profile`(ID)
+    foreign key(ProfileID) references `Profile`(ID)
 );
 
 
@@ -128,14 +128,12 @@ create table if not exists `Event`(
     Start_Time TEXT, 
     End_Time TEXT, 
     Label TEXT,
-    foreign key (ID) references `Schedule`(ID)
+    foreign key (Schedule_ID) references `Schedule`(ID)
 );
 
 -- drop table features;
 create table if not exists Features(
 	Profile_ID int not null,
-	Profile_Email varchar(255) UNIQUE NOT NULL,
-    Profile_Username varchar(255) UNIQUE NOT NULL,
     
     Schedule_ID  int not null,
     Notes_ID int not null,
