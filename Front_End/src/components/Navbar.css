@@ -24,6 +24,10 @@
     justify-content: flex-end;
     margin-right: 2rem;
   }
+
+  .nav-item-profile{
+    
+  }
   
   .nav-item {
     display: flex;
