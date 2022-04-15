@@ -90,6 +90,10 @@ function Task_List() {
         <div class="dropdown-content"> 
           <>
           <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
           {console.log("Shared task list with friend")}
           </>
         </div>

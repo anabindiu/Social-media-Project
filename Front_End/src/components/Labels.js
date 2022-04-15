@@ -34,6 +34,11 @@ export default function Labels() {
         <div class="dropdown-content"> 
           <>
           <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
+          <Link to="/friends"> Friend </Link>
           {console.log("Shared schedule with friend")}
           </>
         </div>
