@@ -13,7 +13,7 @@ export default function Welcome() {
     navigate('/signup');
     } 
   return (
-    <div className="text-center m-5-auto">
+    <div className="text-center m-4-auto">
         <h1>Welcome!</h1>
     
         <button onClick={routeToLogin} className='btn'>
