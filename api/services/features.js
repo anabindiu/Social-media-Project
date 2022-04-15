@@ -4,10 +4,6 @@ function parseKey(key_type, key_value){
     switch(key_type){
         case "Profile_ID":
             return key_value;
-        case "Profile_Email":
-            return `\"${key_value}\"`;
-        case "Profile_Username":
-            return `\"${key_value}\"`;
         default:
             return key_value;
     }
@@ -36,7 +32,7 @@ async function create(body){
         `INSERT INTO features 
         (Profile_ID, Schedule_ID, Notes_ID, Tasks_ID, Setting_ID) 
         VALUES 
-        (${body.Profile_ID}, "${body.Profile_Email}", "${body.Profile_Username}", ${body.Schedule_ID}, ${body.Notes_ID}, ${body.Tasks_ID}, ${body.Setting_ID})`
+        (${body.Profile_ID}, ${body.Schedule_ID}, ${body.Notes_ID}, ${body.Tasks_ID}, ${body.Setting_ID})`
     );
     
     return result;

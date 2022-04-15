@@ -7,6 +7,8 @@ import React, {
 import GlobalContext from "./GlobalContext";
 import dayjs from "dayjs";
 import { Get_Events } from "../auth/action/API_requests";
+import {trackPromise, usePromiseTracker} from "react-promise-tracker";
+import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
 export default function ContextWrapper(props) {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
@@ -68,8 +70,10 @@ export default function ContextWrapper(props) {
       labels.map((lbl) => (lbl.label === label.label ? label : lbl))
     );
   }
-
+  const {promiseInProgress} = usePromiseTracker();
   return (
+    <>
+    {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :
     <GlobalContext.Provider
       value={{
         monthIndex,
@@ -91,6 +95,6 @@ export default function ContextWrapper(props) {
       }}
     >
       {props.children}
-    </GlobalContext.Provider>
+    </GlobalContext.Provider>}</>
   );
 }
