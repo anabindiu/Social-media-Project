@@ -1,3 +1,4 @@
+import { ConstructionOutlined } from "@mui/icons-material";
 import React, { useState, useEffect } from "react";
 import { FaTemperatureHigh } from "react-icons/fa";
 import {Convert_Date_Notes} from "../action/helper";
@@ -25,6 +26,31 @@ export async function Create_Event(event){
     const features = await Get_Features();
     event.Start_Time = `\"${event.Start_Time}\"`;
     event.End_Time = `\"${event.End_Time}\"`;
+
+    const year = event.End_Time.replaceAll('"', '').split("-")[0];
+    const month = event.End_Time.split("-")[2].split("T")[0];
+    const pID = await JSON.parse(localStorage.getItem('user')).ID;
+
+    await fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`)
+    .then(function(response){
+        if(!response.ok){
+            throw new Error("HTTP error " + response.status);
+        }   
+        return response.json();
+    })
+    .then(result => {
+        console.log("RESULT: ", result);
+        if(result.length == 0){
+            console.log("update ", result);
+            Create_Stats(pID, month, year, 1,0,0);
+        }
+        else{
+
+            Update_Stats(pID, month, year, result[0].Total_Events + 1,result[0].Total_Tasks, result[0].Total_Notes);
+        }
+        return(result)
+    })
+
     return(fetch(`http://localhost:3001/event`, {
             method: 'POST',
             headers: new Headers({'content-type': 'application/json'}),
@@ -83,6 +109,25 @@ export async function Update_Event(ID, new_event){
 };
 
 export async function Delete_Event(event){
+
+    const year = event.End_Time.replaceAll('"', '').split("-")[0];
+    const month = event.End_Time.split("-")[2].split("T")[0];
+    const pID = await JSON.parse(localStorage.getItem('user')).ID;
+    
+    await fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`)
+    .then(function(response){
+        if(!response.ok){
+            throw new Error("HTTP error " + response.status);
+        }   
+        return response.json();
+    })
+    .then(result => {
+        console.log("RESULT: ", result);
+
+        Update_Stats(pID, month, year, result[0].Total_Events - 1,result[0].Total_Tasks, result[0].Total_Notes);
+        return(result)
+    })
+
     return(fetch(`http://localhost:3001/event/ID/${event.ID}`, {
             method: 'DELETE',
             headers: new Headers({'content-type': 'application/json'}),
@@ -122,6 +167,27 @@ export async function Get_Task(){
 export async function Create_Task(formData){
     formData.Deadline = `\"${formData.Deadline}\"`;
     console.log("CREATE", formData);
+    console.log(formData.Deadline);
+    const year = formData.Deadline.replaceAll('"', '').split("-")[0];
+    const month = formData.Deadline.split("-")[1];
+    const pID = await JSON.parse(localStorage.getItem('user')).ID;
+    console.log("HERE DATA: ", year, month);
+
+    await fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`)
+    .then(function(response){
+        if(!response.ok){
+            throw new Error("HTTP error " + response.status);
+        }   
+        return response.json();
+    })
+    .then(result => {
+        console.log("RESULT: ", result);
+        if(result.length == 0){
+            console.log("update ", result);
+            Create_Stats(pID, month, year, 0,0,0);
+        }
+    })
+
     return(fetch(`http://localhost:3001/task`, {
             method: 'POST',
             headers: new Headers({'content-type': 'application/json'}),
@@ -149,6 +215,30 @@ export async function Create_Task(formData){
 export async function Update_Task(new_task){
     console.log("CHANGE TO", new_task);
     new_task.Deadline = `\"${new_task.Deadline}\"`;
+
+    const pID = await JSON.parse(localStorage.getItem('user')).ID;
+    console.log(new_task.Deadline);
+    const year =new_task.Deadline.replaceAll('"', '').split("-")[0];
+    const month = new_task.Deadline.split("-")[1];
+    console.log("DATA: ", year, month);
+    await fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`)
+    .then(function(response){
+        if(!response.ok){
+            throw new Error("HTTP error " + response.status);
+        }   
+        return response.json();
+    })
+    .then(result => {
+        console.log("RESULT: ", result);
+        if (new_task.Completion_Status == 1){
+            Update_Stats(pID, month, year, result[0].Total_Events ,result[0].Total_Tasks + 1, result[0].Total_Notes );
+        }
+        else{
+            Update_Stats(pID, month, year, result[0].Total_Events ,result[0].Total_Tasks - 1, result[0].Total_Notes );
+        }
+        return(result)
+    })
+
     return(fetch(`http://localhost:3001/task/ID/${new_task.ID}/Tasks_ID/${new_task.Tasks_ID}`, {
             method: 'PUT',
             headers: new Headers({'content-type': 'application/json'}),
@@ -400,12 +490,37 @@ export async function Get_Note(){
 };
 
 export async function Create_Note(formData){
+    const pID= await JSON.parse(localStorage.getItem('user')).ID;
     formData.Date_Created = Convert_Date_Notes(new Date(formData.Date_Created));
     formData.Last_Modified = Convert_Date_Notes(new Date(formData.Last_Modified));
-    const year = formData.Last_Modified.split("-")[0];
-    const month = formData.Last_Modified.split("-")[1];
+    console.log(formData.Last_Modified);
+    const year = formData.Last_Modified.replaceAll('"', '').split("-")[0];
+    const month = formData.Last_Modified.split("-")[2].split("T")[0];
     console.log(year, month);
     console.log("CREATE", formData);
+
+
+    
+    await fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`)
+    .then(function(response){
+        if(!response.ok){
+            throw new Error("HTTP error " + response.status);
+        }   
+        return response.json();
+    })
+    .then(result => {
+        console.log("RESULT: ", result);
+        if(result.length == 0){
+            console.log("update ", result);
+            Create_Stats(pID, month, year, 0,0,1);
+        }
+        else{
+
+            Update_Stats(pID, month, year, result[0].Total_Events ,result[0].Total_Tasks, result[0].Total_Notes + 1);
+        }
+        return(result)
+    })
+
     return(fetch(`http://localhost:3001/note`, {
             method: 'POST',
             headers: new Headers({'content-type': 'application/json'}),
@@ -429,8 +544,10 @@ export async function Create_Note(formData){
     );
 };
 
-export async function Update_Stats(profileID, month, year,  events,tasks, notes, reminders){
-    return(fetch(`http://localhost:3001/monthly_stats/Profile_ID/${profileID}/Year/${year}/Month/${month}`, {
+export async function Update_Stats( profileID, month, year, events,tasks, notes){
+
+    try{
+        (fetch(`http://localhost:3001/monthly_stats/Profile_ID/${profileID}/Year/${year}/Month/${month}`, {
             method: 'PUT',
             headers: new Headers({'content-type': 'application/json'}),
             body: JSON.stringify({
@@ -440,9 +557,34 @@ export async function Update_Stats(profileID, month, year,  events,tasks, notes,
                 Total_Events: events,
                 Total_Tasks: tasks,
                 Total_Notes: notes,
-                Total_Reminders: reminders
             }),
         }));
+    }catch(error){
+        console.log(error);
+    }
+}
+
+
+
+export async function Create_Stats( profileID, month, year,  events,tasks, notes){
+
+    try{
+        (fetch(`http://localhost:3001/monthly_stats`, {
+            method: 'POST',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                Profile_ID: profileID,
+                Month: month,
+                Year: year,
+                Total_Events: events,
+                Total_Tasks: tasks,
+                Total_Notes: notes,
+            }),
+        }));
+    }catch(error){
+        console.log(error);
+
+    }
 }
 
 export async function Update_Note(note, change, to){
@@ -451,14 +593,8 @@ export async function Update_Note(note, change, to){
     note[change] = to;
     note.Date_Created = Convert_Date_Notes(new Date(note.Date_Created));
     note.Last_Modified = Convert_Date_Notes(new Date(note.Last_Modified));
-    const year = note.Last_Modified.split("-")[0];
-    const month = note.Last_Modified.split("-")[1];
-    console.log(year, month);
     console.log("TO", note);
-    // fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`).then((data) => {
-
-    // })
-
+   
 
     return(fetch(`http://localhost:3001/note/ID/${note.ID}/Notes_ID/${note.Notes_ID}`, {
             method: 'PUT',
