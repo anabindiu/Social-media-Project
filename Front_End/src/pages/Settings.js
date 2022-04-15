@@ -8,6 +8,7 @@ import auth from '../auth/auth';
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
 import { Get_Settings, Update_Settings } from '../auth/action/API_requests';
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
+import {Note_TextArea} from "../components/Notes_Components";
 
 export default function Settings() {
   const create_options = (settings) =>{
@@ -198,23 +199,12 @@ export default function Settings() {
           },
         ]
       },
-      {
-        header: {
-          name: "Report problem",
-        },
-        values: [
-          {
-          name: "Log",
-          description: "",
-          buttons:[],
-          tags:[],
-          }
-        ],
-      },
     ]);
   }
   const [options, setOptions] = useState(create_options(null));
   const [visibleOptions, setVisibleOptions] = useState(options);
+  const [report, setReport] = useState("");
+  
 
   useEffect(async () => {
     trackPromise(
@@ -279,7 +269,6 @@ const OnClickEvent = async (button) => {
 }
 
 const DisplaySettings = () => {
-  console.log(options);
   return(
     visibleOptions.map((option) =>(
       <comp.Setting>
@@ -310,6 +299,10 @@ const DisplaySettings = () => {
       <comp.Panel>
         <comp.Input onChange={onChange} placeholder="Search..."/>
         {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> : <DisplaySettings/>}
+        <comp.Header6>Report a Problem</comp.Header6>
+        <comp.Description>Please type below your problem, and one of our developers will respond ASAP!</comp.Description>
+        <Note_TextArea value = {report} placeholder="Send report here" onChange={(e)=>(setReport(e.target.value))}></Note_TextArea>
+        <Button onClick={()=>{alert("Sending your report, thank you!"); setReport("")}}>Send Report</Button>
         <Button onClick={handleLogOut}>Log Out</Button>
       </comp.Panel> 
     </comp.Base>
