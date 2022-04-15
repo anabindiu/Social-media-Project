@@ -2,7 +2,7 @@ const db = require('./db');
 
 function parseKey(key_type, key_value){
     switch(key_type){
-        case "ProfileID":
+        case "Profile_ID":
             return `\"${key_value}\"`;
         case "Year":
             return `\"${key_value}\"`;
@@ -68,7 +68,7 @@ async function update(key_type1, key_type2, key_type3,  key_value1, key_value2, 
     
     const result = await db.query(
         `UPDATE monthly_stats 
-        SET ProfileID = ${body.ProfileID}, Month="${body.Month}", Year="${body.Year}", Total_Events=${body.Total_Events}, Total_Tasks=${body.Total_Tasks}, Total_Notes=${body.Total_Notes}, Total_Reminders=${body.Total_Reminders}"
+        SET Profile_ID = ${body.Profile_ID}, Month="${body.Month}", Year="${body.Year}", Total_Events=${body.Total_Events}, Total_Tasks=${body.Total_Tasks}, Total_Notes=${body.Total_Notes}, Total_Reminders=${body.Total_Reminders}"
         WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2} AND ${key_type2}=${key_value2}` 
     );
     

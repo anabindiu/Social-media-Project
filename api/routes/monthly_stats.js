@@ -2,20 +2,20 @@ const express = require("express");
 const router = express.Router();
 const monthly_stats_service = require("../services/monthly_stats");
 
-/* GET monthly_stats by ALL, ProfileID, Month_Year */
+/* GET monthly_stats by ALL, Profile_ID, Month_Year */
 router.get('/', (req, res, next) => {send_query(req, res, next, "GET", null, null, null);});
-router.get('/ProfileID/:ProfileID', (req, res, next) => {send_query(req, res, next, "GET", "ProfileID", null, null, req.params.ProfileID, null, null);});
-router.get('/ProfileID/:ProfileID/Year/:Year/Month/:Month', (req, res, next) => {send_query(req, res, next, "GET", "ProfileID", "Year", "Month", req.params.ProfileID, req.params.Year, req.params.Month);});
-router.get('/ProfileID/:ProfileID/Year/:Year', (req, res, next) => {send_query(req, res, next, "GET", "ProfileID", "Year", null, req.params.ProfileID, req.params.Year, null);});
+router.get('/Profile_ID/:Profile_ID', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID", null, null, req.params.Profile_ID, null, null);});
+router.get('/Profile_ID/:Profile_ID/Year/:Year/Month/:Month', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID", "Year", "Month", req.params.Profile_ID, req.params.Year, req.params.Month);});
+router.get('/Profile_ID/:Profile_ID/Year/:Year', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID", "Year", null, req.params.Profile_ID, req.params.Year, null);});
 
 /* POST monthly_stats */
 router.post('/', (req, res, next) => {send_query(req, res, next, "POST", null, null, null);});
 
-/* PUT monthly_stats by ProfileID, Month_Year */
-router.put('/ProfileID/:ProfileID/Year/:Year/Month/:Month', (req, res, next) => {send_query(req, res, next, "PUT", "ProfileID", "Year", "Month", req.params.ProfileID, req.params.Year, req.params.Month);});
+/* PUT monthly_stats by Profile_ID, Month_Year */
+router.put('/Profile_ID/:Profile_ID/Year/:Year/Month/:Month', (req, res, next) => {send_query(req, res, next, "PUT", "Profile_ID", "Year", "Month", req.params.Profile_ID, req.params.Year, req.params.Month);});
 
-/* DELETE monthly_stats by ProfileID, Month_Year */
-router.delete('/ProfileID/:ProfileID/Year/:Year/Month/:Month', (req, res, next) => {send_query(req, res, next, "DELETE", "ProfileID", "Year", "Month", req.params.ProfileID, req.params.Year, req.params.Month);});
+/* DELETE monthly_stats by Profile_ID, Month_Year */
+router.delete('/Profile_ID/:Profile_ID/Year/:Year/Month/:Month', (req, res, next) => {send_query(req, res, next, "DELETE", "Profile_ID", "Year", "Month", req.params.Profile_ID, req.params.Year, req.params.Month);});
 
 //Polymorphic function for sending queries to database.
 async function send_query(req, res, next, type, key1, key2, key3, params1, params2, params3){

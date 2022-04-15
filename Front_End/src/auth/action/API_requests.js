@@ -286,6 +286,9 @@ export async function Get_Note(){
 export async function Create_Note(formData){
     formData.Date_Created = Convert_Date_Notes(new Date(formData.Date_Created));
     formData.Last_Modified = Convert_Date_Notes(new Date(formData.Last_Modified));
+    const year = formData.Last_Modified.split("-")[0];
+    const month = formData.Last_Modified.split("-")[1];
+    console.log(year, month);
     console.log("CREATE", formData);
     return(fetch(`http://localhost:3001/note`, {
             method: 'POST',
@@ -310,12 +313,37 @@ export async function Create_Note(formData){
     );
 };
 
+export async function Update_Stats(profileID, month, year,  events,tasks, notes, reminders){
+    return(fetch(`http://localhost:3001/monthly_stats/Profile_ID/${profileID}/Year/${year}/Month/${month}`, {
+            method: 'PUT',
+            headers: new Headers({'content-type': 'application/json'}),
+            body: JSON.stringify({
+                Profile_ID: profileID,
+                Month: month,
+                Year: year,
+                Total_Events: events,
+                Total_Tasks: tasks,
+                Total_Notes: notes,
+                Total_Reminders: reminders
+            }),
+        }));
+}
+
 export async function Update_Note(note, change, to){
+    const pID= await JSON.parse(localStorage.getItem('user')).ID
     console.log("CHANGE", note, change, to);
     note[change] = to;
     note.Date_Created = Convert_Date_Notes(new Date(note.Date_Created));
     note.Last_Modified = Convert_Date_Notes(new Date(note.Last_Modified));
+    const year = note.Last_Modified.split("-")[0];
+    const month = note.Last_Modified.split("-")[1];
+    console.log(year, month);
     console.log("TO", note);
+    // fetch(`http://localhost:3001/monthly_stats/Profile_ID/${pID}/Year/${year}/Month/${month}`).then((data) => {
+
+    // })
+
+
     return(fetch(`http://localhost:3001/note/ID/${note.ID}/Notes_ID/${note.Notes_ID}`, {
             method: 'PUT',
             headers: new Headers({'content-type': 'application/json'}),
