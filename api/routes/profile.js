@@ -34,6 +34,7 @@ async function send_query(req, res, next, type, key, params){
                 }
                 break;
             case "POST":
+                console.log("BODY: ", req.body);
                 res.json(await profile_service.create(req.body));
                 break;
             case "PUT":

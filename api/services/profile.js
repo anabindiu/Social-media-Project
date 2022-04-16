@@ -20,11 +20,17 @@ async function getOne(key_type, key_value){
 }
 
 async function create(body){
+    console.log(body);
+
+    const bcrypt = require("bcryptjs");
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(body.Password, salt);
+
     const result = await db.query(
         `INSERT INTO profile 
         (Email, Username, Password, B_Date, Name, Profile_Pic) 
         VALUES 
-        (` + mysql.escape(body.Email) + `, ` + mysql.escape(body.Username) + `,` + mysql.escape(body.Password) + `, ` + mysql.escape(body.B_Date) + `, ` + mysql.escape(body.Name) + `, ` + mysql.escape(body.Profile_Pic) + `)`
+        (` + mysql.escape(body.Email) + `, ` + mysql.escape(body.Username) + `,` + mysql.escape(hashedPass) + `, ` + mysql.escape(body.B_Date) + `, ` + mysql.escape(body.Name) + `, ` + mysql.escape(body.Profile_Pic) + `)`
     );
     
     return result;
@@ -32,9 +38,14 @@ async function create(body){
 
 async function update(key_type, key_value, body){
 
+    const bcrypt = require("bcryptjs");
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(body.Password, salt);
+
+
     const result = await db.query(
         `UPDATE profile 
-        SET Email= ` + mysql.escape(body.Email) + `, Username=` + mysql.escape(body.Username) + `, Password=` + mysql.escape(body.Password) + `, B_Date=` + mysql.escape(body.B_Date) + `, Name=` + mysql.escape(body.Name) + `, Profile_Pic=` + mysql.escape(body.Profile_Pic) + `
+        SET Email= ` + mysql.escape(body.Email) + `, Username=` + mysql.escape(body.Username) + `, Password=` + mysql.escape(hashedPass) + `, B_Date=` + mysql.escape(body.B_Date) + `, Name=` + mysql.escape(body.Name) + `, Profile_Pic=` + mysql.escape(body.Profile_Pic) + `
         WHERE ${key_type}=` + mysql.escape(key_value) 
     );
     
