@@ -1,6 +1,6 @@
 {
-  "name": "google-calendar-clone",
-  "version": "0.1.0",
+  "name": "bunga-website-test",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.4.3",
