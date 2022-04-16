@@ -10,8 +10,8 @@ router.get('/Feature_ID/:Feature_ID', (req, res, next) => {send_query(req, res, 
 router.get('/Profile_ID_Author/:Profile_ID_Author/Profile_ID_Recipient/:Profile_ID_Recipient', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID_Author", "Profile_ID_Recipient", req.params.Profile_ID_Author, req.params.Profile_ID_Recipient);});
 router.get('/Profile_ID_Author/:Profile_ID_Author/Feature_ID/:Feature_ID', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID_Author", "Feature_ID", req.params.Profile_ID_Author, req.params.Feature_ID);});
 router.get('/Profile_ID_Author/:Profile_ID_Author/Feature_type/:Feature_type', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID_Author", "Feature_type", req.params.Profile_ID_Author, req.params.Feature_type);});
-router.get('/Profile_ID_Recipient/:Profile_ID_Recipient/Feature_ID/:Feature_ID', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID_Recipient", "Feature_ID", req.params.Profile_ID_Author, req.params.Feature_ID);});
-router.get('/Profile_ID_Recipient/:Profile_ID_Recipient/Feature_type/:Feature_type', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID_Recipient", "Feature_type", req.params.Profile_ID_Author, req.params.Feature_type);});
+router.get('/Profile_ID_Recipient/:Profile_ID_Recipient/Feature_ID/:Feature_ID', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID_Recipient", "Feature_ID", req.params.Profile_ID_Recipient, req.params.Feature_ID);});
+router.get('/Profile_ID_Recipient/:Profile_ID_Recipient/Feature_type/:Feature_type', (req, res, next) => {send_query(req, res, next, "GET", "Profile_ID_Recipient", "Feature_type", req.params.Profile_ID_Recipient, req.params.Feature_type);});
 
 /* POST shared_features */
 router.post('/', (req, res, next) => {send_query(req, res, next, "POST", null, null);});
