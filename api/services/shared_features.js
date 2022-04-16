@@ -65,6 +65,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
             SET Profile_ID_Author=${body.Profile_ID_Author}, Profile_ID_Recipient=${body.Profile_ID_Recipient}, Permissions="${body.Permissions}", Feature_ID=${body.Feature_ID}, Feature_type="${body.Feature_type}"
             WHERE ${key_type1}=${key_value1}`
         );
+        return result;
     }
     else{
         const result = await db.query(
@@ -72,10 +73,8 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
             SET Profile_ID_Author=${body.Profile_ID_Author}, Profile_ID_Recipient=${body.Profile_ID_Recipient}, Permissions="${body.Permissions}", Feature_ID=${body.Feature_ID}, Feature_type="${body.Feature_type}"
             WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
         );
+        return result;
     }
-    
-
-    return result;
 }
 
 async function remove(key_type1, key_type2, key_value1, key_value2){
@@ -86,14 +85,14 @@ async function remove(key_type1, key_type2, key_value1, key_value2){
         const result = await db.query(
             `DELETE FROM shared_features WHERE ${key_type1}=${key_value1}`
         );
+        return result;
     }
     else{
         const result = await db.query(
             `DELETE FROM shared_features WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
         );
+        return result;
     }
-    
-    return result;
 }
 
 module.exports = {
