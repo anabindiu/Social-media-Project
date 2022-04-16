@@ -5,19 +5,21 @@ import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 import TaskForm from '../components/TaskForm';
 import Task from '../components/Task';
 import * as comp from "../components/Tasks_Components";
-import { Link } from "react-router-dom";
-import {Button} from "../components/Buttons";
 
 function Task_List() {
   const [task_list, setTaskList] = useState([]);
   const [isDisabled, setDisabled] = useState(false);
 
-  useEffect(async () => {
-    trackPromise(
-      Get_Task().then((task_list) => {
-        setTaskList([...task_list]);
-      })
-    );
+  useEffect(() => {
+    async function fetchData(){
+      trackPromise(
+        Get_Task().then((task_list) => {
+          setTaskList([...task_list]);
+        })
+      );
+    }
+    fetchData();
+    
   }, []);
 
   const onAddTask = async (task) => {

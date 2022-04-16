@@ -1,5 +1,4 @@
-import ReactMarkdown from "react-markdown";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import * as comp from "./Notes_Components";
 const Note = ({ activeNote, onUpdateNote, setActiveNote}) => {
   const [refresh, setRefresh] = useState(false);
@@ -23,7 +22,7 @@ const Note = ({ activeNote, onUpdateNote, setActiveNote}) => {
           onBlur={onBlurEvent.bind(this, "Title", activeNote.Title)}
           autoFocus
         />
-        <comp.Note_TextArea
+        <comp.NoteTextArea
           placeholder="Write your note here..."
           value={activeNote.Content}
           onChange={(e) => onEditField("Content", e.target.value)}

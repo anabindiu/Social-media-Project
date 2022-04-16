@@ -1,15 +1,6 @@
 const db = require('./db');
+const mysql = require('mysql')
 
-function parseKey(key_type, key_value){
-    switch(key_type){
-        case "ID_1":
-            return key_value;
-        case "ID_2":
-            return key_value;
-        default:
-            return key_value;
-    }
-}
 
 async function getAll(){
     const data = await db.query(
@@ -20,13 +11,12 @@ async function getAll(){
 }
 
 async function getOne(key_type1, key_type2, key_value1, key_value2){
-    key_value1 = parseKey(key_type1, key_value1);
-    key_value2 = parseKey(key_type2, key_value2);
+
     if(key_value2 == null){
         const data = await db.query(
             `SELECT ID_1, ID_2
             FROM has_friend
-            WHERE ${key_type1}=${key_value1}`
+            WHERE ${key_type1}= ` +mysql.escape(key_value1)
         );
         return(data);
     }
@@ -34,7 +24,7 @@ async function getOne(key_type1, key_type2, key_value1, key_value2){
         const data = await db.query(
             `SELECT ID_1, ID_2
             FROM has_friend
-            WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
+            WHERE ${key_type1}= `+mysql.escape(key_value1) + ` AND ${key_type2}= `+mysql.escape(key_value2)
         );
         return(data);
     }
@@ -45,31 +35,29 @@ async function create(body){
         `INSERT INTO has_friend 
         (ID_1, ID_2) 
         VALUES 
-        (${body.ID_1}, ${body.ID_2})`
+        (`+mysql.escape(body.ID_1)+`, `+mysql.escape(body.ID_2)+`)`
     );
     
     return result;
 }
 
 async function update(key_type1, key_type2, key_value1, key_value2, body){
-    key_value1 = parseKey(key_type1, key_value1);
-    key_value2 = parseKey(key_type2, key_value2);
+
 
     const result = await db.query(
         `UPDATE has_friend 
-        SET ID_1=${body.ID_1}, ID_2=${body.ID_2}
-        WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}` 
+        SET ID_1=` + mysql.escape(body.ID_1)+`, ID_2=` + mysql.escape(body.ID_2)+`
+        WHERE ${key_type1}=` + mysql.escape(key_value1)+` AND ${key_type2}=` + mysql.escape(key_value2)
     );
 
     return result;
 }
 
 async function remove(key_type1, key_type2, key_value1, key_value2){
-    key_value1 = parseKey(key_type1, key_value1);
-    key_value2 = parseKey(key_type2, key_value2);
+
     
     const result = await db.query(
-        `DELETE FROM has_friend WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2}`
+        `DELETE FROM has_friend  WHERE ${key_type1}=` + mysql.escape(key_value1)+` AND ${key_type2}=` + mysql.escape(key_value2)
     );
     
     return result;

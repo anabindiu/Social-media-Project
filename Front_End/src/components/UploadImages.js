@@ -19,7 +19,7 @@ export default function UploadImages() {
     return (
         <>
             <input type="file" multiple accept="image/*" onChange={onImageChange} />
-            { imageURLs.map(imageSrc => <img src={imageSrc} />)}
+            { imageURLs.map(imageSrc => <img src={imageSrc} alt="profile_image"/>)}
         </>
     );
 }

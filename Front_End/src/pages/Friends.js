@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react'
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
 import {Button} from "../components/Buttons";
-import {Get_Friends, Get_Profile_Identifier, Get_All_Profile_Identifier, Create_Friend, Delete_Friend} from "../auth/action/API_requests";
+import {Get_Friends, Get_All_Profile_Identifier, Create_Friend, Delete_Friend} from "../auth/action/API_requests";
 import "../App.css";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
@@ -11,14 +11,16 @@ export default function Friends() {
   const [friends_search, setFriendsSearch] = useState([]);
   const [visible_friends, setVisibleFriends] = useState([]);
 
-  useEffect(async () => {
-    trackPromise(
-      Update_Friends_Lists()
-    );
+  useEffect(() => {
+    async function fetchData(){
+      trackPromise(
+        Update_Friends_Lists()
+      );
+    }
+    fetchData();
   }, []);
 
   const Update_Friends_Lists = async () => {
-    console.log("UPDATING");
     Get_All_Profile_Identifier().then(async (a_list) => {
       await Get_Friends().then(async (b_list) => {
         const list = [];
@@ -34,14 +36,12 @@ export default function Friends() {
   const Add_Friend = async (friend) => {
     await Create_Friend(friend);
     await Update_Friends_Lists();
-    console.log("Look");
     setVisibleFriends([...[]]);
   }
 
   const Remove_Friend = async (friend) => {
     await Delete_Friend(friend);
     await Update_Friends_Lists();
-    console.log("Look");
     setVisibleFriends([...[]]);
   }
 
@@ -56,10 +56,10 @@ export default function Friends() {
     var index = 0;
     const returnedItems=[];
     friends_search.forEach((friend) => {
-      if((friend.Username.toLocaleLowerCase().localeCompare(value.trim().toLowerCase()) == 0
-      || friend.Name.toLocaleLowerCase().localeCompare(value.trim().toLowerCase()) == 0)
-      && (friends_list.find(({ID}) => ID === friend.ID) == undefined 
-      && friend.ID != JSON.parse(localStorage.getItem('user')).ID)){
+      if((friend.Username.toLocaleLowerCase().localeCompare(value.trim().toLowerCase()) === 0
+      || friend.Name.toLocaleLowerCase().localeCompare(value.trim().toLowerCase()) === 0)
+      && (friends_list.find(({ID}) => ID === friend.ID) === undefined 
+      && friend.ID !== JSON.parse(localStorage.getItem('user')).ID)){
         returnedItems[index++] = friend;
       }
     });

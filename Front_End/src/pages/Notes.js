@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Note from "../components/Note";
-import Notes_Sidebar from "../components/Notes_SideBar";
+import NotesSideBar from "../components/NotesSideBar";
 import {Get_Note, Get_Notes, Create_Note, Delete_Note, Update_Note} from "../auth/action/API_requests";
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
@@ -10,20 +10,23 @@ function Notes() {
   const [notes, setNotes] = useState([]);
   const [activeNote, setActiveNote] = useState(false);
 
-  useEffect(async () => {
-    trackPromise(
-      Get_Note().then((note_list) => {
-        setNotes([...note_list]);
-      })
-    );
+  useEffect(() => {
+    async function fetchData(){
+      trackPromise(
+        Get_Note().then((note_list) => {
+          setNotes([...note_list]);
+        })
+      );
+    }
+    fetchData();
   }, []);
 
   const onAddNote = async () => {
     const notes = await Get_Notes();
     const note_data = {
       "Notes_ID": notes.ID, 
-      "Date_Created":`${new Date()}`, 
-      "Last_Modified":`${new Date()}`, 
+      "Date_Created":`${(new Date()).toLocaleString()}`, 
+      "Last_Modified":`${(new Date()).toLocaleString()}`, 
       "Title":"Note Title", 
       "Content":"Write your note here..."
     };
@@ -44,6 +47,7 @@ function Notes() {
   };
 
   const onUpdateNote = async (activeNote, field, value) => {
+    activeNote.Last_Modified = (new Date()).toLocaleString();
     await Update_Note(activeNote, field, value);
 
     await Get_Note().then((note_list) => {
@@ -60,7 +64,7 @@ function Notes() {
   return (
     <comp.Notes_Base>
       {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :<>
-      <Notes_Sidebar
+      <NotesSideBar
         notes={notes}
         onAddNote={onAddNote}
         onDeleteNote={onDeleteNote}

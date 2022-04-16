@@ -1,4 +1,3 @@
-import React from "react";
 import styled from 'styled-components';
 
 export const Note_NoneActive = styled.div`
@@ -112,7 +111,7 @@ export const Note_Input = styled.input`
     font-size: 2rem;
 `;
 
-export const Note_TextArea = styled.textarea`
+export const NoteTextArea = styled.textarea`
     display: block;
     border: 1px solid #ddd;
     margin-bottom: 20px;

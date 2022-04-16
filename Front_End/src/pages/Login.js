@@ -33,12 +33,11 @@ const Login = (signupUser)  => {
         const handleSubmit = (e) =>{
             setError("");
             e.preventDefault();
-            const response = loginUser(formData, navigate).then(response => {
+            loginUser(formData, navigate).then(response => {
               if(response.length>0){
                 setError(response);
               };
             });
-
         };
     
         return (

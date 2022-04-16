@@ -43,7 +43,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
     if(key_value2 == null){
         const result = await db.query(
             `UPDATE note 
-            SET Notes_ID=`+mysql.escape(body.Notes_ID)+`, Date_Created=`+mysql.escape(body.Date_Created)+`, Last_Modified=`+mysql.escape(body.Last_Modified)+`, Title="`+mysql.escape(body.Title)+`", Content="`+mysql.escape(body.Content)+`"
+            SET Notes_ID=`+mysql.escape(body.Notes_ID)+`, Date_Created=`+mysql.escape(body.Date_Created)+`, Last_Modified=`+mysql.escape(body.Last_Modified)+`, Title=`+mysql.escape(body.Title)+`, Content=`+mysql.escape(body.Content)+`
             WHERE ${key_type1}=`+mysql.escape(key_value1)+``
         );
 
@@ -52,7 +52,7 @@ async function update(key_type1, key_type2, key_value1, key_value2, body){
     else{
         const result = await db.query(
             `UPDATE note 
-            SET Notes_ID=`+mysql.escape(body.Notes_ID)+`, Date_Created=`+mysql.escape(body.Date_Created)+`, Last_Modified=`+mysql.escape(body.Last_Modified)+`, Title="`+mysql.escape(body.Title)+`", Content="`+mysql.escape(body.Content)+`"
+            SET Notes_ID=`+mysql.escape(body.Notes_ID)+`, Date_Created=`+mysql.escape(body.Date_Created)+`, Last_Modified=`+mysql.escape(body.Last_Modified)+`, Title=`+mysql.escape(body.Title)+`, Content=`+mysql.escape(body.Content)+` q
             WHERE ${key_type1}=`+mysql.escape(key_value1)+` AND ${key_type2}=`+mysql.escape(key_value2)+`` 
         );
 

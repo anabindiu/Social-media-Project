@@ -23,7 +23,7 @@ async function create(body){
         `INSERT INTO tasks 
         (Profile_ID, Header) 
         VALUES 
-        (${body.Profile_ID}, "${body.Header}")`
+        (`+mysql.escape(body.Profile_ID)+`, `+mysql.escape(body.Header)+`)`
     );
     
     return result;

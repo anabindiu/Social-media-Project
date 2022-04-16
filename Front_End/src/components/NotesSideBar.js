@@ -1,9 +1,6 @@
 import * as comp from "./Notes_Components";
-import { Link } from "react-router-dom";
-import {Button} from "../components/Buttons";
-import { TiExport } from "react-icons/ti";
 
-const Notes_Sidebar = ({
+const NotesSideBar = ({
     notes,
     onAddNote,
     onDeleteNote,
@@ -11,7 +8,7 @@ const Notes_Sidebar = ({
     setActiveNote,
   }) => {
     const sortedNotes = notes.sort((a, b) => (new Date(b.Last_Modified)).getTime() - (new Date(a.Last_Modified)).getTime());
-  
+
     return (
       <comp.Notes_SideBar_Base>
         <comp.Notes_SideBar_Header_Base>
@@ -19,8 +16,9 @@ const Notes_Sidebar = ({
           <comp.Notes_SideBar_Header_Button onClick={onAddNote}>Add</comp.Notes_SideBar_Header_Button>
         </comp.Notes_SideBar_Header_Base>
         <comp.Notes_SideBar_Notes_List>
-          {sortedNotes.map((note) => (
+          {sortedNotes.map((note, index) => (
             <comp.Notes_SideBar_Note
+              key={index}
               className={`${note.ID === activeNote && "active"}`}
               onClick={() => setActiveNote(note.ID)}
             >
@@ -38,5 +36,5 @@ const Notes_Sidebar = ({
     );
 };
   
-export default Notes_Sidebar;
+export default NotesSideBar;
   

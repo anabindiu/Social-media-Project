@@ -15,15 +15,19 @@ export default function Profile() {
   const [Password, setPassword] = useState("");
 
 
-  useEffect(async () => {
-    await Get_Profile().then((profile) => {
-      setProfileInfo(profile);
-      console.log(profile);
-      setName(profile.Name);
-      setBirthday(profile.B_Date);
-      setEmail(profile.Email);
-      setPassword("");
-    })
+  useEffect(() => {
+    async function fetchData(){
+      trackPromise(
+        Get_Profile().then((profile) => {
+        setProfileInfo(profile);
+        console.log(profile);
+        setName(profile.Name);
+        setBirthday(profile.B_Date);
+        setEmail(profile.Email);
+        setPassword("");
+      }));
+    }
+    fetchData();
   }, []);
 
   const update_profile = async () => {
@@ -34,7 +38,7 @@ export default function Profile() {
       "Name":Name, 
       "B_Date":Birthday, 
     }
-    await Update_Profile(new_profile);
+    await Update_Profile(new_profile, !!Password);
     await Get_Profile().then((profile) => {
       setProfileInfo(profile);
       console.log(profile);

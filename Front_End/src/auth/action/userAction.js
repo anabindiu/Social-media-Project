@@ -1,6 +1,5 @@
 import auth from "../auth";
 import { Create_Default_Features, Create_Default_Notes, Create_Default_Settings, Create_Default_Tasks, Create_Default_Schedule, Create_Profile, Create_Default_Stats} from "./API_requests";
-import bcrypt from 'bcryptjs';
 import {Failed_To_Connect} from "./helper";
 
 

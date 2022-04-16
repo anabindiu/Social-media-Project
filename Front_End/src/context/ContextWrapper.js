@@ -1,14 +1,11 @@
 import React, {
   useState,
   useEffect,
-  useReducer,
   useMemo,
 } from "react";
 import GlobalContext from "./GlobalContext";
 import dayjs from "dayjs";
 import { Get_Events } from "../auth/action/API_requests";
-import {trackPromise, usePromiseTracker} from "react-promise-tracker";
-import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
 
 export default function ContextWrapper(props) {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
@@ -29,15 +26,17 @@ export default function ContextWrapper(props) {
     );
   }, [savedEvents, labels]);
 
-  useEffect(async () => {
-    Get_Events().then((events)=>{
-      setSavedEvents([...events]);
-    });
+  useEffect(() => {
+    async function fetchData(){
+      Get_Events().then((events)=>{
+        setSavedEvents([...events]);
+      });
+    }
+    fetchData();
   }, []);
 
   useEffect(() => {
     setLabels((prevLabels) => {
-      console.log(prevLabels);
       return [...new Set(savedEvents.map((evt) => evt.Label))].map(
         (label) => {
           console.log(label);
@@ -57,23 +56,21 @@ export default function ContextWrapper(props) {
     if (smallCalendarMonth !== null) {
       setMonthIndex(smallCalendarMonth);
     }
-  }, []);
+  }, [smallCalendarMonth]);
 
   useEffect(() => {
     if (!showEventModal) {
       setSelectedEvent(null);
     }
-  }, []);
+  }, [showEventModal]);
 
   function updateLabel(label) {
     setLabels(
       labels.map((lbl) => (lbl.label === label.label ? label : lbl))
     );
   }
-  const {promiseInProgress} = usePromiseTracker();
+
   return (
-    <>
-    {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :
     <GlobalContext.Provider
       value={{
         monthIndex,
@@ -95,6 +92,6 @@ export default function ContextWrapper(props) {
       }}
     >
       {props.children}
-    </GlobalContext.Provider>}</>
+    </GlobalContext.Provider>
   );
 }

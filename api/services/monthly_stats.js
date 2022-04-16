@@ -1,15 +1,5 @@
 const db = require('./db');
-
-function parseKey(key_type, key_value){
-    switch(key_type){
-        case "Year":
-            return `${key_value}`;
-        case "Month":
-            return `${key_value}`;
-        default:
-            return key_value;
-    }
-}
+const mysql = require ('mysql')
 
 async function getAll(){
     const data = await db.query(
@@ -19,14 +9,12 @@ async function getAll(){
 }
 
 async function getOne(key_type1, key_type2, key_type3, key_value1, key_value2, key_value3){
-    key_value1 = parseKey(key_type1, key_value1);
-    key_value2 = parseKey(key_type2, key_value2);
-    key_value3 = parseKey(key_type3, key_value3);
+
     if(key_value2 == null){
         const data = await db.query(
             `SELECT *
             FROM monthly_stats
-            WHERE ${key_type1}=${key_value1}`
+            WHERE ${key_type1}=`+mysql.escape(key_value1)
         );
         return(data);
     }
@@ -35,7 +23,7 @@ async function getOne(key_type1, key_type2, key_type3, key_value1, key_value2, k
         const data = await db.query(
             `SELECT *
             FROM monthly_stats
-            WHERE ${key_type1}=${key_value1} AND  ${key_type2}=${key_value2}`
+            WHERE ${key_type1}= `+mysql.escape(key_value1)+` AND  ${key_type2}=`+mysql.escape(key_value2) 
         );
         return(data);
     }
@@ -43,7 +31,7 @@ async function getOne(key_type1, key_type2, key_type3, key_value1, key_value2, k
         const data = await db.query(
             `SELECT *
             FROM monthly_stats
-            WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2} AND ${key_type3}=${key_value3}`
+            WHERE ${key_type1}= `+mysql.escape(key_value1)+` AND  ${key_type2}=`+mysql.escape(key_value2) + ` AND  ${key_type3}=`+mysql.escape(key_value3)
         );
         return(data);
     }
@@ -53,35 +41,29 @@ async function create(body){
     const result = await db.query(
         `INSERT INTO monthly_stats 
         VALUES 
-        (${body.Profile_ID}, "${body.Month}", "${body.Year}", ${body.Total_Events}, ${body.Total_Tasks}, ${body.Total_Notes})`
+        (`+mysql.escape(body.Profile_ID)+`, `+mysql.escape(body.Month)+`, `+mysql.escape(body.Year)+`, `+mysql.escape(body.Total_Events)+`, `+mysql.escape(body.Total_Tasks)+`,`+mysql.escape(body.Total_Notes)+`)`
     );
     
     return result;
 }
 
 async function update(key_type1, key_type2, key_type3, key_value1, key_value2, key_value3, body){
-    key_value1 = parseKey(key_type1, key_value1);
-    key_value2 = parseKey(key_type2, key_value2);
-    key_value3 = parseKey(key_type3, key_value3);
+
 
     console.log(body);
     
     const result = await db.query(
         `UPDATE monthly_stats 
-        SET Profile_ID=${body.Profile_ID}, Month="${body.Month}", Year="${body.Year}", Total_Events= ${body.Total_Events}, Total_Tasks= ${body.Total_Tasks}, Total_Notes=${body.Total_Notes}
-        WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2} AND  ${key_type3}=${key_value3}`
-    );
+        SET Profile_ID = `+mysql.escape(body.Profile_ID)+`, Month=`+mysql.escape(body.Month)+`, Year=`+mysql.escape(body.Year)+`, Total_Events= `+mysql.escape(body.Total_Events)+`, Total_Tasks= `+mysql.escape(body.Total_Tasks)+`, Total_Notes=`+mysql.escape(body.Total_Notes)+`
+        WHERE ${key_type1}= `+mysql.escape(key_value1)+` AND  ${key_type2}=`+mysql.escape(key_value2) + ` AND  ${key_type3}=`+mysql.escape(key_value3)    );
     
     return result;
 }
 
 async function remove(key_type1, key_type2, key_type3,  key_value1, key_value2, key_value3){
-    key_value1 = parseKey(key_type1, key_value1);
-    key_value2 = parseKey(key_type2, key_value2);
-    key_value3 = parseKey(key_type3, key_value3);
 
     const result = await db.query(
-        `DELETE FROM monthly_stats WHERE ${key_type1}=${key_value1} AND ${key_type2}=${key_value2} AND ${key_type3}=${key_value3}`
+        `DELETE FROM monthly_stats WHERE ${key_type1}= `+mysql.escape(key_value1)+` AND  ${key_type2}=`+mysql.escape(key_value2) + ` AND  ${key_type3}=`+mysql.escape(key_value3)
     );
     
     let message = 'Error in deleting monthly_stats';

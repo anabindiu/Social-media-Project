@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import ReactDOM from "react-dom";
 import "../App.css";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as comp from "../components/Settings_Components";
-import {Button, LinkButton} from '../components/Buttons';
+import {Button} from '../components/Buttons';
 import auth from '../auth/auth';
 import {trackPromise, usePromiseTracker} from "react-promise-tracker";
 import { Get_Settings, Update_Settings } from '../auth/action/API_requests';
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
-import {Note_TextArea} from "../components/Notes_Components";
+import {NoteTextArea} from "../components/Notes_Components";
 
 export default function Settings() {
   const create_options = (settings) =>{
@@ -206,13 +205,16 @@ export default function Settings() {
   const [report, setReport] = useState("");
   
 
-  useEffect(async () => {
-    trackPromise(
-      Get_Settings().then((settings) => {
-        setOptions([...create_options(settings)]);
-        setVisibleOptions([...create_options(settings)]);
-      })
-    );
+  useEffect(() => {
+    async function fetchData(){
+      trackPromise(
+        Get_Settings().then((settings) => {
+          setOptions([...create_options(settings)]);
+          setVisibleOptions([...create_options(settings)]);
+        })
+      );
+    }
+    fetchData();
   }, []);
   
 const navigate = useNavigate();
@@ -274,8 +276,8 @@ const OnClickEvent = async (button) => {
       {promiseInProgress ? <ClimbingBoxLoader color={"black"} size={20}/> :
       <comp.Panel>
         <comp.Input onChange={onChange} placeholder="Search..."/>
-        {visibleOptions.map((option) =>(
-        <comp.Setting>
+        {visibleOptions.map((option, index) =>(
+        <comp.Setting key={index}>
           <comp.Header3>{option.header.name}</comp.Header3>
           <comp.Body>
           {option.values.map((value) => (
@@ -294,7 +296,7 @@ const OnClickEvent = async (button) => {
         ))};
         <comp.Header6>Report a Problem</comp.Header6>
         <comp.Description>Please type below your problem, and one of our developers will respond ASAP!</comp.Description>
-        <Note_TextArea value = {report} placeholder="Send report here" onChange={(e)=>(setReport(e.target.value))}></Note_TextArea>
+        <NoteTextArea value = {report} placeholder="Send report here" onChange={(e)=>(setReport(e.target.value))}></NoteTextArea>
         <Button onClick={()=>{alert("Sending your report, thank you!"); setReport("")}}>Send Report</Button>
         <Button onClick={handleLogOut}>Log Out</Button>
       </comp.Panel>}
