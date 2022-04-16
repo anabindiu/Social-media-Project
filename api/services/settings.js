@@ -1,15 +1,5 @@
 const db = require('./db');
-
-function parseKey(key_type, key_value){
-    switch(key_type){
-        case "ID":
-            return key_value;
-        case "Profile_ID":
-            return key_value;
-        default:
-            return key_value;
-    }
-}
+const mysql = require('mysql')
 
 async function getAll(){
     const data = await db.query(
@@ -20,11 +10,10 @@ async function getAll(){
 }
 
 async function getOne(key_type, key_value){
-    key_value = parseKey(key_type, key_value);
     const data = await db.query(
         `SELECT ID, Profile_ID, Date_Format, Time_Format, TimeZone, Language, Theme, Country, Notification
         FROM settings
-        WHERE ${key_type}=${key_value}`
+        WHERE ${key_type}=`+mysql.escape(key_value)+``
     );
     return(data);
 }
@@ -34,28 +23,25 @@ async function create(body){
         `INSERT INTO settings 
         (Profile_ID, Date_Format, Time_Format, TimeZone, Language, Theme, Country, Notification) 
         VALUES 
-        (${body.Profile_ID}, "${body.Date_Format}", "${body.Time_Format}", "${body.TimeZone}", "${body.Language}", "${body.Theme}", "${body.Country}", "${body.Notification}")`
+        (`+mysql.escape(body.Profile_ID)+`, `+mysql.escape(body.Date_Format)+`, `+mysql.escape(body.Time_Format)+`, `+mysql.escape(body.TimeZone)+`, `+mysql.escape(body.Language)+`, `+mysql.escape(body.Theme)+`, `+mysql.escape(body.Country)+`, `+mysql.escape(body.Notification)+`)`
     );
     
     return result;
 }
 
 async function update(key_type, key_value, body){
-    
-    key_value = parseKey(key_type, key_value);
     const result = await db.query(
         `UPDATE settings 
-        SET Profile_ID=${body.Profile_ID}, Date_Format="${body.Date_Format}", Time_Format="${body.Time_Format}", TimeZone="${body.TimeZone}", Language="${body.Language}", Theme="${body.Theme}", Country="${body.Country}", Notification="${body.Notification}"
-        WHERE ${key_type}=${key_value}` 
+        SET Profile_ID=`+mysql.escape(body.Profile_ID)+`, Date_Format=`+mysql.escape(body.Date_Format)+`, Time_Format=`+mysql.escape(body.Time_Format)+`, TimeZone=`+mysql.escape(body.TimeZone)+`, Language=`+mysql.escape(body.Language)+`, Theme=`+mysql.escape(body.Theme)+`, Country=`+mysql.escape(body.Country)+`, Notification=`+mysql.escape(body.Notification)+`
+        WHERE ${key_type}=`+mysql.escape(key_value)+`` 
     );
     
     return result;
 }
 
 async function remove(key_type, key_value){
-    key_value = parseKey(key_type, key_value);
     const result = await db.query(
-        `DELETE FROM settings WHERE ${key_type}=${key_value}`
+        `DELETE FROM settings WHERE ${key_type}=`+mysql.escape(key_value)+``
     );
     
     return result;
